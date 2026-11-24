@@ -36,7 +36,7 @@
 | `scripts/check_doc_claims.py` | **维护闸**：文档里写的数字/名字/路径逐条对回磁盘事实；另含**罗蛇字符级红线 T07/T08**（中文容器的负字距与假斜体，含内联 `style` 与代码注释豁免）（改完文档必跑，见下方体量段） | 无 |
 | `scripts/gen-theme-slices.py` | 从九份预览板截「风格切片」写 `docs/themes/<slug>.png`（隐藏字体提示条、固定裁切框 380,8–1520,700、缩到 900 宽），给 README 主页九宫格用 | Pillow + Chrome（走 `render-png.sh`） |
 | `scripts/gen-theme-preview.py` | 生成 B 出口主题预览 HTML（自包含单文件；三种 flavor 见 `references/theme-preview.md`，配色判据见 `references/palette-check.md`） | 无 |
-| `scripts/check-theme-colors.py` | **配色体检闸**：读 `:root` 的 hex token，算 WCAG 对比度 / CIE L* 间距 / 色相暧昧带（含 `amb-ok` 换轴放行与 `blk-ok` 描边放行，后者会把合成描边对主色的对比度一并算出）/ 主色-底明度差；`--md` 出人读报告、`--json` 出明细；**有 FAIL 即非零退出** | 无 |
+| `scripts/check-theme-colors.py` | **配色体检闸**：读 `:root` 的 hex token，算 WCAG 对比度 / CIE L* 间距 / 色相暧昧带（含 `amb-ok` 换轴放行与 `blk-ok` 描边放行，后者会把合成描边对主色的对比度一并算出）/ 主色-底明度差；另扫 `base.css`/`layouts.css`/主题 css 的组件块——品牌色纯 token 实心底上出现 `#fff`/`--text-1..3` 记 `comp_fills` FAIL（`color-mix` tint、渐变、`rgba` 跳过）；`--md` 出人读报告、`--json` 出明细；**有 FAIL 或 comp_fills 即非零退出** | 无 |
 | `scripts/check-preview-sync.py` | **预览页一致性闸（判据级）**：应查集合＝主题 CSS 全集（**缺预览页即红**）；读产物 HTML 对回主题 CSS，查色板 hex / 材质类 / 组件类 / 导览语汇 / 浮层压卡 / 模板源真值六类静默漂移；`--only` 限定主题、`--json` 出明细 | 无 |
 | `scripts/check-deck-sync.py` | **deck 一致性闸**：交付单文件 deck 里内联的 `<style data-from data-sha256>` 指纹必须等于主题源文件当前指纹（主题改了没重打包 ⇒ 红）、源 deck 必须在库里、残留本地 link/script 不许有、页数与 `assets/decks.json` 登记一致；交付文件不在本机时降为 WARN | 无 |
 | `scripts/check-fonts.py` | **字体闸（判据级）**：读 woff2 的 cmap 与主题 CSS 对账，查子集内容 / `@font-face` 死声明 / 字体 token 死引用 / 标点回落策略；`--only` 限定主题、`--json` 出明细 | fontTools（**硬依赖**，缺则 FAIL 并 exit 2） |

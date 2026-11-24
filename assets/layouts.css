@@ -607,13 +607,14 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
 
 /* ---------- 25. 横条比例 .bars：一条轨道内嵌标签，实色段按比例拉长，数值钉在右端 ----------
    与 charts 族分界：charts 是坐标轴图表，bars 是「排名＋占比」的清单式读法，行数少、字大。 */
-.bars{margin-top:28px;display:flex;flex-direction:column;gap:14px}
-.bars .bar-row{display:grid;grid-template-columns:1fr 92px;align-items:center;gap:16px}
-.bars .track{position:relative;height:48px;border-radius:999px;overflow:hidden;
-  background:color-mix(in oklab, var(--accent) 14%, var(--surface))}
-.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--accent);opacity:.90}
-.bars .track .k{position:relative;z-index:2;display:flex;align-items:center;height:100%;
-  padding-left:22px;font-size:var(--t-cap);font-weight:600;color:var(--text-1)}
+.bars{margin-top:28px;display:flex;flex-direction:column;gap:16px}
+.bars .bar-row{display:grid;grid-template-columns:236px 1fr 84px;align-items:center;gap:20px}
+.bars .track{position:relative;height:44px;border-radius:999px;overflow:hidden;
+  background:color-mix(in oklab, var(--accent) 13%, var(--surface))}
+.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;
+  background:var(--accent);opacity:.92}
+.bars .k{font-size:var(--t-cap);font-weight:600;color:var(--text-1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bars .v{font-size:var(--t-h4);font-weight:700;color:var(--accent);text-align:right;
   font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 .note{margin-top:20px;font-size:calc(var(--t-cap) - 2px);line-height:1.6;color:var(--text-2)}

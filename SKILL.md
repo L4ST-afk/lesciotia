@@ -1,11 +1,11 @@
 ---
 name: 来雪亭Lesciotia
-version: 1.2.70
+version: 1.2.71
 description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付形态（影像件／网页件／可改件）——A 影像 deck（逐页 AI 生图 → pptx/pdf，不能改字）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可改件（原生 PPTX，文本与形状都能改）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
 metadata:
   vaccineOrigin: local
   vaccineVersion: e8d93bf0731f
-  version: "1.2.70"
+  version: "1.2.71"
   created: "2026-11-10"
   sources:
     - "html-ppt (MIT, © lewis)（历史来源：2026-11-23 起本库代码件与整册已全部自写，无复制件）"
@@ -115,8 +115,10 @@ python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [--dark
 弧形分割写 `<!-- layout: arc -->`＋两段正文＋一张图：一条 S 弧当分界，图在右、通到页顶与页右，文在左。弧线是 `objectBoundingBox` 的 clipPath（0–1 坐标），换画布尺寸不跑形；⛔ 别用 `border-radius` 的椭圆角假造，它只能弯一次。C 侧出单图页。
 弧线时间轴写 `<!-- layout: timeline-arc -->`＋至多六条 `日期｜标题｜说明`：曲线与圆点在 SVG 里按贝塞尔算，卡片跟着圆点的 y 交替上下，日期竖杆连回曲线。C 侧降级为列表页。
 底部口号带写 `<!-- band: 一句话 -->`，可挂任意页：通栏一条压在页底，字距 .22em；挂带的页会自动隐藏页脚、把内容区收进 150px。
-横条比例写 `<!-- layout: bars -->`＋至多七条 `标签｜数值`：一条圆角轨道里嵌标签，实色段按比例拉长，数值钉在右端，表后一段当注脚。数值带 `%` 直接当百分比，超过 100 的大数按最大值归一。这是「排名＋占比」的清单读法，⛔ 不与 charts 族的坐标轴图表混用。C 侧降级为两列表格。
+横条比例写 `<!-- layout: bars -->`＋至多七条 `标签｜数值`：标签独立成左列，圆角轨道只留色段，实色段按比例拉长，数值钉在右端，表后一段当注脚。⛔ 别把标签放进轨道——深字压在深色段上，短条的标签会跨在实色段与浅轨道两侧，对比度必有一侧不够（1.2.70 首版就是这个毛病）。数值带 `%` 直接当百分比，超过 100 的大数按最大值归一。这是「排名＋占比」的清单读法，⛔ 不与 charts 族的坐标轴图表混用。C 侧降级为两列表格。
 团队卡写 `<!-- layout: team -->`＋二至四条 `姓名｜职务｜一句简介`，再按同序列图：人像切进有机形状（四组 `border-radius` 百分比拧出来，不用 SVG），形状在后方错位探出一角；无图时同形退成 accent 淡色块。⛔ 人像要用抠好的透明底 PNG 或纯色底，白底棚拍会在有机形里留一圈白。C 侧降级为列表页，人像与有机形不保留。
+**实心块上的字只有一种写法**：品牌色（`--accent`/`--accent-2`/`--accent-3`/`--primary`）做底时，字色一律 `var(--accent-ink)`，逐主题按 WCAG 算过（白字压 accent-2 常见只有 2–3:1）。⛔ 不硬写 `#fff`、⛔ 不放 `--text-1/2/3`；浅色 tint（`color-mix(accent 10–26%, surface)`）才是深字的合法底。闸门 `check-theme-colors.py` 会逐块扫这条。
+
 **质感三件**：`.soft-cast` 用光影替边框（⛔ 别再给形状叠描边）、`.glass-pane` 玻璃面（走 `--glass-bg`/`--glass-blur`，缺省退回中性 Aqua 参数，C 侧只能降成半透明填＋内高光）、`.bubble` 气泡（径向透明渐变＋错位叠两层）。三者是装饰件，⛔ 不覆盖九瓦作各自的玻璃语言。
 
 **三个名字怎么用**：给用户说功能名（网页件 / 可改件 / 影像件），A/B/C 只留在命令、脚本与 `check-wash` 这类工具名里。

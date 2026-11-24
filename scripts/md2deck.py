@@ -616,10 +616,10 @@ def render_bars(head, bl, kick=''):
     for label, v, raw in vals:
         w = v / peak * 100 if peak > 100 else v
         w = max(2, min(100, w))
-        out.append('    <div class="bar-row"><div class="track">'
-                   '<span class="fill" style="width:%.2f%%"></span>'
-                   '<span class="k">%s</span></div><div class="v">%s</div></div>'
-                   % (w, inline(label), inline(raw.replace('%', '')) + ('<small>%</small>' if '%' in raw else '')))
+        out.append('    <div class="bar-row"><div class="k">%s</div>'
+                   '<div class="track"><span class="fill" style="width:%.2f%%"></span></div>'
+                   '<div class="v">%s</div></div>'
+                   % (inline(label), w, inline(raw.replace('%', '')) + ('<small>%</small>' if '%' in raw else '')))
     out.append('  </div>')
     note = ' '.join(b[1] for b in bl if b[0] == 'para')
     if note:

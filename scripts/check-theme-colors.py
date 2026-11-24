@@ -191,6 +191,29 @@ def load_theme(path):
             out[name] = (hexv, rgb)
     return out
 
+BRAND_FILL = ('var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--primary)')
+LIGHT_INK = re.compile(r'#fff|#ffffff|white|--text-[123]')
+
+def lint_component_fills(paths):
+    """组件层：品牌色做实心底时，字色必须是 --accent-ink（⛔ 不许硬写 #fff / 正文色）。
+    这是 1.2.70 那一页「深字压蓝条」的同型病：token 层查不出，因为色对本身合法，
+    错在组件把 --text-1 放到了 --accent 上。"""
+    out = []
+    block = re.compile(r'([^{}]+)\{([^{}]*)\}')
+    for path in paths:
+        raw = re.sub(r'\x2f\x2a.*?\x2a\x2f', '', open(path, encoding='utf-8').read(), flags=re.S)
+        for sel, body in block.findall(raw):
+            sel = ' '.join(sel.split())
+            bg = re.search(r'background(?:-color)?\s*:\s*([^;]+)', body)
+            if not bg or bg.group(1).strip() not in BRAND_FILL:
+                continue
+            col = re.search(r'(?<!-)color\s*:\s*([^;]+)', body)
+            if col and LIGHT_INK.search(col.group(1)) and 'accent-ink' not in col.group(1):
+                out.append(dict(file=os.path.basename(path), sel=sel[:90],
+                                ink=col.group(1).strip()[:32]))
+    return out
+
+
 def audit(path):
     v = load_theme(path)
     grounds = [(n, v[n][0], v[n][1]) for n in GROUNDS if n in v]
@@ -489,6 +512,11 @@ def main():
         want = {s.strip() for s in a.only.split(',') if s.strip()}
         files = [f for f in files if f[:-4] in want]
     rows = [audit(os.path.join(a.dir, f)) for f in files]
+    asset_dir = os.path.dirname(os.path.abspath(a.dir.rstrip('/')))
+    paths = [os.path.join(asset_dir, f) for f in ('base.css', 'layouts.css')
+             if os.path.isfile(os.path.join(asset_dir, f))]
+    paths += [os.path.join(a.dir, f) for f in files]
+    comp_fills = lint_component_fills(paths)
     rows.sort(key=lambda r: (-r['fail'], -r['warn'], r['file']))
     agg = dict(themes=len(rows),
                with_fail=sum(1 for r in rows if r['fail']),
@@ -496,7 +524,8 @@ def main():
                clean=sum(1 for r in rows if not r['fail'] and not r['warn']), by_code={},
                amb_waived=sum(r['amb_waived'] for r in rows),
                blkok=sum(1 for r in rows for i in r['issues'] if i['code'] == 'BLKOK'),
-               amb_stale=sum(r['amb_stale'] for r in rows))
+               amb_stale=sum(r['amb_stale'] for r in rows),
+               comp_fills=len(comp_fills))
     for r in rows:
         for i in r['issues']:
             if i['sev'] in ('F', 'W'):
@@ -504,10 +533,18 @@ def main():
     if a.json:
         json.dump(dict(summary=agg, rows=rows), open(a.json, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(json.dumps(agg, ensure_ascii=False, indent=1))
+    for c in comp_fills:
+        print('FAIL 组件字色  %s  %s  →  %s（须改 --accent-ink）' % (c['file'], c['sel'], c['ink']))
     if a.md:
-        open(a.md, 'w', encoding='utf-8').write(render_md(rows, agg))
+        md = render_md(rows, agg)
+        if comp_fills:
+            md += '\n## 组件层（品牌色实心底上的字）\n\n'
+            md += '| 文件 | 选择器 | 现字色 | 修法 |\n|---|---|---|---|\n'
+            for c in comp_fills:
+                md += '| %s | `%s` | `%s` | 改 `var(--accent-ink)` |\n' % (c['file'], c['sel'], c['ink'])
+        open(a.md, 'w', encoding='utf-8').write(md)
     # 2026-11-23 评审#04：原先只打印不退出，对比度硬伤也 exit 0
-    return 1 if agg["with_fail"] else 0
+    return 1 if (agg["with_fail"] or agg['comp_fills']) else 0
 
 if __name__ == '__main__':
     sys.exit(main())
