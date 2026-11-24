@@ -610,9 +610,13 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
 .bars{margin-top:28px;display:flex;flex-direction:column;gap:16px}
 .bars .bar-row{display:grid;grid-template-columns:236px 1fr 84px;align-items:center;gap:20px}
 .bars .track{position:relative;height:44px;border-radius:999px;overflow:hidden;
-  background:color-mix(in oklab, var(--accent) 13%, var(--surface))}
-.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;
-  background:var(--accent);opacity:.92}
+  background:var(--bar-track, color-mix(in oklab, var(--accent) 13%, var(--surface)));
+  box-shadow:inset 0 2px 6px var(--bar-well, transparent),
+    inset 0 1px 0 var(--bar-rim, transparent), inset 0 -1px 0 var(--bar-rim-bottom, transparent)}
+.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;overflow:hidden;
+  background:var(--bar-fill, var(--accent));box-shadow:var(--bar-fill-ring, none)}
+.bars .fill::after{content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--bar-fill-gloss, none);pointer-events:none}
 .bars .k{font-size:var(--t-cap);font-weight:600;color:var(--text-1);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bars .v{font-size:var(--t-h4);font-weight:700;color:var(--accent);text-align:right;

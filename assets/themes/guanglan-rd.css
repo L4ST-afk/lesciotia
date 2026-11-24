@@ -17,6 +17,14 @@
   --aero-ring-violet:0 0 0 1px rgba(104,84,186,.28); /* 紫玻璃 */
   --aero-ring-coral:0 0 0 1px rgba(170,64,22,.28);   /* 桃玻璃 */
   --aero-ink:rgba(14,86,110,.11);
+  /* 比例条玻璃皮：轨道是水槽玻璃、条身是果冻凝胶；只在本主题声明，别的瓦作继承不到就保持平涂 */
+  --bar-track:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(199,233,248,.58) 100%);
+  --bar-rim:rgba(255,255,255,.94);
+  --bar-well:rgba(12,70,100,.24);
+  --bar-rim-bottom:rgba(255,255,255,.62);
+  --bar-fill:linear-gradient(180deg,#8fd8f2 0%,#3aa3cf 46%,#1a7fb8 100%);
+  --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.72) 0,rgba(255,255,255,.34) 12px,rgba(255,255,255,.10) 30%,rgba(255,255,255,.01) 56%,rgba(255,255,255,.10) 86%,rgba(255,255,255,.28) 100%);
+  --bar-fill-ring:inset 0 1px 0 rgba(255,255,255,.70), inset 0 -1px 0 rgba(8,58,84,.30), 0 2px 6px rgba(12,70,100,.16);
   --border:rgba(32,113,134,.16);
   --border-strong:rgba(24,104,124,.30);
   --text-1:#173b52;
