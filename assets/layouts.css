@@ -480,6 +480,7 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
    只把图栏推到页边（-112px）。⛔ 不复用 .bleed——那是 hero 族的通栏图，语义不同。 */
 .split.bleed-img{grid-template-columns:minmax(0,46%) minmax(0,1fr)}
 .split.bleed-img .col-img{margin-right:-112px}
+.split.bleed-img .col-text p+p{margin-top:24px}
 .split.bleed-img .col-img .img-frame{border:0;padding:0;background:none;box-shadow:none;border-radius:var(--radius) 0 0 var(--radius)}
 
 /* ③ 底线三段卡 .cols3：三列等宽，卡内两段正文以虚线分隔，卡底一道 accent 细线。 */

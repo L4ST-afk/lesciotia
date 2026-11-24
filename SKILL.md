@@ -1,11 +1,11 @@
 ---
 name: 来雪亭Lesciotia
-version: 1.2.66
+version: 1.2.67
 description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付形态（影像件／网页件／可改件）——A 影像 deck（逐页 AI 生图 → pptx/pdf，不能改字）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可改件（原生 PPTX，文本与形状都能改）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
 metadata:
   vaccineOrigin: local
   vaccineVersion: e8d93bf0731f
-  version: "1.2.66"
+  version: "1.2.67"
   created: "2026-11-10"
   sources:
     - "html-ppt (MIT, © lewis)（历史来源：2026-11-23 起本库代码件与整册已全部自写，无复制件）"
@@ -108,6 +108,7 @@ python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [--dark
 | **可改件（C · 可编辑 PPTX）** | 原生 `.pptx`（文本/形状/图片可改） | 甲方能自己改字、和 HTML 侧共用一套瓦作 token | `export-pptx.py` 覆盖 12 个页型（含 `figure` 一图一页、`figures` 多图一页；图与图组按 `--radius` 同值裁成圆角，圆角是图片形状本身，不是贴角遮罩）；渐变与布尔经 `wash_bridge.py` 换算成 `a:gradFill` / `a:custGeom`；页切换按瓦作 `.slide` 的时长出 `p:transition`（含 morph）；spec 里 `wash`/`shapes` 的 `fill`（渐变）与 `boolean`（两圆差/交）由 `wash_bridge.py` 在导出时求值；加 `--animate` 才写 `p:timing`——每页内容形状按阅读顺序切 ≤4 组，放映时一次回车淡入一组（`animate:false` 单页关、`animate_groups` 改组数）；导出时顺手删掉母版里残留的日期/页脚/页码占位 | 客户明确要改字，或要「HTML 与 PPT 同风格」 |
 
 **册级导航条**（长册才知道讲到第几节）：首部写 `<!-- nav: 序 > 现状 > 判断 > 出册 -->`，每页写 `<!-- sec: 现状 -->`，B 侧生成 `.deck-nav`、C 侧按同数据画；`nav-block:` 出色块型（通栏底 + 当前节实块）。只放顶部、只此两式——⛔ 不放左侧（竖排要重排版心）、⛔ 不放底部（与页脚抢行）、⛔ 不做图标型（库里没有图标体系）。条高上限 44px，页面上内边距 72px，再高就压标题。
+**四式与 md 指令**：图带压卡写 `<!-- layout: ride -->`（一图当带、首段压带内、列表项当白卡，字段用全角「｜」切：`标题｜副标｜段一｜段二`）；底线三段卡写 `<!-- layout: cols3 -->`（`标题｜段一｜段二`，可再加 `<!-- chips: A｜B｜C -->` 出标签行）；左文右图出血写 `<!-- layout: bleed -->`（两段正文 + 一张图，图推到页边）。C 出口没有这三种结构，分别降级成列表页/列表页/单图页，导出时逐页打印「降级」——⛔ 不是静默丢弃。
 **三个名字怎么用**：给用户说功能名（网页件 / 可改件 / 影像件），A/B/C 只留在命令、脚本与 `check-wash` 这类工具名里。
 **常见错误**：把网页件当可改件发出去（对方改不了字）；以为两件像素全同（同一套瓦作、两个渲染器：圆角按同值裁形，裁切取景与动效仍有差）；拿影像件应急后又改内容（只能整页重出）。
 

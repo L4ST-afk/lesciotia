@@ -42,7 +42,7 @@
   --shadow:0 12px 32px rgba(30,100,124,.12),0 2px 8px rgba(20,87,111,.06);
   --shadow-lg:0 24px 64px rgba(30,100,124,.18),0 8px 20px rgba(20,87,111,.08);
   --font-sans:'Lato','华文黑体','STHeiti','Heiti SC','Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  --font-display:'Nunito','华文黑体','STHeiti','Heiti SC','Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-display:'Nunito','PingFang SC','华文黑体'   /* 标题粗体：CJK 先落到 PingFang（有 Semibold），华文黑体只有 Light/Medium，700 靠合成 */,'STHeiti','Heiti SC','Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-mono:'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Menlo,'华文黑体','STHeiti','Heiti SC',monospace;
   --letter-tight:0;              /* 中文不套英文负字距 */
   --letter-normal:0;

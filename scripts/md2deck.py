@@ -90,21 +90,29 @@ def parse_pages(body):
             if cur is not None:
                 cur['sec'] = m_sec.group(1).strip()
             continue
+        m_dir = re.match(r'\s*<!--\s*(layout|chips):\s*(.*?)\s*-->\s*$', s)
+        if m_dir:
+            if cur is not None:
+                if m_dir.group(1) == 'layout':
+                    cur['layout'] = m_dir.group(2).strip().lower()
+                else:
+                    cur['chips'] = [x.strip() for x in re.split(r'\s*[｜|]\s*', m_dir.group(2)) if x.strip()]
+            continue
         if s.startswith('# ') and not s.startswith('## '):
             if title is None and cur is None:
                 title = s[2:].strip()
             else:
-                cur = {'head': s[2:].strip(), 'body': []}
+                cur = {'head': s[2:].strip(), 'body': [], 'layout': None, 'chips': None}
                 pages.append(cur)
         elif s.startswith('## '):
-            cur = {'head': s[3:].strip(), 'body': [], 'parent': None}
+            cur = {'head': s[3:].strip(), 'body': [], 'parent': None, 'layout': None, 'chips': None}
             pages.append(cur)
         elif s.startswith('### '):
             parent = cur['parent'] or cur['head'] if cur else None
             if cur is not None and not cur['parent'] and not any(x.strip() for x in cur['body']):
                 # `##` 后紧跟 `###`：`##` 只当章名，不单独占一页
                 pages.pop()
-            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent}
+            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent, 'layout': None, 'chips': None}
             pages.append(cur)
         else:
             if cur is None:
@@ -349,6 +357,85 @@ def render_table(head, bl):
 
 
 
+def _card_fields(item: str):
+    """列表项按全角「｜」切成卡的字段：第一段是小标题，其余是段落。
+
+    只认全角竖线：半角 `|` 在 md 里是表格语法，别混。
+    """
+    parts = [x.strip() for x in re.split(r'｜', item) if x.strip()]
+    return (parts[0] if parts else ''), parts[1:]
+
+
+def render_chips(chips):
+    if not chips:
+        return ''
+    spans = ''.join('<span class="chip%s">%s</span>' % (' on' if i == 0 else '', esc(c))
+                    for i, c in enumerate(chips))
+    return '  <div class="chips">%s<span class="chip more">……</span></div>' % spans
+
+
+def render_ride(head, bl, build, fix=None, kick=''):
+    """图带压卡：1 图当图带、首段当压在图上的结论、列表项当骑压的白卡。"""
+    imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
+    paras = [b for b in bl if b[0] == 'para']
+    cards = [x for b in bl if b[0] == 'list' for x in b[1]]
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <div class="ride">')
+    out.append('    <div class="rt-img"><img src="%s" alt="%s">' % (imgs[0][1], esc(imgs[0][0])))
+    if paras:
+        out.append('      <p class="rt-thesis">%s</p>' % inline(paras[0][1]))
+    out.append('    </div>')
+    out.append('    <div class="rt-cards">')
+    for it in cards[:3]:
+        parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+        # 图带卡的小标题给两行：标题｜副标（三字段以上时），其余当正文段
+        head2 = parts[0]
+        if len(parts) >= 3:
+            head2 = parts[0] + '<br>' + parts[1]
+            ps = parts[2:]
+        else:
+            ps = parts[1:]
+        body = ''.join('<p>%s</p>' % inline(x) for x in ps)
+        out.append('      <div class="rt-card"><b>%s</b>%s</div>' % (inline(head2).replace('&lt;br&gt;', '<br>'), body))
+    out.append('    </div>')
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_cols3(head, bl, build, kick='', chips=None):
+    """底线三段卡：列表项按「标题｜段一｜段二」切，卡底一道 accent。"""
+    cards = [x for b in bl if b[0] == 'list' for x in b[1]]
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    if chips:
+        out.append(render_chips(chips))
+    out.append('  <div class="cols3">')
+    for it in cards[:3]:
+        title, ps = _card_fields(it)
+        body = ''
+        for i, x in enumerate(ps):
+            if i:
+                body += '<div class="dv"></div>'
+            body += '<p>%s</p>' % x
+        out.append('    <div class="c3"><span class="k">%s</span>%s</div>' % (inline(title), body))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_bleed(head, bl, fix=None, kick=''):
+    """左文右图出血：文本两段在左，图推到页边。"""
+    imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
+    paras = [b for b in bl if b[0] == 'para']
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <div class="split bleed-img">')
+    out.append('    <div class="col-text">')
+    for i, p_ in enumerate(paras[:3]):
+        out.append('      <p class="lede%s">%s</p>' % ('' if i == 0 else ' dim', inline(p_[1])))
+    out.append('    </div>')
+    out.append('    <div class="col-img"><figure class="img-frame"><img src="%s" alt="%s"></figure></div>' % (imgs[0][1], esc(imgs[0][0])))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
 def split_item(s: str, limit: int = 19):
     """C 出口的 bullets 正文 32px、单条只有 19 字的位置；长句要拆成「主句 + 小注」。
 
@@ -380,7 +467,7 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
     对照：cover/bullets/quote/table/end 有对应；image 系列与 code 在 C 出口没有等价页型
     （C 的图片只能是版式里的装饰，不是「一图一页」），跳过往 `skipped` 里记，不硬塞。
     """
-    out, skipped = [], []
+    out, skipped, notes = [], [], []
     slide = {'type': 'cover', 'title': [title],
              'kicker': meta.get('kicker', ''),
              'lede': '', 'source': meta.get('source', brand),
@@ -389,9 +476,45 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
     for idx, pg in enumerate(pages, 1):
         bl = blocks(pg['body'])
         fam = family_of(bl)
+        layout = pg.get('layout')
         head = pg['head']
         foot = f'{brand} · {idx:02d}'
-        if fam == 'quote':
+        if layout in ('ride', 'cols3', 'bleed'):
+            cards = [x for b in bl if b[0] == 'list' for x in b[1]]
+            paras = [b[1] for b in bl if b[0] == 'para']
+            imgs = [b for b in bl if b[0] == 'img']
+            if layout == 'ride' and imgs and cards:
+                titles, caps = [], []
+                for it in cards[:5]:
+                    t, ps = _card_fields(it)
+                    titles.append(t)
+                    caps.append(ps[0] if ps else '')
+                out.append({'type': 'bullets', 'title': head, 'items': titles,
+                            'captions': caps, 'source': meta.get('source', brand), 'footer': foot})
+                notes.append((idx, head, '图带压卡：C 侧降级为列表页，图与压卡结构不保留'))
+            elif layout == 'cols3' and cards:
+                titles, caps = [], []
+                for it in cards[:5]:
+                    t, ps = _card_fields(it)
+                    titles.append(t)
+                    caps.append(' '.join(ps)[:96])
+                out.append({'type': 'bullets', 'title': head, 'items': titles,
+                            'captions': caps, 'source': meta.get('source', brand), 'footer': foot})
+                notes.append((idx, head, '底线三段卡：C 侧降级为列表页，卡底 accent 线不保留'))
+            elif layout == 'bleed' and imgs:
+                src = imgs[0][2]
+                if not re.match(r'(https?:|data:|/)', src):
+                    src = str((a_src_dir / src).resolve()) if a_src_dir else src
+                out.append({'type': 'figure', 'title': head, 'image': src,
+                            'caption': re.sub(r'<[^>]+>', '', paras[0]) if paras else imgs[0][1],
+                            'source': meta.get('source', brand), 'footer': foot})
+                notes.append((idx, head, '左文右图出血：C 侧出单图页，左侧两段正文折进图注'))
+            else:
+                notes.append((idx, head, 'layout 指令缺图或缺卡片，按普通页处理'))
+                layout = None
+        if layout == 'ride' or layout == 'cols3' or layout == 'bleed':
+            pass
+        elif fam == 'quote':
             q = [b for b in bl if b[0] == 'quote'][0][1]
             paras = [b for b in bl if b[0] == 'para']
             out.append({'type': 'quote', 'title': head, 'text': q,
@@ -466,7 +589,7 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
             out[-1]['sec'] = pg['sec']
     out.append({'type': 'end', 'title': '谢谢', 'lede': meta.get('outro', '讲完这一册，剩下的交给现场。'),
                 'source': meta.get('source', brand), 'footer': brand})
-    return {'slides': out, 'skipped': skipped}
+    return {'slides': out, 'skipped': skipped, 'notes': notes}
 
 
 def emit_pptx(a, build_steps: bool) -> int:
@@ -488,6 +611,8 @@ def emit_pptx(a, build_steps: bool) -> int:
     tmp.write_text(json.dumps(payload, ensure_ascii=False), encoding='utf-8')
     for idx, head, why in spec['skipped']:
         print(f'  · 跳过第 {idx} 页「{head}」：{why}')
+    for idx, head, why in spec.get('notes', []):
+        print(f'  · 降级第 {idx} 页「{head}」：{why}')
     cmd = [sys.executable, str(ROOT / 'scripts' / 'export-pptx.py'), str(tmp),
            '-o', str(a.pptx), '--theme', theme, '--allow-prose', '--force']
     # md 是这册的正源：成稿闸的「字数够不够 / 单条太长」判据是给手写 spec 用的，
@@ -546,7 +671,18 @@ def build(src_path, out, theme, title_override, build_steps):
         bl = blocks(pg['body'])
         fam = family_of(bl)
         kick = pg.get('parent') or ('第 %02d 页' % idx)
-        if fam == 'quote':
+        layout = pg.get('layout')
+        has_img = any(b[0] == 'img' for b in bl)
+        if layout == 'ride' and has_img:
+            inner = render_ride(pg['head'], bl, build_steps, fix_image, kick)
+            fam = 'ride'
+        elif layout == 'cols3':
+            inner = render_cols3(pg['head'], bl, build_steps, kick, pg.get('chips'))
+            fam = 'cols3'
+        elif layout == 'bleed' and has_img:
+            inner = render_bleed(pg['head'], bl, fix_image, kick)
+            fam = 'bleed'
+        elif fam == 'quote':
             inner = render_quote(pg['head'], bl, kick)
         elif fam == 'image1':
             inner = render_image_single(pg['head'], bl, build_steps, fix_image)
@@ -560,7 +696,7 @@ def build(src_path, out, theme, title_override, build_steps):
             inner = render_code(pg['head'], bl, kick if pg.get('parent') else '')
         else:
             inner = render_table(pg['head'], bl)
-        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split'}[fam]
+        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split', 'ride': 'image-band', 'cols3': 'text', 'bleed': 'image-split'}[fam]
         sec.append('  <section data-style="%s" class="slide" data-title="%s">' % (style, esc(pg['head'])))
         sec.append(nav_markup(nav, nav_form, pg.get('sec'))) if nav and pg.get('sec') else None
         sec.append(inner)

@@ -1,8 +1,8 @@
 {
   "theme": "guanglan-rd",
   "source": "../themes/guanglan-rd.css",
-  "source_sha256": "98c96fc2f125ad4edcf91486c3f6585f31b6f12acf48a22809ca32c8e8df1e2f",
-  "generated": "2026-11-23T12:44:40",
+  "source_sha256": "f656b7bc7da29f2777d331fe86996b94593a649b4001188b36692b34bb649bab",
+  "generated": "2026-11-24T23:47:21",
   "renderer": "chrome-headless",
   "palette": [
     "#000A0F",
@@ -49,7 +49,7 @@
       "kind": "board",
       "w": 1128,
       "h": 524,
-      "sha256": "b12733e65b151e541500fe5331e23c331417c64e497dfecd98576c3837fa799c"
+      "sha256": "8c9a50f3b4f52ee7b0fe1cfc5e294f6cd514b31c94ce7e23f52c198eafe82f89"
     }
   ],
   "unknown_material_like": []
