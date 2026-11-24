@@ -598,6 +598,58 @@ def claim_band(text):
     return '  <div class="claim-band"><span>%s</span></div>' % inline(text)
 
 
+def render_bars(head, bl, kick=''):
+    """横条比例：每行「标签｜数值」，轨道内嵌标签，实色段按比例拉长，数值钉右端。"""
+    rows = [x for b in bl if b[0] == 'list' for x in b[1]]
+    if not rows:
+        return render_text(head, bl, False, kick)
+    vals = []
+    for it in rows[:7]:
+        parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+        label = parts[0] if parts else ''
+        raw = parts[1] if len(parts) > 1 else '0'
+        num = re.search(r'[-+]?\d+(?:\.\d+)?', raw)
+        vals.append((label, float(num.group()) if num else 0.0, raw))
+    peak = max(v for _, v, _ in vals) or 1.0
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <div class="bars">')
+    for label, v, raw in vals:
+        w = v / peak * 100 if peak > 100 else v
+        w = max(2, min(100, w))
+        out.append('    <div class="bar-row"><div class="track">'
+                   '<span class="fill" style="width:%.2f%%"></span>'
+                   '<span class="k">%s</span></div><div class="v">%s</div></div>'
+                   % (w, inline(label), inline(raw.replace('%', '')) + ('<small>%</small>' if '%' in raw else '')))
+    out.append('  </div>')
+    note = ' '.join(b[1] for b in bl if b[0] == 'para')
+    if note:
+        out.append('  <p class="note">%s</p>' % inline(note))
+    return '\n'.join(out)
+
+
+def render_team(head, bl, fix=None, kick=''):
+    """团队卡：人像切进有机形状，姓名/职务/一句简介在下；无图时留同形淡色块。"""
+    cards = [x for b in bl if b[0] == 'list' for x in b[1]]
+    imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
+    if not cards:
+        return render_text(head, bl, False, kick)
+    n = max(2, min(4, len(cards)))
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <div class="team" style="--n:%d">' % n)
+    for i, it in enumerate(cards[:4]):
+        parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+        name = parts[0] if parts else ''
+        role = parts[1] if len(parts) > 1 else ''
+        bio = parts[2] if len(parts) > 2 else ''
+        out.append('    <div class="mem"><div class="ava"><span class="back"></span>')
+        if i < len(imgs):
+            out.append('      <div class="mask"><img src="%s" alt="%s"></div>' % (imgs[i][1], esc(imgs[i][0])))
+        out.append('    </div><p class="nm">%s</p><p class="rl">%s</p><p class="dv"></p>'
+                   '<p class="bio">%s</p></div>' % (inline(name), inline(role), inline(bio)))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
 def split_item(s: str, limit: int = 19):
     """C 出口的 bullets 正文 32px、单条只有 19 字的位置；长句要拆成「主句 + 小注」。
 
@@ -720,7 +772,31 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
         elif layout == 'timeline-arc':
             notes.append((idx, head, '弧线时间轴缺里程碑，按普通页处理'))
             layout = None
-        if layout in ('ride', 'cols3', 'bleed', 'gantt', 'modules', 'arc', 'timeline-arc'):
+        elif layout == 'bars' and cards:
+            rows = []
+            for it in cards[:7]:
+                parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+                rows.append([parts[0] if parts else '', parts[1] if len(parts) > 1 else ''])
+            out.append({'type': 'table', 'title': head, 'cols': ['项目', '占比'], 'rows': rows,
+                        'source': meta.get('source', brand), 'footer': foot})
+            notes.append((idx, head, '横条比例：C 侧降级为表格，条与轨道不保留'))
+        elif layout == 'bars':
+            notes.append((idx, head, '横条比例缺数据，按普通页处理'))
+            layout = None
+        elif layout == 'team' and cards:
+            items, caps = [], []
+            for it in cards[:4]:
+                parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+                items.append(parts[0] if parts else '')
+                caps.append(' / '.join(parts[1:]))
+            out.append({'type': 'bullets', 'title': head, 'items': items,
+                        'captions': caps, 'source': meta.get('source', brand), 'footer': foot})
+            notes.append((idx, head, '团队卡：C 侧降级为列表页，人像与有机形不保留'))
+        elif layout == 'team':
+            notes.append((idx, head, '团队卡缺成员，按普通页处理'))
+            layout = None
+        if layout in ('ride', 'cols3', 'bleed', 'gantt', 'modules', 'arc', 'timeline-arc',
+                      'bars', 'team'):
             pass
         elif fam == 'quote':
             q = [b for b in bl if b[0] == 'quote'][0][1]
@@ -902,6 +978,12 @@ def build(src_path, out, theme, title_override, build_steps):
         elif layout == 'timeline-arc':
             inner = render_timeline(pg['head'], bl, kick)
             fam = 'tline'
+        elif layout == 'bars':
+            inner = render_bars(pg['head'], bl, kick)
+            fam = 'bars'
+        elif layout == 'team':
+            inner = render_team(pg['head'], bl, fix_image, kick)
+            fam = 'team'
         elif fam == 'quote':
             inner = render_quote(pg['head'], bl, kick)
         elif fam == 'image1':
@@ -918,7 +1000,8 @@ def build(src_path, out, theme, title_override, build_steps):
             inner = render_table(pg['head'], bl)
         style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split', 'ride': 'image-band', 'cols3': 'text', 'bleed': 'image-split',
                              'gantt': 'process-gantt', 'modules': 'text',
-                             'arc': 'image-split', 'tline': 'process-timeline'}[fam]
+                             'arc': 'image-split', 'tline': 'process-timeline',
+                             'bars': 'data-stat', 'team': 'image-card'}[fam]
         has_band = bool(pg.get('band'))
         sec.append('  <section data-style="%s" class="slide%s" data-title="%s">'
                    % (style, ' has-band' if has_band else '', esc(pg['head'])))
