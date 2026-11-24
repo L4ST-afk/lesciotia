@@ -1,0 +1,114 @@
+{
+  "theme": "qiu-r",
+  "source": "../themes/qiu-r.css",
+  "source_sha256": "32d08bebf8d2444f79e3be4e78e24fab4a0803ecec92d181f1af085dca25dd32",
+  "generated": "2026-11-23T12:48:27",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#1B3A41",
+    "#1D2421",
+    "#244A52",
+    "#253B5C",
+    "#2A545C",
+    "#2F6B57",
+    "#3C757E",
+    "#4A8891",
+    "#4C5651",
+    "#6A241F",
+    "#6C746E",
+    "#6F7873",
+    "#8A3932",
+    "#8A6A18",
+    "#8D958F",
+    "#AA822A",
+    "#C9C6B8",
+    "#E9E4D4",
+    "#EFEBDE",
+    "#F4F1E7",
+    "#F6F2E4",
+    "#FBFAF3",
+    "#FFFFFF"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "57dac3d22780d449cba4fb8c691eb765eebeab93a067312a7c2dbf1f7b73ffaf"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "293068fe987b32d43daee424c940361ecf52202666eec11e6405ee451847e178"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "b0e8c4a0189f4900b4d3fc388d57f5a70a2f789b1a9738f28a11eca8299ee043"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "ab6e9aeff290d9406590bdac6fd70d9b6b648a4360ab45a9e070ceabcbde12ad"
+    },
+    {
+      "file": "tex-qj-fiber.png",
+      "kind": "svg-token",
+      "token": "qj-fiber",
+      "tile_w": 220,
+      "tile_h": 220,
+      "w": 440,
+      "h": 440,
+      "sha256": "a9457ed42d748614e30b6da50a6d880942b8ff4f17c811faf01dec4798406519"
+    },
+    {
+      "file": "tex-qj-ripple.png",
+      "kind": "svg-token",
+      "token": "qj-ripple",
+      "tile_w": 240,
+      "tile_h": 34,
+      "w": 480,
+      "h": 68,
+      "sha256": "41d0bdbd1b2dd3f866d363f029f39ba897b9d6e2923f7c19edc7bc01335ed967"
+    },
+    {
+      "file": "tex-qj-speck.png",
+      "kind": "svg-token",
+      "token": "qj-speck",
+      "tile_w": 140,
+      "tile_h": 140,
+      "w": 280,
+      "h": 280,
+      "sha256": "44a96ecdb383114c4d7713d64caf522e9d76f77ff6608b63e8d01bb36309f1bc"
+    },
+    {
+      "file": "tex-qj-brick-tile.png",
+      "kind": "svg-token",
+      "token": "qj-brick-tile",
+      "tile_w": 120,
+      "tile_h": 56,
+      "w": 240,
+      "h": 112,
+      "sha256": "15690e1331edd437852dd40255724f2747ff4cc49707cc5a0ae52e7235455e6b"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 1332,
+      "sha256": "3b2e2691730c8643cc9517dc63a032efced6fdc3126f8d71c9316242117b86b6"
+    }
+  ],
+  "unknown_material_like": []
+}

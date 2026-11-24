@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="century-ave"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../assets/themes/century-ave.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#0d0c0a;padding:22px 30px;font-family:var(--font-note)}
+h1{font:400 18px/1.3 system-ui;color:#f2ede4;margin:0 0 3px}
+.sub{font:400 12px/1.5 system-ui;color:#8d8579;margin:0 0 16px}
+.cap{color:#cbb79a;font-size:12.5px;letter-spacing:.08em;margin:0 0 6px}
+.stage{position:relative;width:820px;height:230px;border-radius:12px;overflow:hidden;margin:0 0 16px;
+  background:#0d0c0a}
+/* 背景内容：一块黑金大理石 + 一盏暖灯箱 + 一排细字，折射要在有反差的东西上才看得见 */
+.under{position:absolute;inset:0}
+.under .cp-marble{position:absolute;inset:0}
+.under .lamp{position:absolute;left:-6%;top:-30%;width:46%;height:170%;
+  background:radial-gradient(52% 60% at 40% 45%,rgba(255,226,168,.95),rgba(255,196,96,.35) 46%,rgba(255,196,96,0) 72%)}
+.under .stripes{position:absolute;inset:0;background:
+   repeating-linear-gradient(90deg,rgba(255,244,214,.22) 0 1px,transparent 1px 9px);
+   mask-image:linear-gradient(90deg,transparent 40%,#000 62%,transparent 96%)}
+/* 玻璃卡：底 + 描边 + 光，与主题 .glass 同族；hero 只多一条 backdrop-filter 的折射 */
+.card{position:absolute;inset:30px 44px;border-radius:18px;
+  background:
+    radial-gradient(112% 92% at 26% -8%,rgba(255,226,168,.22),rgba(255,226,168,0) 66%),
+    linear-gradient(105deg,transparent 58%,rgba(255,255,255,.12) 63%,rgba(255,255,255,.05) 68%,transparent 74%),
+    linear-gradient(135deg,rgba(124,104,84,.30),rgba(66,54,42,.24));
+  border:1px solid rgba(255,240,208,.24);
+  box-shadow:0 18px 40px rgba(0,0,0,.42),0 10px 80px rgba(255,200,120,.10),
+    inset 0 1px 0 rgba(255,246,220,.50),inset 1px 0 0 rgba(255,240,208,.16),
+    inset 0 -1px 0 rgba(0,0,0,.32),inset 0 0 54px rgba(255,222,160,.18);
+  display:flex;align-items:flex-end;padding:18px 22px;color:#fbeecd;font-size:13.5px;line-height:1.6}
+/* A 只有模糊；B/C 加真折射 */
+.hero{backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%)}
+.hero--deep{backdrop-filter:url(#lg-refract) blur(4px) saturate(118%);
+  -webkit-backdrop-filter:url(#lg-refract) blur(4px) saturate(118%)}
+.hero--strong{backdrop-filter:url(#lg-refract2) blur(3px) saturate(118%);
+  -webkit-backdrop-filter:url(#lg-refract2) blur(3px) saturate(118%)}
+</style></head><body>
+
+<svg width="0" height="0" aria-hidden="true">
+  <!-- 兜底：湍流位移场。seed 固定、滤镜本体不动画（红线：禁 feSpecularLighting 动画） -->
+  <filter id="lg-refract" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="62" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="lg-refract2" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.020" numOctaves="2" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="92" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<h1>century-ave · hero 玻璃卡（真折射）</h1>
+<p class="sub">同一块背后的东西（黑金石面 + 暖灯箱 + 细竖纹），只换 backdrop-filter：A 纯模糊 / B 位移 62 / C 92</p>
+
+<p class="cap">A · 只有 blur（现在的 .glass）</p>
+<div class="stage"><div class="under"><div class="cp-marble"></div><div class="lamp"></div><div class="stripes"></div></div>
+  <div class="card hero">A：背后被糊成一片，玻璃只是「雾」——边缘没有任何弯折</div></div>
+
+<p class="cap">B · + 真折射 scale 62 / blur 4</p>
+<div class="stage"><div class="under"><div class="cp-marble"></div><div class="lamp"></div><div class="stripes"></div></div>
+  <div class="card hero--deep">B：靠近边缘处，背后的竖纹被往里掰弯，像一块有厚度的玻璃压在纸上</div></div>
+
+<p class="cap">C · + 真折射 scale 92 / blur 3（拆台档）</p>
+<div class="stage"><div class="under"><div class="cp-marble"></div><div class="lamp"></div><div class="stripes"></div></div>
+  <div class="card hero--strong">C：位移过大，竖纹在边带被揉成波浪——过了就假</div></div>
+
+</body></html>

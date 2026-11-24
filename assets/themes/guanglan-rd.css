@@ -1,0 +1,356 @@
+/* theme: guanglan-rd - 广兰路 Guanglan Rd ｜ 天蓝玻璃复古科技
+   命名：上海浦东 · 广兰路（地铁 2 号线，张江集成电路一带）。
+   玻璃幕墙的芯片厂与洁净车间、宽到近乎空的路、修得一丝不苟的绿化带——
+   「明亮、洁净、被精心维护的自然」在现实里的原型，正是 Frutiger Aero 想拍的那种未来。
+   风格源：Aqua / Frutiger Aero 2007（原 frutiger-aero） */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#eaf7ff;
+  --bg-soft:#f2fbfb;
+  --surface:rgba(255,255,255,.86);
+  --surface-2:rgba(223,249,246,.86);
+  /* Aqua 玻璃四件：镜面亮带（19→20.4% 的硬边＝水面线）、玻璃底、外暗环、接地反光 */
+  --aero-gloss:linear-gradient(180deg,rgba(255,255,255,.98) 0,rgba(255,255,255,.82) 18px,rgba(255,255,255,.36) 21px,rgba(255,255,255,.06) 38%,rgba(255,255,255,.22) 62%,rgba(255,255,255,.02) 74%,rgba(255,255,255,.26) 90%,rgba(255,255,255,.50) 100%);
+  --aero-rim:#ffffff;
+  --aero-ring:0 0 0 1px rgba(16,90,120,.26);      /* 蓝玻璃 */
+  --aero-ring-violet:0 0 0 1px rgba(104,84,186,.28); /* 紫玻璃 */
+  --aero-ring-coral:0 0 0 1px rgba(170,64,22,.28);   /* 桃玻璃 */
+  --aero-ink:rgba(14,86,110,.11);
+  --border:rgba(32,113,134,.16);
+  --border-strong:rgba(24,104,124,.30);
+  --text-1:#173b52;
+  --text-2:#4b6c7d;
+  --text-3:#4b6875;             /* 玻璃底 #d9effb 上 5.00:1（原 #7695a2 压底仅 2.92） */
+  /* 三强调色按 L* 拉开三档（2026-11-20 配色体检后定）：主色 L*50 / 紫玻璃 L*64 / 珊瑚 L*40，
+     两两 ΔL* ≥10，转灰或色弱时不并级。原紫 #8b7ce8(57.8)、原珊瑚 #e0632f(57.1) 只差 0.7，已改。 */
+  --accent:#1a7fb8;             /* Aqua 主色（蓝）：结构件、链接下划线、主强调；压底 4.03:1 */
+  --accent-2:#9c8feb;           /* 紫玻璃：L*64 */
+  --accent-3:#a04018;           /* 暖珊瑚压成深陶土：L*40 */
+  --accent-ink:#000a0f;         /* 主色上的字：原 #042126 只有 3.82:1，压到近黑才够 4.5:1（实 4.54） */
+  --good:#168f70;
+  --warn:#d58a26;
+  --bad:#d65b65;
+  --grad:linear-gradient(135deg,#1a7fb8,#9c8feb 58%,#b26ebb 71%,#b1495a 90%,#a04018);
+  /* 2026-11-23 补两个中间色标：紫 #9c8feb → 棕 #a04018 色相差 111°、RGB 直连彩度掉 37%（中段发灰）。
+     #b26ebb / #b1495a 是按 OKLCH 色相弧取的中间点（L* 与彩度同步过渡），补齐后路径彩度掉 0%。
+     判据见 check-theme-colors 的 D 项；真源见「渐变实验室」mudong-gradient.pages.dev。 */
+  --grad-soft:linear-gradient(135deg,#dbeefb,#e7e2fc 58%,#ffe9df);
+  --radius:20px;
+  --radius-sm:12px;
+  --radius-lg:28px;
+  --shadow:0 12px 32px rgba(30,100,124,.12),0 2px 8px rgba(20,87,111,.06);
+  --shadow-lg:0 24px 64px rgba(30,100,124,.18),0 8px 20px rgba(20,87,111,.08);
+  --font-sans:'Lato','华文黑体','STHeiti','Heiti SC','Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-display:'Nunito','华文黑体','STHeiti','Heiti SC','Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Menlo,'华文黑体','STHeiti','Heiti SC',monospace;
+  --letter-tight:0;              /* 中文不套英文负字距 */
+  --letter-normal:0;
+}
+
+html,body{
+  background:#dff2fb;
+  color:var(--text-1);
+  font-family:var(--font-sans);
+  font-weight:500;
+}
+
+body{background:linear-gradient(145deg,#d6eefb 0%,#e4f7f4 100%)}
+.deck{
+  background:
+    /* 天顶白光 */
+    radial-gradient(76% 44% at 50% -12%,rgba(255,255,255,.96) 0%,rgba(255,255,255,.42) 46%,rgba(255,255,255,0) 70%),
+    /* 极光：压到画面下部作地平辉光（青→紫→珊瑚），不横穿标题 */
+    linear-gradient(0deg,rgba(90,205,235,0) 0%,rgba(90,205,235,.15) 5%,rgba(150,140,250,.14) 12%,rgba(255,150,110,.09) 20%,rgba(255,150,110,0) 34%),
+    /* 散景：两枚极软光斑（bokeh），只做空气感 */
+    radial-gradient(circle at 79% 14%,rgba(255,255,255,.52) 0,rgba(255,255,255,.16) 5%,rgba(255,255,255,0) 11%),
+    radial-gradient(circle at 90% 30%,rgba(140,215,255,.26) 0,rgba(140,215,255,.08) 5%,rgba(140,215,255,0) 10%),
+    /* 气泡：两枚玻璃球（亮环 + 月牙高光 + 薄填充），只落页脚以下的水区，不压任何卡片 */
+    radial-gradient(circle at 89% 89%,rgba(190,240,255,.12) 0,rgba(190,240,255,.12) 32px,rgba(120,180,220,.18) 34px,rgba(120,180,220,0) 38px,rgba(255,255,255,.82) 40px,rgba(150,220,250,.50) 43px,rgba(150,220,250,0) 46px),
+    radial-gradient(circle at 88.1% 88.1%,rgba(255,255,255,.92) 0,rgba(255,255,255,.50) 4px,rgba(255,255,255,0) 10px),
+    radial-gradient(circle at 77% 93%,rgba(190,240,255,.10) 0,rgba(190,240,255,.10) 16px,rgba(255,255,255,.72) 17px,rgba(150,220,250,.42) 19px,rgba(150,220,250,0) 22px),
+    /* 水线：近底略压深，像水面托住画面 */
+    linear-gradient(180deg,rgba(58,140,200,0) 82%,rgba(58,140,200,.06) 100%),
+    linear-gradient(168deg,#d9f2ff 0%,#e4f1fd 50%,#ebeefb 100%);
+}
+.slide{padding:80px 104px}  /* 正文基准由 base.css 给，主题只覆盖 padding */   /* 引擎无正文基准，主题必须给 */
+
+h1.title,h2.title,.h1,.h2,h3,.h3,h4,.h4{
+  font-family:var(--font-display);
+  color:var(--text-1);
+}
+h1.title,.h1{font-weight:700;line-height:1.06}   /* 900 在本机与 700 同面同墨量，收敛到 700 免得换机跳档 */
+h2.title,.h2{font-weight:700;line-height:1.1}
+h3,.h3,h4,.h4{font-weight:700}
+.lede{color:var(--text-2);font-weight:500}
+.kicker,.eyebrow{
+  font-family:var(--font-mono);
+  font-weight:700;
+  color:var(--text-3);
+  letter-spacing:.08em;
+}
+
+/* 玻璃板：顶弧光 + 纵向亮→蓝渐变 + 三圈边界（内亮线、内暗收、外 1px 暗环） */
+.card{
+  background:var(--aero-gloss),linear-gradient(180deg,#f6fdff 0%,#e2f4fc 42%,#d9effb 100%);
+  border:1px solid var(--aero-rim);
+  border-radius:var(--radius);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -2px 6px -3px rgba(16,90,120,.32),
+    var(--aero-ring),
+    0 18px 38px -14px rgba(16,90,120,.45),
+    0 5px 12px rgba(16,90,120,.14);
+  backdrop-filter:blur(18px) saturate(135%);
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+}
+.card-soft{
+  background:var(--aero-gloss),linear-gradient(180deg,#f9f6ff 0%,#f1ecfe 42%,#ece7fd 100%);
+  border-color:var(--aero-rim);
+  box-shadow:inset 0 1px 0 #ffffff,inset 0 -2px 6px -3px rgba(104,84,186,.26),var(--aero-ring-violet),0 18px 38px -14px rgba(90,72,170,.42),0 5px 12px rgba(90,72,170,.14);
+}
+.card-outline{
+  background:linear-gradient(180deg,rgba(255,255,255,.70) 0%,rgba(255,255,255,.30) 19%,rgba(255,255,255,.08) 20.4%,rgba(255,255,255,.02) 44%,rgba(255,255,255,0) 100%),
+    linear-gradient(180deg,rgba(240,252,255,.72),rgba(203,235,248,.62));
+  border-color:rgba(16,90,120,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),var(--aero-ring),0 10px 24px -14px rgba(16,90,120,.34);
+}
+.card-accent{
+  border-top:3px solid var(--accent-3);
+  border-left:0;
+  background:var(--aero-gloss),linear-gradient(180deg,#fffaf6 0%,#ffeade 42%,#ffe4d8 100%);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -2px 6px -3px rgba(150,70,30,.24),
+    var(--aero-ring-coral),
+    0 -1px 0 rgba(224,99,47,.22),
+    0 18px 38px -14px rgba(16,90,120,.42);
+}
+.card-hover:hover{box-shadow:inset 0 1px 0 #fff,var(--aero-ring),0 26px 48px -16px rgba(16,90,120,.50),0 6px 14px rgba(16,90,120,.16);transform:translateY(-3px)}
+
+/* 玻璃板 .glass：与胶囊同一套语法，只是把尺度放大——
+   上缘 0–15px 镜面亮带 → 16px 处硬水线 → 中部透光 → 下缘 22px 接地反光。
+   大板不按比例做反光（30% 折算到 500px 高会变成半块渐变），这里取绝对像素 16 / 22。
+   ⛔ 别拿它当小构件用：高度低于 240px 时改用 .card 或 .pill，16px 亮带会占掉一半。 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+
+  border-radius:var(--radius-lg);corner-shape:squircle;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,.99) 0,
+      rgba(255,255,255,.97) 15px,
+      rgba(255,255,255,.84) 16px,
+      rgba(255,255,255,.79) calc(100% - 26px),
+      rgba(255,255,255,.74) calc(100% - 22px),
+      rgba(255,255,255,.87) calc(100% - 10px),
+      rgba(255,255,255,.97) 100%);
+  -webkit-backdrop-filter:blur(26px) saturate(118%);
+  backdrop-filter:blur(26px) saturate(118%);
+  border:1px solid rgba(9,84,124,.34);
+  box-shadow:
+    0 30px 70px rgba(12,70,110,.22),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,255,255,.95),
+    inset 0 0 0 1px rgba(255,255,255,.50);
+}
+
+/* 玻璃胶囊 v5：顶部高光由「硬切横线」改为「圆角高光胶囊」（Frutiger 常见操作）。
+   顶层高光收窄为 0→13px 柔化白渐变，本体首段在 13px 处平滑衔接，去掉旧的
+   16px→17.5px 硬切横线；::before 再叠一枚 border-radius:999px 的白色半透明
+   高光胶囊覆盖上半部，模拟玻璃弧面的集中反光。只改高光表现，不动尺寸/内距/点击区域。 */
+/* 高光胶囊：三枚按钮共享，pointer-events:none 且不设 z-index → 位于文字下层 */
+.pill::before,.pill-accent::before,.pill-good::before{
+  content:"";position:absolute;left:7%;right:7%;top:3px;height:calc(50% - 4px);
+  border-radius:999px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.34) 42%,rgba(255,255,255,.06) 82%,rgba(255,255,255,0) 100%);
+}
+.pill{
+  /* 上下内距刻意不对称（10 / 14）：1.7 行高下 CJK 字墨比行盒中心低约 2px，用多出来的下内距把它顶回去 */
+  position:relative;   /* 承载 ::before 高光胶囊定位 */
+  padding:10px 20px 14px;
+  border-radius:999px;
+  font-family:var(--font-sans);
+  font-weight:700;
+  font-size:var(--t-cap);
+  color:#03212f;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.38) 0,rgba(255,255,255,.16) 6px,rgba(255,255,255,.05) 11px,rgba(255,255,255,0) 14px),
+    linear-gradient(180deg,#a9e3fd 0,#a9e3fd 12px,#5fc0e6 15px,#3aa6e0 20px,#2a93cf 34%,#1c86c0 48%,#1478b0 60%,#125e88 70%,#1d7fa8 78%,#4aa8c8 86%,#93d8ea 93%,#b6e9f7 100%);
+  border:1px solid rgba(9,84,124,.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -2px 0 rgba(255,255,255,.04),
+    0 7px 18px rgba(12,70,100,.20),
+    0 2px 4px rgba(12,70,100,.14);
+}
+.pill-accent{
+  /* 上下内距刻意不对称（10 / 14）：1.7 行高下 CJK 字墨比行盒中心低约 2px，用多出来的下内距把它顶回去 */
+  position:relative;   /* 承载 ::before 高光胶囊定位 */
+  padding:10px 20px 14px;
+  border-radius:999px;
+  font-family:var(--font-sans);
+  font-weight:700;
+  font-size:var(--t-cap);
+  color:#2a0f04;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.38) 0,rgba(255,255,255,.16) 6px,rgba(255,255,255,.05) 11px,rgba(255,255,255,0) 14px),
+    linear-gradient(180deg,#ffc6ac 0,#ffc6ac 12px,#f79a6d 15px,#f2703f 20px,#e05f2f 34%,#d55226 48%,#c93f15 60%,#b03510 70%,#b8501f 78%,#d7833f 86%,#f2b47e 93%,#ffd9bd 100%);
+  border:1px solid rgba(150,52,14,.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 -2px 0 rgba(255,255,255,.04),
+    0 7px 18px rgba(140,60,20,.20),
+    0 2px 4px rgba(140,60,20,.14);
+}
+.pill-good{
+  /* 上下内距刻意不对称（10 / 14）：1.7 行高下 CJK 字墨比行盒中心低约 2px，用多出来的下内距把它顶回去 */
+  position:relative;   /* 承载 ::before 高光胶囊定位 */
+  padding:10px 20px 14px;
+  border-radius:999px;
+  font-family:var(--font-sans);
+  font-weight:700;
+  font-size:var(--t-cap);
+  color:#03291f;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.38) 0,rgba(255,255,255,.16) 6px,rgba(255,255,255,.05) 11px,rgba(255,255,255,0) 14px),
+    linear-gradient(180deg,#9fe9c6 0,#9fe9c6 12px,#54cf9d 15px,#1aa977 20px,#149a6a 34%,#0f8f61 48%,#0b8459 60%,#076d49 70%,#0a7a52 78%,#14966b 86%,#4fc394 93%,#b0ecd2 100%);
+  border:1px solid rgba(8,96,66,.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 -2px 0 rgba(255,255,255,.04),
+    0 7px 18px rgba(10,80,55,.20),
+    0 2px 4px rgba(10,80,55,.14);
+}
+
+.divider{background:var(--border)}
+/* 玻璃棒：一道有厚度的高光条，不是色块 */
+.divider-accent{
+  height:6px;width:72px;border-radius:999px;
+  background:linear-gradient(180deg,#7fd8ff 0%,#35aee3 46%,#1f8fc4 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -2px 3px rgba(8,50,70,.28),0 1px 2px rgba(16,88,112,.18);
+}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);
+  letter-spacing:.06em;
+  color:var(--text-3);
+}
+.progress-bar > span{background:linear-gradient(180deg,#8fd6f4 0%,#35aee3 55%,#1f8fc4 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 0 0 1px rgba(16,90,120,.18)}
+
+/* 选项：静息态是「白瓷托盘」，判对/选错才换成玻璃糖（方角，同一套软反光）。 */
+.quiz-opt{
+  border:1px solid rgba(16,80,110,.20);
+  border-radius:var(--radius);
+  background:linear-gradient(180deg,#ffffff 0%,#fefeff 54%,#f2f8fc 100%);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -4px 0 rgba(16,80,110,.07),
+    0 1px 0 rgba(255,255,255,.92),
+    0 12px 28px rgba(16,90,120,.16),
+    0 3px 7px rgba(16,90,120,.10);
+  font-family:var(--font-sans);
+  font-weight:700;
+}
+.quiz-opt:hover{
+  border-color:rgba(26,127,184,.62);
+  background:linear-gradient(180deg,#ffffff 0%,#f4fbff 58%,#e6f5fe 100%);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -4px 0 rgba(16,80,110,.07),
+    0 0 0 1px rgba(26,127,184,.22),
+    0 14px 30px rgba(16,90,120,.18);
+}
+.quiz-opt.correct{
+  border:1px solid rgba(8,96,66,.55);
+  color:#03291f;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.40) 0,rgba(255,255,255,.16) 4px,rgba(255,255,255,.06) 9px,rgba(255,255,255,0) 11px),
+    linear-gradient(180deg,#9fe9c6 0,#9fe9c6 9px,#1aa977 10.5px,#149a6a 32%,#0f8f61 46%,#0b8459 58%,#076d49 70%,#0a7a52 78%,#14966b 86%,#4fc394 93%,#b0ecd2 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.96),inset 0 -8px 16px -12px rgba(4,50,35,.22),0 9px 22px rgba(10,80,55,.22),0 3px 6px rgba(10,80,55,.14);
+}
+.quiz-opt.chosen-wrong{
+  border:1px solid rgba(150,28,44,.55);
+  color:#31060c;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.40) 0,rgba(255,255,255,.16) 4px,rgba(255,255,255,.06) 9px,rgba(255,255,255,0) 11px),
+    linear-gradient(180deg,#ffb3b9 0,#ffb3b9 9px,#e34a5c 10.5px,#d33a4e 32%,#c62c42 46%,#c01f38 58%,#a81a2f 70%,#b02b40 78%,#cf4a61 86%,#ec93a2 93%,#ffcfd6 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.94),inset 0 -8px 16px -12px rgba(60,4,12,.22),0 9px 22px rgba(150,30,45,.22),0 3px 6px rgba(150,30,45,.14);
+}
+
+.quiz-reveal{border-top:3px solid var(--accent);background:var(--aero-gloss),linear-gradient(180deg,#f9fffd,#e2f6f1);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),var(--aero-ring)}
+
+/* 相框：白瓷框 + 玻璃层，像把图卡进一块亚克力里（图本身不动，只加框） */
+.img-frame{
+  border-radius:var(--radius);
+  padding:8px;
+  background:var(--aero-gloss),linear-gradient(180deg,#ffffff 0%,#eaf8ff 100%);
+  box-shadow:inset 0 1px 0 #ffffff,var(--aero-ring),0 16px 34px -14px rgba(16,90,120,.42);
+}
+.mono{font-family:var(--font-mono)}
+
+/* —— 字号与间距：六档收口（2026-11-18）—— 相邻级差全部 ≥25%，正文基准在 .slide 里给 —— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h2);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h4);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body-sm);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill{font-size:var(--t-cap);padding:10px 18px 14px}
+.img-cap{font-size:var(--t-cap)}
+.img-tag{font-size:var(--t-cap);padding:8px 16px}
+.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}
+
+/* 链接：正文语境不拿品牌色当文字色（本主题 accent 对底只有 3.x:1），改主文字色 + 品牌色下划线 */
+a{color:var(--text-1);text-decoration-color:var(--accent)}
+
+/* ============ 组件类（cp-*）：供预览板与下游页面共用 ============ */
+/* 此前这些类只写在 gen-theme-preview.py 的 AERO_OVERRIDE 里当兜底，
+   主题 CSS 里一个都没有，等于主题不自洽；且兜底写死了旧色 #e0632f。
+   这里收进主题本体，颜色一律走 token。 */
+
+/* 次按钮：描边幽灵（与模板同一层级逻辑，Aqua 蓝） */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:10px 22px;border-radius:999px;font-size:var(--t-cap);font-weight:700;
+  color:var(--accent);background:rgba(255,255,255,.78);border:1.5px solid var(--accent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.92);
+}
+/* 轻警示细条：暖珊瑚，只作卡顶细条 */
+.cp-alert{width:64px;height:10px;border-radius:3px;background:var(--accent-3);box-shadow:0 3px 8px rgba(160,64,24,.28)}
+/* 分类标签：紫玻璃小面积标记 */
+.tag-chip{background:var(--accent-2);color:#fff;box-shadow:0 3px 8px rgba(90,72,170,.22)}
+/* 导航未选中项：Aqua 蓝描边幽灵 */
+.pill-ghost{color:var(--accent);background:rgba(255,255,255,.80);border:1.5px solid rgba(26,127,184,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.92)}
+/* 已选锚点：实心主色胶囊 */
+.cp-anchor{
+  display:inline-block;padding:7px 16px;border-radius:999px;font-size:var(--t-cap);font-weight:700;
+  color:#fff;background:var(--accent);box-shadow:0 4px 10px rgba(12,70,100,.20);
+}
+/* 进度条 */
+.cp-progress{height:8px;border-radius:999px;background:rgba(26,127,184,.16);overflow:hidden}
+.cp-progress span{display:block;height:100%;width:62%;border-radius:999px;background:var(--accent)}
+/* 导航条：Aqua 玻璃横条（.g-nav 用它，缺了会解析成透明，导航浮在底色上） */
+.cp-steel{
+  background-color:var(--bg-soft);
+  background-image:
+    linear-gradient(180deg,rgba(255,255,255,.92),rgba(217,239,251,.72) 58%,rgba(191,227,242,.80)),
+    radial-gradient(120% 60% at 50% 0%,rgba(255,255,255,.86),rgba(255,255,255,0) 62%);
+  border-bottom:1px solid rgba(26,127,184,.22);
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(16,90,120,.10);
+}
+/* 转角砖：玻璃砖拼贴，圆角软反光（.tile-corner 用它，缺了转角是空的） */
+.cp-tile{
+  background-color:var(--bg-soft);
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0 23px,rgba(26,127,184,.22) 23px 24px),
+    repeating-linear-gradient(90deg,transparent 0 23px,rgba(26,127,184,.22) 23px 24px),
+    radial-gradient(90% 70% at 30% 10%,rgba(255,255,255,.90),rgba(255,255,255,0) 66%),
+    linear-gradient(150deg,#eaf7ff,#bfe3f2 60%,#8fd4e8);
+}

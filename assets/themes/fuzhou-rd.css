@@ -1,0 +1,457 @@
+/* theme: fuzhou-rd - 福州路 Fuzhou Rd ｜ 石印小报 · 套版错位 · 新闻纸
+   命名：上海黄浦区福州路，旧称四马路。公共地名，可长期作主题代号。
+   地理与史实锚点（2026-11-20 核对）：福州路是上海近代的报馆街与书店街，旧书摊、笺扇庄、
+   小报馆、石印所沿街而设；隔壁汉口路的《申报》1872 年创刊，其麾下点石斋书局 1884 年 5 月 8 日
+   出《点石斋画报》——旬刊，每期八帧，吴友如主笔，随《申报》附送，是中国最早的时事画报之一。
+   立意：不做「老上海怀旧滤镜」，只取石印与小报的版面语言——黑线描边、套色错版、网目过渡、
+   栏线与报头。四格漫画的祖型就在这类石印画报里，而不是在某部作品的画风里。
+   ⛔ 界面文案不出现任何漫画作品名、角色名与作者名；本主题是独立的版面风格，非任何作品的联名或复刻。
+   与相邻主题的分工：番禺路＝硬黑线 + 实心投影 + 拱券（几何克制）；万航渡＝棕灰铅笔线 + 柔影 + 河岸（纸与水的工艺）；
+                       福州路＝印刷机理：线是版线、影是错版、色是套色。
+   纪律：
+     ① 线是版线：1.6px，色取墨咖 #7a6a56 与炭黑 #14110e 两档，⛔ 不用纯黑 3px 描边（那是廉价的漫画描边）。
+     ② 影是错版不是投影：抬起的层次靠「第二块版的边」与柔影，⛔ 不做 4px 4px 0 的实心硬投影。
+     ③ 色只做套版：朱、靛、藤黄三枚专色，只做面、线与标记；⛔ 高饱和平涂、⛔ 霓虹渐变。
+     ④ 渐变只许有印刷来由：网目过渡（.fz-halftone）、油墨与纸的衰老（环境层）、叠印交叠；
+        ⛔ 渐变字、⛔ 玻璃高光渐变、⛔ linear-gradient 当色块铺一张卡。
+     ⑤ 肌理只做纸与版：网点 ≥6px 网格、纤维 α .04–.08、脱墨斑只在大半径低 α 处，
+        ⛔ 压正文、⛔ 贴图式卡通纹理。
+   母题五件：网点（.fz-halftone）、套版错位（.fz-misreg）、栏线（.fz-rule）、报头双线（.fz-masthead）、
+   新闻纸（.fz-news）——再加石版压痕（.fz-plate）与油墨不匀（.fz-ink）。
+   字体：标题与引语走南西油墨宋（自带油墨噪点肌理，报头与标题的钝角笔画），
+   报头小字走等宽（日期栏、期号），正文走宋骨黑体（宋的骨架 + 黑体的易读）。
+   三套栈全留系统回落，缺字不空。
+   骨架承 wanhang-fy.css：token 名、组件选择器、六档字号与 CJK 行盒补偿沿用，只换视觉。 */
+
+/* 内化字体（2026-11-20）：两款都裁 GB2312 一级字（3755 汉字 + ASCII + 常用标点），
+   子集外的繁体/生僻字回落系统字体。许可与出处见 ATTRIBUTION.md。
+   南西油墨宋只有 Regular 一档（usWeightClass 400），故 @font-face 声明 400 700 区间，
+   标题写 700 时由浏览器合成加粗而非另找字重——这款字笔画本就粗壮，伪粗不明显。 */
+@font-face{
+  font-family:'NanxiYoumosong';
+  src:local('NanxiYoumosong'),local('NanxiYoumosong-Regualr'),url('../fonts/nanxi/NanxiYoumosong-Subset.woff2') format('woff2');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'SongguHei';
+  src:local('宋骨黑体'),local('宋骨黑体 Medium'),local('SGH-Medium'),url('../fonts/songgu/SongguHei-Subset.woff2') format('woff2');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  /* —— 纸与墨 —— */
+  --bg:#f3ead7;                /* 新闻纸奶黄，带一点旧 */
+  --bg-soft:#ece2cb;
+  --surface:#fcf7e8;           /* 未上墨的白纸 */
+  --surface-2:#f6efdc;
+  --paper-deep:#dfd3b7;
+  /* —— 三枚套版色 —— */
+  --vermilion:#a83a2c;         /* 套版朱：对纸底 4.9:1，可承载小字 */
+  --indigo:#25476b;            /* 套版靛：主色，纸白字 7.4:1 */
+  --ochre:#bd8f33;             /* 藤黄：只做面与标记，⛔ 不承载正文 */
+  --ink:#14110e;               /* 墨：正文与版线 */
+  --ink-2:#2b241c;
+  /* —— 文字与线 —— */
+  --text-1:#241d15;            /* 对纸底 13.2:1 */
+  --text-2:#4b3d2d;            /* 8.0:1 */
+  --text-3:#6a5947;            /* 5.6:1，页脚小字够用 */
+  --line:#7a6a56;              /* 墨咖版线 */
+  --border:rgba(36,29,21,.18);
+  --border-strong:rgba(36,29,21,.38);
+  --primary:#25476b;
+  --accent:var(--vermilion);
+  --accent-2:#a83a2c;
+  --accent-3:var(--ochre);
+  --accent-ink:#fcf7e8;
+  /* 预览页模板沿用的旧名，一律别名到本主题实色，不新开 hex */
+  --primary-hi:#3a6389;
+  --primary-lo:#182f47;
+  --line-2:#14110e;
+  --line-4:#5b7f9c;
+  --line-6:#bd8f33;
+  --good:#3f6b45;
+  --warn:#8a6a24;
+  --bad:#8b3b2c;
+  --grad:linear-gradient(135deg,#182f47,#25476b 62%,#5b7f9c);
+  --grad-soft:linear-gradient(135deg,#fcf7e8,#f0e7d0);
+  /* 圆角与影：纸片是方的，只留极小的圆；影柔、零方向 */
+  --radius:6px;
+  --radius-sm:3px;
+  --radius-lg:10px;
+  --shadow:0 10px 24px rgba(20,17,14,.08);
+  --shadow-lg:0 22px 48px rgba(20,17,14,.12);
+  --soft:rgba(20,17,14,.16);
+  /* 标题：南西油墨宋（内化 GB2312 一级字子集）→ 华文中宋 → 宋体加粗。
+     ⚠️ 这款字自带油墨噪点肌理，作者原话「不适合小字」，故只用于标题/引语，
+     ⛔ 绝不承载正文（12px 正文下噪点会糊成一团）。 */
+  --ff-title:'NanxiYoumosong','南西油墨宋','STZhongsong','华文中宋','Songti SC','STSong','SimSun',serif;
+  /* 正文：宋骨黑体（内化 GB2312 一级字子集）→ 思源黑体 → 系统黑体 */
+  --ff-body:'SongguHei','宋骨黑体','Source Han Sans SC','思源黑体','Noto Sans CJK SC','PingFang SC','Heiti SC','SimHei',sans-serif;
+  --ff-mono:'SF Mono','Menlo','Consolas','Roboto Mono',monospace;
+  --font-display:var(--ff-title);
+  --font-serif:var(--ff-title);
+  --font-sans:var(--ff-body);
+  --font-button:var(--ff-body);
+  --font-note:var(--ff-title);
+  --font-mono:var(--ff-mono);
+  --letter-tight:0;            /* 中文不套英文负字距 */
+  --letter-normal:0;
+}
+
+html,body{background:var(--bg);color:var(--text-1);font-family:var(--font-sans);font-weight:400}
+body{background-color:var(--bg)}
+
+/* 环境层：新闻纸的纤维与四角脱墨。
+   网点 6px 网格、45°，α .022 只在空白处读得出来；⛔ 小于 6px 在 1080 下会摩尔纹。 */
+.deck{
+  background:
+    radial-gradient(circle 1px at 50% 50%,rgba(36,29,21,.022) 0 100%,transparent 0),
+    repeating-linear-gradient(90deg,transparent 0 3px,rgba(90,74,58,.016) 3px 4px),
+    radial-gradient(120% 80% at 50% -10%,rgba(255,255,255,.62),rgba(255,255,255,0) 70%),
+    radial-gradient(90% 70% at 0% 100%,rgba(120,96,64,.10),rgba(120,96,64,0) 62%),
+    radial-gradient(80% 64% at 100% 96%,rgba(120,96,64,.09),rgba(120,96,64,0) 60%),
+    linear-gradient(180deg,#f4ecda 0%,#f3ead7 46%,#efe5ce 100%);
+  background-size:6px 6px,auto,auto,auto,auto,auto;
+}
+/* 底部一条报脚：墨线 + 朱线，双线样式，不上色块 */
+.deck::before{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:44px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(252,247,232,0) 0%,rgba(252,247,232,.55) 46%,rgba(252,247,232,.92) 100%);
+  border-bottom:1.2px solid rgba(20,17,14,.46);
+  box-shadow:0 3px 0 -1.5px rgba(168,58,44,.34);
+}
+.slide{padding:80px 104px}  /* 正文基准由 base.css 给，主题只覆盖 padding */
+.progress-bar{height:3px;bottom:0;background:transparent}
+.progress-bar > span{background:var(--vermilion);box-shadow:none}
+
+/* 标题：宋体，报头气；行高按中文给足（1.2–1.35），⛔ 不描边、⛔ 不用手写体 */
+h1,h2,h3,h4,h1.title,h2.title,.h1,.h2,.h3,.h4{
+  font-family:var(--font-display);font-weight:400;color:var(--text-1);letter-spacing:0;
+}
+h1.title,.h1{line-height:1.14}
+h2.title,.h2{line-height:1.2}
+h3,.h3,h4,.h4{line-height:1.32}
+.lede{color:var(--text-2);font-weight:400}
+/* 眉题：等宽 + 字距 + 竖线前的期号感 */
+.kicker,.eyebrow{
+  font-family:var(--font-mono);font-weight:400;color:var(--text-3);
+  letter-spacing:.12em;text-transform:uppercase;
+}
+
+/* —— 四档「版片」：靠框（双线/单线/虚线/报头带）分档，影一律柔 —— */
+/* 栏线卡：单线框 + 白内框（套印留白） */
+.card{
+  background:var(--surface);
+  border:1.6px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow),inset 0 0 0 3px rgba(252,247,232,.92);
+}
+/* 套版卡：靛底极淡、右缘一道朱线（第二块版的边），网点压面 */
+.card-soft{
+  background:
+    radial-gradient(circle 1.15px at 50% 50%,rgba(37,71,107,.17) 0 100%,transparent 0),
+    var(--surface-2);
+  background-size:7px 7px,auto;
+  border:1.6px solid var(--border-strong);
+  border-right:3px solid rgba(168,58,44,.62);
+  border-radius:var(--radius);
+  box-shadow:0 8px 18px rgba(20,17,14,.06),inset 0 0 0 3px rgba(252,247,232,.90);
+}
+/* 剪报卡：只有虚线裁切边，没有影——「刚从报上剪下来、还没贴」 */
+.card-outline{
+  background:transparent;
+  border:1.6px dashed rgba(36,29,21,.42);
+  border-radius:0;
+  box-shadow:none;
+}
+/* 报头卡：顶上一道粗墨线 + 一道朱线（报头双线），卡本身方角 */
+.card-accent{
+  position:relative;
+  padding-top:44px;
+  background:var(--surface);
+  border:1.6px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow),inset 0 0 0 3px rgba(252,247,232,.92);
+  overflow:hidden;
+}
+.card-accent::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:13px;
+  background:linear-gradient(180deg,
+    rgba(20,17,14,.92) 0 6px,rgba(20,17,14,0) 6px 9px,
+    rgba(168,58,44,.88) 9px 11px,rgba(168,58,44,0) 11px);
+}
+.card-hover:hover{box-shadow:var(--shadow-lg),inset 0 0 0 3px rgba(252,247,232,.92);transform:translateY(-2px)}
+
+/* 浮层：一张抬起来的白纸片——柔影 + 墨咖细线，⛔ 不给玻璃 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+
+  border-radius:var(--radius-lg);corner-shape:squircle;
+  background:rgba(252,247,232,.97);
+  border:1.6px solid var(--border-strong);
+  box-shadow:0 20px 46px rgba(20,17,14,.12);
+}
+
+/* 胶囊三态：靛实心 / 朱实心 / 墨线幽灵。
+   ⚠️ 2026-11-20：内距原为 13/11（上下不对称），是给旧字体（系统宋体，descender 深）
+   做的基线补偿。正文换成宋骨黑体后，字体 metrics 已在文件里修正为
+   typoAsc 868 / typoDesc -88 / lineGap 0（汉字重心与行盒中心重合），
+   13/11 的补偿反而把胶囊撑歪。改回对称 12/12，实测墨心偏差 0。 */
+.pill{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--indigo);
+  border:1.6px solid var(--primary-lo);
+  box-shadow:none;
+}
+/* 主按钮＝靛蓝实心（纸白字 7.4:1）。⛔ 藤黄不做底：藤黄对纸白字只有 1.9:1。
+   ⚠️ 2026-11-20 修：原先这条与 .pill 逐字相同，主次按钮视觉上分不开。
+   按套版逻辑拉开——主＝靛（主色），次＝朱（第二块版），两枚专色各司其职。 */
+.pill-accent{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--vermilion);
+  border:1.6px solid #8a2c20;
+  box-shadow:none;
+}
+.pill-ghost{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:rgba(252,247,232,.92);
+  border:1.6px solid var(--border-strong);
+  box-shadow:none;
+}
+/* 判对/通过：朱实心（纸白字 4.9:1）；不用绿——本主题没有草，只有套版 */
+.pill-good{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--vermilion);
+  border:1.6px solid #8a2c20;
+  box-shadow:none;
+}
+
+.divider{background:rgba(36,29,21,.30);height:1.6px;border-radius:0}
+/* 小号报头双线：一墨一朱，两线之间留 3px 白 */
+.divider-accent{
+  height:8px;width:148px;border-radius:0;box-shadow:none;
+  background:linear-gradient(180deg,
+    rgba(20,17,14,.92) 0 2px,rgba(20,17,14,0) 2px 6px,
+    rgba(168,58,44,.86) 6px 8px);
+}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);font-weight:400;letter-spacing:.1em;color:var(--text-3);
+}
+.deck-footer{border-top:1.6px solid rgba(36,29,21,.26);padding-top:9px}
+
+/* 选项：版片；判对走靛面，选错走朱面，字一律纸白 */
+.quiz-opt{
+  display:flex;align-items:center;min-height:58px;padding:12px 20px;line-height:1.35;
+  border:1.6px solid var(--border-strong);
+  border-radius:var(--radius-sm);
+  background:var(--surface);
+  box-shadow:0 6px 14px rgba(20,17,14,.05);
+  font-family:var(--font-button);font-weight:400;
+}
+.quiz-opt:hover{background:var(--surface-2);box-shadow:0 10px 20px rgba(20,17,14,.08)}
+.quiz-opt.correct{background:rgba(37,71,107,.14);color:#1b3550;border-color:#25476b}
+.quiz-opt.chosen-wrong{background:rgba(168,58,44,.14);color:#7d2b21;border-color:#a83a2c}
+.quiz-reveal{border-top:2px solid var(--ink);background:var(--surface);box-shadow:0 8px 22px rgba(20,17,14,.07)}
+
+/* 图版框：2px 墨线 + 纸白内框 + 外圈朱线（第二块版错开的边），⛔ 不投硬影 */
+.img-frame{
+  border-radius:var(--radius-sm);padding:8px;
+  background:var(--surface);
+  border:2px solid var(--ink-2);
+  box-shadow:inset 0 0 0 3px rgba(252,247,232,.95),0 0 0 2px rgba(252,247,232,.95),0 0 0 3.6px rgba(168,58,44,.42),0 12px 24px rgba(20,17,14,.07);
+}
+/* 图版号：藤黄纸签，墨字，直角小片 */
+.img-tag{
+  border-radius:2px;background:var(--ochre);color:var(--ink);
+  border:1.6px solid var(--ink);
+  text-transform:none;letter-spacing:.04em;font-family:var(--font-note);
+}
+/* ⚠️ 2026-11-20 修：原先这条把 .deck-header/.deck-footer 的等宽字族覆盖成宋体，
+   与文件头「报头小字走等宽（日期栏、期号）」的规矩冲突。只留 .img-cap 走宋体。 */
+.img-cap{font-family:var(--font-note)}
+.mono{font-family:var(--font-mono)}
+
+/* —— 母题层：网点 / 套版错位 / 栏线 / 报头双线 / 新闻纸 / 石版压痕 / 油墨 —— */
+/* 网点：45°，7px 网格，点径随 α 变化——这是半调网目，不是噪点 */
+.fz-halftone{
+  /* 底色由 #d2c29c(L*78.9) 压到 #c9b78d(L*75.0)：与新闻纸 87.1 拉开 12.1 级、
+     与套版藤黄 62.3 拉开 12.7 级。窗口只有 4.8 级宽（上下都被邻居夹住）。 */
+  background-color:#c9b78d;
+  background-image:
+    radial-gradient(circle 1.7px at 50% 50%,rgba(20,17,14,.34) 0 100%,transparent 0),
+    radial-gradient(circle 1.1px at 0% 0%,rgba(20,17,14,.20) 0 100%,transparent 0),
+    linear-gradient(180deg,#dcccab,#c6b48e);
+  background-size:7px 7px,7px 7px,auto;
+}
+/* 套版错位：两枚色块偏移叠放，交叠处自然出现第三色（图上就是这么印歪的） */
+.fz-misreg{
+  /* 底色由 #8f8778(L*56.6) 压到 #827a6b(L*51.5)：与套版藤黄 62.3 拉开 10.8 级、
+     与套版朱 40.5 拉开 11.0 级。窗口只有 1.8 级宽。 */
+  background-color:#827a6b;
+  background-image:
+    linear-gradient(180deg,rgba(37,71,107,.92),rgba(37,71,107,.92)),
+    linear-gradient(180deg,rgba(168,58,44,.88),rgba(168,58,44,.88)),
+    radial-gradient(circle 1.2px at 50% 50%,rgba(20,17,14,.10) 0 100%,transparent 0),
+    linear-gradient(180deg,#827a6b,#827a6b);
+  background-size:58% 100%,58% 100%,6px 6px,auto;
+  background-position:0 0,10px 8px,0 0,0 0;
+  background-repeat:no-repeat,no-repeat,repeat,no-repeat;
+}
+/* 栏线：细横线等距排布，像报纸的分栏基线 */
+.fz-rule{
+  background-color:#f3ead7;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(36,29,21,.34) 0 1px,transparent 1px 18px),
+    repeating-linear-gradient(0deg,rgba(36,29,21,.10) 0 1px,transparent 1px 6px);
+}
+/* 报头双线：粗墨线 + 朱线，中间留白——报头与栏题的收口 */
+.fz-masthead{
+  background-color:#fcf7e8;
+  background-image:
+    linear-gradient(180deg,rgba(20,17,14,.94) 0 6px,rgba(20,17,14,0) 6px 13px,rgba(168,58,44,.92) 13px 16px,rgba(168,58,44,0) 16px),
+    radial-gradient(120% 80% at 50% -20%,rgba(255,255,255,.6),rgba(255,255,255,0) 66%);
+}
+/* 新闻纸：纤维 + 脱墨斑（斑只在大半径低 α，不压字） */
+.fz-news{
+  background-color:#e6d9bd;
+  background-image:
+    repeating-linear-gradient(96deg,rgba(110,86,56,.085) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(14deg,rgba(110,86,56,.060) 0 1px,transparent 1px 4px),
+    radial-gradient(56% 42% at 20% 22%,rgba(90,74,58,.24),rgba(90,74,58,0) 74%),
+    radial-gradient(48% 38% at 80% 78%,rgba(90,74,58,.20),rgba(90,74,58,0) 72%),
+    radial-gradient(circle 1.2px at 50% 50%,rgba(70,56,38,.10) 0 100%,transparent 0);
+  background-size:auto,auto,auto,auto,6px 6px;
+}
+/* 石版压痕：大半径极淡的边缘压深，读作石板印到最后一道的压印 */
+.fz-plate{
+  background-color:#d6c8a9;
+  background-image:
+    radial-gradient(120% 100% at 50% 50%,rgba(255,255,255,.42) 0 46%,rgba(120,96,64,.10) 72%,rgba(90,74,58,.22) 100%),
+    radial-gradient(circle 1px at 50% 50%,rgba(36,29,21,.10) 0 100%,transparent 0);
+  background-size:auto,6px 6px;
+}
+/* 油墨不匀：墨面里的深浅，像上墨滚过一遍的痕 */
+.fz-ink{
+  background-color:#1a1612;
+  background-image:
+    radial-gradient(80% 60% at 24% 18%,rgba(255,255,255,.12),rgba(255,255,255,0) 66%),
+    radial-gradient(70% 50% at 82% 90%,rgba(0,0,0,.42),rgba(0,0,0,0) 70%),
+    radial-gradient(circle 1px at 50% 50%,rgba(255,255,255,.05) 0 100%,transparent 0);
+  background-size:auto,auto,6px 6px;
+}
+.fz-vermilion{background:var(--vermilion)}
+.fz-indigo{background:var(--indigo)}
+.fz-ochre{background:var(--ochre)}
+.fz-paper{background:var(--surface)}
+
+.fz-paper{
+  /* 位图层（2026-11-22）：新闻纸的纤维与厚薄不匀；纯色底上只留极淡纸纹，⛔ 不压在正文上成噪点。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.fz-paper::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/fiber/fiber-gray-512.png");
+  background-repeat:repeat;
+  background-size:640px 640px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.60;
+}
+/* 回退：.fz-paper--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.fz-paper--flat::after{content:none}
+
+/* —— 组件层：cp-*（预览页模板依赖，与 wanhang-fy 同几何、只换视觉）—— */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  /* ⚠️ 2026-11-20：宋骨黑体原 metrics 是 typoAsc 880 / typoDesc -120 / lineGap 200，
+     行盒 1200 units 而汉字墨迹只占 -88..868，重心比行盒中心高 90 units（≈1.34px @12px），
+     按钮文字读作「偏上」。已在字体文件里把 metrics 改成 868/-88/0（行盒 956 units，
+     汉字重心与行盒中心精确重合）。行盒随之从 14px 缩到 11px，故 padding 由 9px 补到 12px，
+     按钮总高维持 38px 不变。 */
+  padding:12px 24px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:var(--surface);
+  border:1.6px solid var(--border-strong);
+  box-shadow:none;
+}
+/* 轻提示：藤黄实心细条（色板规格里藤黄＝小牌 / 轻标记；朱留给分类标记与图版号）。
+   ⚠️ 2026-11-20 修：原先是朱色实心条，与组件卡标签 ALERT / OCHRE 不符；
+   原注释还写「不铺底」，与实心条自相矛盾。 */
+.cp-alert{height:8px;width:262px;max-width:82%;border-radius:0;background:var(--ochre);opacity:.86}
+/* 已选锚点：纸底胶囊 + 前置一枚靛点。
+   ⚠️ 2026-11-20 修：原注释写「墨点」、代码是朱色、组件卡标签写 SELECTED / INDIGO，三处不一致。
+   选中态在本主题＝靛（导航选中项就是靛实心），故圆点改靛，注释改对。 */
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:10px;
+  /* 同 .cp-btn-2：宋骨黑体 metrics 修正后行盒变矮。此处不设 font-size（继承 16px），
+     行盒从 19.2px 缩到 15.3px，padding 补不回 7px 缺口，故显式给 line-height:1.5
+     把行盒拉回 24px，padding 回到 9px，总高与原设计一致。 */
+  padding:9px 18px;line-height:1.5;border-radius:999px;
+  background:var(--surface);color:var(--text-1);
+  font-family:var(--font-button);font-weight:400;
+  border:1.6px solid var(--border-strong);
+  box-shadow:none;
+}
+.cp-anchor::before{
+  content:"";flex:0 0 auto;width:12px;height:12px;
+  border-radius:50%;
+  background:var(--indigo);
+}
+/* 进度：纸槽 + 墨条 */
+.cp-progress{height:8px;border-radius:0;background:var(--paper-deep);border:1.2px solid rgba(36,29,21,.24);overflow:hidden}
+.cp-progress > span{display:block;height:100%;width:28%;background:var(--ink)}
+/* 材质底：新闻纸 / 网点 / 套版 */
+.cp-steel{
+  background-color:#6b6255;
+  background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.14) 0 1px,transparent 1px 5px);
+}
+.cp-tile{
+  background-color:#e2d6ba;
+  background-image:
+    radial-gradient(circle 1.6px at 50% 50%,rgba(36,29,21,.20) 0 100%,transparent 0);
+  background-size:8px 8px;
+}
+.cp-marble{
+  background-color:var(--bg);
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 2px,rgba(90,74,58,.06) 2px 3px),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(90,74,58,.05) 3px 4px);
+}
+
+/* —— 字号与间距：六档收口（沿用 wanhang-fy 的档位，2026-11-20）—— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h2);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h4);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body-sm);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill,.pill-accent,.pill-good,.pill-ghost,.img-tag,.img-cap,.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}
+
+/* 链接：正文语境不拿套版色当文字色，改主文字色 + 朱下划 */
+a{color:var(--text-1);text-decoration-color:var(--vermilion)}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-themes="century-ave,century-sq,guanglan-rd">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>演讲者模式 · 一屏讲，一屏看</title>
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/base.css">
+<link rel="stylesheet" href="../../../assets/animations/animations.css">
+<link rel="stylesheet" href="../../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../../assets/themes/century-ave.css">
+<style>
+  .pm-key{display:grid;grid-template-columns:120px 1fr;gap:0;margin-top:26px;border-top:1px solid var(--border)}
+  .pm-key > div{padding:14px 0;border-bottom:1px solid var(--border);font-size:var(--t-body-sm)}
+  .pm-key .k{font-family:var(--font-mono);font-size:var(--t-h4);font-weight:700;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <section class="slide" data-title="封面">
+    <div class="deck-header"><span>演讲者模式</span><span>S 键</span></div>
+    <p class="kicker">Path B · 双屏</p>
+    <h1 class="h1 mt-s">一屏给观众，<br>一屏给你自己。</h1>
+    <p class="lede mt-m">观众屏只有这一页；你的那一屏有下一页、逐字稿、计时器，还能拖。</p>
+    <div class="deck-footer"><span>按 S 开始</span><span class="slide-number" data-current="1" data-total="6"></span></div>
+    <div class="notes">开场：先说这一屏是干什么的——不是炫技，是让你不必背稿。提示：按 S 打开演讲者窗。</div>
+  </section>
+
+  <section class="slide" data-title="目录">
+    <p class="eyebrow">Contents · 这一册讲什么</p>
+    <h2 class="h2">五件事</h2>
+    <div class="grid g2 mt-l anim-stagger-list" data-anim-target>
+      <div class="card"><div class="row"><div class="h3 dim2" style="width:56px">01</div><div><h4>六个键够用</h4><p class="dim">翻页、全屏、开窗、讲稿、黑屏、参考线。</p></div></div></div>
+      <div class="card"><div class="row"><div class="h3 dim2" style="width:56px">02</div><div><h4>四张可拖的卡</h4><p class="dim">当前、下一页、逐字稿、计时。</p></div></div></div>
+      <div class="card"><div class="row"><div class="h3 dim2" style="width:56px">03</div><div><h4>一条通道说话</h4><p class="dim">两屏只通过 BroadcastChannel 同步。</p></div></div></div>
+      <div class="card"><div class="row"><div class="h3 dim2" style="width:56px">04</div><div><h4>稿子不上墙</h4><p class="dim">.notes 只在你自己那屏可见。</p></div></div></div>
+      <div class="card" style="grid-column:span 2"><div class="row"><div class="h3 dim2" style="width:56px">05</div><div><h4>按 S，然后别看观众</h4><p class="dim">开窗、同步、计时归零，一次讲完。</p></div></div></div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="键位">
+    <p class="kicker">键位</p>
+    <h2 class="h2">六个键够用</h2>
+    <div class="pm-key">
+      <div class="k">← →</div><div>翻页，也认空格、PgUp／PgDn、Home／End</div>
+      <div class="k">F</div><div>全屏；退出用 Esc</div>
+      <div class="k">S</div><div>开演讲者窗，再按一次关</div>
+      <div class="k">N</div><div>讲稿抽屉，只在你自己那屏出现</div>
+      <div class="k">B</div><div>黑屏，讲到一半要观众抬头时用</div>
+      <div class="k">G</div><div>参考线，验页边距与基线用</div>
+    </div>
+    <div class="notes">这页别念完六行，挑 B 和 G 讲：黑屏是礼貌动作，参考线是自查动作。</div>
+  </section>
+
+  <section class="slide" data-title="四张卡">
+    <p class="kicker">演讲者窗</p>
+    <h2 class="h2">四张可拖的卡</h2>
+    <div class="grid g4 mt-l">
+      <div class="card card-accent"><p class="eyebrow">卡一</p><h4>当前页</h4><p class="dim">与观众屏同源，改一下就同步。</p></div>
+      <div class="card"><p class="eyebrow">卡二</p><h4>下一页</h4><p class="dim">提前看半页，接话不慌。</p></div>
+      <div class="card"><p class="eyebrow">卡三</p><h4>逐字稿</h4><p class="dim">取 <code>.notes</code> 与 <code>.speaker-notes</code> 两种写法。</p></div>
+      <div class="card"><p class="eyebrow">卡四</p><h4>计时</h4><p class="dim">R 归零，超时变色。</p></div>
+    </div>
+    <div class="notes">四张卡都能拖，位置按你自己的习惯摆；关掉再开会回到上次的排布。</div>
+  </section>
+
+  <section class="slide" data-title="同步">
+    <p class="kicker">同步</p>
+    <h2 class="h2">两边只通过一条通道说话</h2>
+    <p class="lede mt-s">观众屏与演讲者窗各自管键位，翻页、黑屏、换主题都走同一条 <code>BroadcastChannel</code>。</p>
+    <div class="grid g3 mt-l">
+      <div class="card card-soft"><h4>单向出口</h4><p class="dim">状态只从 go(n) 写出去，不在键位里各写一半。</p></div>
+      <div class="card card-soft"><h4>不数 DOM</h4><p class="dim">总览会克隆整页，页数只认初始集合。</p></div>
+      <div class="card card-soft"><h4>深链可用</h4><p class="dim"><code>#/5</code> 直接跳到第五页，预览用 <code>?preview=5</code>。</p></div>
+    </div>
+    <div class="notes">这里可以现场演示：在演讲者窗点下一页，观众屏跟着变。</div>
+  </section>
+
+  <section class="slide" data-title="讲稿">
+    <p class="kicker">讲稿</p>
+    <h2 class="h2">稿子永远不上墙</h2>
+    <p class="lede mt-s">写进 <code>.notes</code> 的文字在放映时一律不显示，只有演讲者窗和 N 抽屉读得到。</p>
+    <div class="card card-accent mt-l" style="max-width:900px">
+      <h4>判据</h4>
+      <p class="dim">选择器表要与取稿逻辑同源。漏一种写法，等于把稿子投在墙上——这类事故只看一眼观众席就知道。</p>
+    </div>
+    <div class="notes">这页有条讲稿，你现在看到的就是它：说明它没有出现在观众屏上。</div>
+  </section>
+
+  <section class="slide center tc" data-title="收束">
+    <div>
+      <p class="kicker">FIN</p>
+      <h1 class="h1">按 S，然后别看观众。</h1>
+      <p class="lede" style="margin:16px auto">看你自己那屏的下一页。</p>
+      <div class="row mt-l" style="justify-content:center;gap:16px">
+        <span class="pill">R 重置计时</span>
+        <span class="pill pill-accent">Esc 收浮层</span>
+      </div>
+    </div>
+    <div class="deck-footer"><span>演讲者模式 · 完</span><span class="slide-number" data-current="7" data-total="7"></span></div>
+    <div class="notes">收尾：留 30 秒提问；如无人提问，直接按 B 黑屏结束。</div>
+  </section>
+
+</div>
+<script src="../../../assets/runtime.js"></script>
+</body></html>

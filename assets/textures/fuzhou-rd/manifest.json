@@ -1,0 +1,95 @@
+{
+  "theme": "fuzhou-rd",
+  "source": "../themes/fuzhou-rd.css",
+  "source_sha256": "28772217c1d9710a9d43bf88f42e099020fc811933b4448c34cdf35de40ca4fe",
+  "generated": "2026-11-23T12:44:11",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#14110E",
+    "#182F47",
+    "#241D15",
+    "#25476B",
+    "#2B241C",
+    "#3A6389",
+    "#3F6B45",
+    "#4B3D2D",
+    "#5B7F9C",
+    "#6A5947",
+    "#7A6A56",
+    "#8A6A24",
+    "#8B3B2C",
+    "#A83A2C",
+    "#BD8F33",
+    "#DFD3B7",
+    "#ECE2CB",
+    "#F3EAD7",
+    "#F6EFDC",
+    "#FCF7E8"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "0617e23f4dd5a13692688e0327c45f5ec02bd7d33e75fa642674bda4a7972fd6"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "0fd1ca1dce663ba0155f28a0272e9db1cbb78a32363bc37bc75db1d8fc1a6e8d"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "c6b09aac1cc3265443bdceae6a7ea6f7e27771ea90e84fc023d8377eefdab4dd"
+    },
+    {
+      "file": "mat-fz-ink.png",
+      "kind": "material-class",
+      "class": "fz-ink",
+      "w": 320,
+      "h": 320,
+      "sha256": "cdf588249b960bbab95f263a3ac3d5922838f3f40f10ac2e7539e4aa7a9591b4"
+    },
+    {
+      "file": "mat-fz-ochre.png",
+      "kind": "material-class",
+      "class": "fz-ochre",
+      "w": 320,
+      "h": 320,
+      "sha256": "59e7d52559e0e0ff6d2b61c62840e78cc4baeeb6ad5d8b6cf4224b17180af523"
+    },
+    {
+      "file": "mat-fz-paper.png",
+      "kind": "material-class",
+      "class": "fz-paper",
+      "w": 320,
+      "h": 320,
+      "sha256": "aaaeae6745502d98f71c16673b0c8bc2ac99beebde661d9d43e46b1b5ead4be2"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "868e83d0b5764b6293dbc176dd2af43e88b5133ed8395e22212379413ba3873e"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 1332,
+      "sha256": "fe18abbffe6de43de62d382d44ea5b50f4269bfdc6d9faa1b5fecd09781414da"
+    }
+  ],
+  "unknown_material_like": []
+}

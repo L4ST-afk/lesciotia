@@ -1,0 +1,280 @@
+{
+  "version": 2,
+  "note": "位图资产登记表。v2（2026-11-22）：一条 = 一张 tile，可以有多个消费方（used_by），⛔ 不许按主题复制同一张图；体积按面分档（1024 ≤400KB、512 ≤160KB）。改这里之前先读 references/theme-bitmap.md。",
+  "families": {
+    "marble": "白石 / 汉白玉：层理与细脉。亮底用 light（multiply），暗底用 dark（overlay，中值 128）。",
+    "grain": "颗粒骨料：水磨石、花岗、石面、香灰共用一张，靠 background-size 换粒径（384/256 各自成档）。",
+    "fiber": "纸纤维 / 批灰：拷贝纸、新闻纸、白墙共用一张，靠 background-size 换「抹上去还是印上去」。",
+    "travertine": "石灰华横向沉积：有方向性，⛔ 不许拿去冒充各向同性纸纹。"
+  },
+  "assets": [
+    {
+      "id": "marble-light",
+      "family": "marble",
+      "role": "shared-tile",
+      "source": "assets/textures-src/century-sq/marble-raw.png",
+      "derived": "assets/textures/marble/marble-gray-1024.png",
+      "builder": "scripts/make-material-tile.py --profile marble --size 1024",
+      "blend": "multiply",
+      "license": "self-generated",
+      "license_detail": "AI 生成（Seedream 5.5，2026-11-22），由本库自行生成并后处理，无第三方权属",
+      "prompt": "白大理石顶视平铺纹理：极淡暖白底、细灰层理与斜向细脉、低对比、无光斑无投影无透视",
+      "derived_sha256": "60938b59fd0b7252",
+      "derived_w": 1024,
+      "derived_h": 1024,
+      "derived_mode": "L",
+      "max_bytes": 400000,
+      "stage": "wired",
+      "used_by": [
+        {
+          "theme": "century-sq",
+          "sel": ".cp-marble",
+          "blend": "multiply",
+          "opacity": ".85",
+          "bg": 1024,
+          "layer": "::before"
+        },
+        {
+          "theme": "friendship-bldg",
+          "sel": ".cp-marble",
+          "blend": "multiply",
+          "opacity": ".80",
+          "bg": 1024,
+          "layer": "::before"
+        }
+      ],
+      "stage_note": "2026-11-22 首接 century-sq（默认 .85，另有 --flat / --soft 两开关）；同日按家族共享给 friendship-bldg（汉白玉，.80）"
+    },
+    {
+      "id": "marble-dark",
+      "family": "marble",
+      "role": "shared-tile",
+      "source": "assets/textures-src/century-sq/marble-raw.png",
+      "derived": "assets/textures/marble/marble-dark-512.png",
+      "builder": "scripts/make-material-tile.py --profile dark --size 512",
+      "blend": "overlay",
+      "license": "self-generated",
+      "license_detail": "由同一张 marble-raw.png 反相压到中值 128 派生（不是新的 AI 生成，没有新的权属来源）",
+      "prompt": "（派生件，无独立提示词）同 marble-light 的源图，profile=dark：base 128 / amp 42",
+      "derived_sha256": "8ed9ac0aa82054d8",
+      "derived_w": 512,
+      "derived_h": 512,
+      "derived_mode": "L",
+      "max_bytes": 160000,
+      "stage": "wired",
+      "used_by": [
+        {
+          "theme": "century-ave",
+          "sel": ".cp-marble",
+          "blend": "overlay(bg)",
+          "opacity": "1",
+          "bg": 512,
+          "layer": "::before",
+          "note": "2026-11-22：tile 挪进 .cp-marble 自身 background-image，background-blend-mode:overlay 与底色合成（::before 让给灰白脉）"
+        }
+      ],
+      "stage_note": "暗底专属。实测：multiply 在 #1a1410 上看不见；invert+screen 会把整片平白区抬亮成雾；overlay 对中值 128 是恒等，平白区零漂移、只有脉络起伏"
+    },
+    {
+      "id": "grain-agg",
+      "family": "grain",
+      "role": "shared-tile",
+      "source": "assets/textures-src/grain/grain-raw.png",
+      "derived": "assets/textures/grain/grain-gray-512.png",
+      "builder": "scripts/make-material-tile.py --profile grain --size 512 --amp 26",
+      "blend": "multiply",
+      "license": "self-generated",
+      "license_detail": "AI 生成（Seedream 5.5，2026-11-22），落盘后降为 1024 灰度源图；无第三方权属",
+      "prompt": "顶视无缝平铺的浅灰水磨石 / 花岗岩微距纹理：骨料颗粒大小不一、疏密均匀、极低对比；纯灰阶无彩色、无高光无阴影无透视无接缝",
+      "source_uri": "https://aka.doubaocdn.com/s/wbGE2huNXU",
+      "derived_sha256": "b1aec5af9b9e7bee",
+      "derived_w": 512,
+      "derived_h": 512,
+      "derived_mode": "L",
+      "max_bytes": 180000,
+      "stage": "wired",
+      "used_by": [
+        {
+          "theme": "qiu-r",
+          "sel": ".cp-marble",
+          "blend": "multiply",
+          "opacity": ".70",
+          "bg": 512,
+          "layer": "::after"
+        },
+        {
+          "theme": "panyu-rd",
+          "sel": ".pg-terrazzo",
+          "blend": "multiply",
+          "opacity": ".80",
+          "bg": 512,
+          "layer": "::after"
+        },
+        {
+          "theme": "longhua-si",
+          "sel": ".lh-granite",
+          "blend": "multiply",
+          "opacity": ".55",
+          "bg": 384,
+          "layer": "::after"
+        },
+        {
+          "theme": "longhua-si",
+          "sel": ".lh-ash",
+          "blend": "multiply",
+          "opacity": ".45",
+          "bg": 256,
+          "layer": "::after"
+        }
+      ],
+      "stage_note": "一张 tile 服务四个消费方：粒径由 background-size 决定（384 碑石 / 256 香灰），不是四张图｜2026-11-22 二次调对比：首版 amp 只有 9/5/10，实测 Δ≈1–3/255 等于看不见，故拉到 26/18/26（CSS 里的 opacity 未动）"
+    },
+    {
+      "id": "fiber-paper",
+      "family": "fiber",
+      "role": "shared-tile",
+      "source": "assets/textures-src/fiber/fiber-raw.png",
+      "derived": "assets/textures/fiber/fiber-gray-512.png",
+      "builder": "scripts/make-material-tile.py --profile fiber --size 512 --amp 18",
+      "blend": "multiply",
+      "license": "self-generated",
+      "license_detail": "AI 生成（Seedream 5.5，2026-11-22），落盘后降为 1024 灰度源图；无第三方权属",
+      "prompt": "顶视无缝平铺的米白手工纸 / 新闻纸纤维微距：极细纤维交错、少量云状厚薄不均；纯灰阶无彩色、无字迹无污渍无阴影无接缝",
+      "source_uri": "https://aka.doubaocdn.com/s/t75VpHMFNN",
+      "derived_sha256": "4e83ca4388954c59",
+      "derived_w": 512,
+      "derived_h": 512,
+      "derived_mode": "L",
+      "max_bytes": 180000,
+      "stage": "wired",
+      "used_by": [
+        {
+          "theme": "fuzhou-rd",
+          "sel": ".fz-paper",
+          "blend": "multiply",
+          "opacity": ".60",
+          "bg": 640,
+          "layer": "::after"
+        },
+        {
+          "theme": "wanhang-fy",
+          "sel": ".wf-paper",
+          "blend": "multiply",
+          "opacity": ".75",
+          "bg": 512,
+          "layer": "::after"
+        },
+        {
+          "theme": "longhua-si",
+          "sel": ".lh-wall",
+          "blend": "multiply",
+          "opacity": ".48",
+          "bg": 768,
+          "layer": "::after"
+        }
+      ],
+      "stage_note": "一张 tile 服务纸面与墙面：bg 越大越「抹上去」（墙面 768），越小越「印上去」（纸 512/640）｜2026-11-22 二次调对比：首版 amp 只有 9/5/10，实测 Δ≈1–3/255 等于看不见，故拉到 26/18/26（CSS 里的 opacity 未动）"
+    },
+    {
+      "id": "travertine-strata",
+      "family": "travertine",
+      "role": "shared-tile",
+      "source": "assets/textures-src/travertine/travertine-raw.png",
+      "derived": "assets/textures/travertine/travertine-gray-512.png",
+      "builder": "scripts/make-material-tile.py --profile travertine --size 512 --amp 26",
+      "blend": "multiply",
+      "license": "self-generated",
+      "license_detail": "AI 生成（Seedream 5.5，2026-11-22），落盘后降为 1024 灰度源图；无第三方权属",
+      "prompt": "顶视无缝平铺的暖白石灰华：密集平行横向沉积细纹、层厚略变、极淡孔洞感；纯灰阶无彩色、无高光无阴影无透视",
+      "source_uri": "https://aka.doubaocdn.com/s/l5D6tVJs6V",
+      "derived_sha256": "6163fcf016c3615e",
+      "derived_w": 512,
+      "derived_h": 512,
+      "derived_mode": "L",
+      "max_bytes": 180000,
+      "stage": "wired",
+      "used_by": [
+        {
+          "theme": "panyu-rd",
+          "sel": ".pg-travertine",
+          "blend": "multiply",
+          "opacity": ".70",
+          "bg": 512,
+          "layer": "::after"
+        }
+      ],
+      "stage_note": "方向性材质，只服务石灰华一处；不入「颗粒/纤维」那两张各向同性 tile｜2026-11-22 二次调对比：首版 amp 只有 9/5/10，实测 Δ≈1–3/255 等于看不见，故拉到 26/18/26（CSS 里的 opacity 未动）"
+    },
+    {
+      "id": "marble-vein",
+      "family": "marble",
+      "role": "hero-vein",
+      "source": "assets/textures-src/marble-vein/vein-raw.png",
+      "derived": "assets/textures/marble/marble-vein-1024.png",
+      "builder": "scripts/make-material-tile.py --profile vein --size 1024",
+      "blend": "multiply",
+      "license": "self-generated",
+      "license_detail": "AI 生成（Seedream 5.5，2026-11-22），按用户参考的 Calacatta Borghini 大脉络风格重生成；无第三方权属",
+      "prompt": "顶视 Calacatta Borghini 型白色大理石大板：暖白底、几道宽阔深灰巨脉横贯、脉络蜿蜒分叉带角碎块网格、脉宽约为画幅 1/8–1/5、大片纯白留白、纯灰阶无高光无阴影无透视",
+      "source_uri": "https://aka.doubaocdn.com/s/5vVOvMTEc4",
+      "derived_sha256": "b0aa80515e2a3b0d",
+      "derived_w": 1024,
+      "derived_h": 1024,
+      "derived_mode": "L",
+      "max_bytes": 520000,
+      "stage": "wired",
+      "used_by": [
+        {
+          "theme": "century-sq",
+          "sel": ".cp-marble",
+          "layer": "::after",
+          "blend": "multiply",
+          "opacity": ".90",
+          "bg": 0,
+          "note": "cover 不重复，裁切 0% 0%"
+        },
+        {
+          "theme": "friendship-bldg",
+          "sel": ".cp-marble",
+          "layer": "::after",
+          "blend": "multiply",
+          "opacity": ".88",
+          "bg": 0,
+          "note": "cover 不重复，裁切 60% 40%（与世纪广场不同段）"
+        }
+      ],
+      "stage_note": "大脉络不做无缝：周期比版面大，硬做会把穿缝的脉揉成软影；按 cover 裁切，一块面只看到一段"
+    },
+    {
+      "id": "marble-vein-mask",
+      "family": "marble",
+      "role": "mask",
+      "source": "assets/textures-src/marble-vein/vein-raw.png",
+      "source_uri": "https://aka.doubaocdn.com/s/5vVOvMTEc4",
+      "derived": "assets/textures/marble/marble-vein-mask-512.png",
+      "builder": "python3 scripts/make-material-tile.py --raw assets/textures-src/marble-vein/vein-raw.png --profile mask --size 512 --mask-floor 0.28 --mask-gamma 2.0 --out assets/textures/marble/marble-vein-mask-512.png",
+      "blend": "mask",
+      "license": "self-generated",
+      "license_detail": "Seedream 5.5 生成的原石图，派生掩膜同源；无第三方素材",
+      "prompt": "Portoro/Calacatta 式白底大脉络原图，派生为「脉处不透明、板面全透」的 alpha 掩膜",
+      "derived_sha256": "493def7f9dd8fbc7",
+      "derived_w": 512,
+      "derived_h": 512,
+      "derived_mode": "RGBA",
+      "max_bytes": 160000,
+      "stage": "wired",
+      "stage_note": "2026-11-22 v5：一张掩膜两用——::after 金色（token 上色）、::before 白脉（旋转 180° + 15% 灰白 + blur 1.6）。base64 在 :root 提成 --marble-vein-mask，只存一份",
+      "used_by": [
+        {
+          "theme": "century-ave",
+          "sel": ".cp-marble",
+          "blend": "mask",
+          "opacity": "1",
+          "bg": "#1a1410",
+          "layer": "::after",
+          "note": "background-color:var(--marble-gold-vein) 走 ::after；::before 复用同一掩膜但旋转 180°、15% 灰白、blur 1.6 做「透出来的白脉」"
+        }
+      ]
+    }
+  ]
+}

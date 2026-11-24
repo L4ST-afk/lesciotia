@@ -1,0 +1,46 @@
+{
+  "decks": [
+    {
+      "name": "世纪大道 · 材质 6 页",
+      "src": "examples/decks/century-ave-materials/index.html",
+      "theme": "century-ave",
+      "built": "/Users/nath/Doubao/chats/2026-11-21/new-chat/世纪大道-材质deck-6页.html",
+      "pages": 6
+    },
+    {
+      "name": "模板 · 课程单元 × 虬江",
+      "src": "assets/full-decks/course-module/index.html",
+      "theme": "qiu-r",
+      "mode": "source",
+      "pages": 8
+    },
+    {
+      "name": "模板 · Pitch Deck × 世纪广场",
+      "src": "assets/full-decks/pitch-deck/index.html",
+      "theme": "century-sq",
+      "pages": 10,
+      "built": "/Users/nath/Doubao/chats/2026-11-21/new-chat/模板pitch-10页-世纪广场.html"
+    },
+    {
+      "name": "模板 · 演讲者模式 × 世纪大道",
+      "src": "assets/full-decks/presenter-mode-reveal/index.html",
+      "theme": "century-ave",
+      "mode": "source",
+      "pages": 7
+    },
+    {
+      "name": "模板 · 技术分享 × 广兰路",
+      "src": "assets/full-decks/tech-sharing/index.html",
+      "theme": "guanglan-rd",
+      "mode": "source",
+      "pages": 9
+    },
+    {
+      "name": "模板 · 周报 × 世纪广场",
+      "src": "assets/full-decks/weekly-report/index.html",
+      "theme": "century-sq",
+      "mode": "source",
+      "pages": 9
+    }
+  ]
+}

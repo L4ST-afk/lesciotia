@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>透镜位移场 · 可选效果</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../assets/themes/century-sq.css">
+<link rel="stylesheet" href="../../assets/effects/lens.css">
+</head><body class="single">
+<div class="deck">
+  <section class="slide is-active" data-title="Lens">
+    <p class="kicker">可选效果 · 玻璃透镜</p>
+    <h2 class="h2">边缘折射，中心不动</h2>
+    <p class="lede">圆角矩形距离场 → 正弦剖面 → Snell 偏折（n=1.5）→ RGB 三通道错位。读不到像素就落回湍流。</p>
+    <div class="lens" data-lens-src="../../assets/effects/demo-grid.svg"
+         data-lens-bend="56" data-lens-aberr="8" data-lens-band="0.14"
+         style="height:520px;margin-top:32px">
+      <span class="lens-badge">初始化…</span>
+    </div>
+    <p class="img-cap">格子图（竖线 + 横线）：真透镜只在四边棱带弯折，中心线段仍是直的；湍流兜底整面都在晃。</p>
+    <p class="params">拖动窗口宽度可看到 canvas 按 820 长边重算；<code>data-lens-bend</code> 调折深、<code>data-lens-aberr</code> 调色散。</p>
+  </section>
+</div>
+<script src="../../assets/effects/lens.js"></script>
+</body></html>

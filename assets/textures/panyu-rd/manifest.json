@@ -1,0 +1,140 @@
+{
+  "theme": "panyu-rd",
+  "source": "../themes/panyu-rd.css",
+  "source_sha256": "ec8e010a73dbb0d125bb05afc1243f948ccddb6ad1c8131008f227f1204503f5",
+  "generated": "2026-11-23T12:47:26",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#141414",
+    "#24476C",
+    "#2F5D8C",
+    "#3F4A31",
+    "#4A423A",
+    "#4E5A3D",
+    "#5E6B4B",
+    "#63594E",
+    "#7B8A63",
+    "#8A6A18",
+    "#963826",
+    "#BA4A33",
+    "#C95D45",
+    "#E0A32E",
+    "#E6DBCA",
+    "#ECE2D3",
+    "#EEB443",
+    "#F3ECE1",
+    "#F7F0E2",
+    "#FBF7EE",
+    "#FFFFFF"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "d2ac2bdc1d6dc7528738b750d9757b0af147f41b56f35833d46ed9f89f16c4e7"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "bfedb58a41f6a40f8f42f2ac8a0e151470acdb4b28fd0344fbf44a7ba485ba3f"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "7e3a6b01068ce1166387cef8c74e060f49907113850dd9b8cc097a2bdc65bff0"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "9322444fc7a9fca253b37004e7ac87ad0b27a40cbb74e901d0d74fb399978ce5"
+    },
+    {
+      "file": "mat-pg-arch.png",
+      "kind": "material-class",
+      "class": "pg-arch",
+      "w": 320,
+      "h": 320,
+      "sha256": "33b226164a88b723b4d0dac092c4f5b43b68155f70af4c718235ee0131ce1102"
+    },
+    {
+      "file": "mat-pg-flute.png",
+      "kind": "material-class",
+      "class": "pg-flute",
+      "w": 320,
+      "h": 320,
+      "sha256": "f46c0c21d1d663c8550dab9a2a0da0cf57246da7485740690d0cbfd9266566cf"
+    },
+    {
+      "file": "mat-pg-fluted.png",
+      "kind": "material-class",
+      "class": "pg-fluted",
+      "w": 320,
+      "h": 320,
+      "sha256": "f46c0c21d1d663c8550dab9a2a0da0cf57246da7485740690d0cbfd9266566cf"
+    },
+    {
+      "file": "mat-pg-ink.png",
+      "kind": "material-class",
+      "class": "pg-ink",
+      "w": 320,
+      "h": 320,
+      "sha256": "c401284da2f9425da466cef843150ea27b91b2bdfeb7dae8d42c5f681e888aec"
+    },
+    {
+      "file": "mat-pg-ochre.png",
+      "kind": "material-class",
+      "class": "pg-ochre",
+      "w": 320,
+      "h": 320,
+      "sha256": "cf0bfeb56220d23342f251a305aa19ca62fce42c576159dea1b39f1e2b47dcd6"
+    },
+    {
+      "file": "mat-pg-terrazzo.png",
+      "kind": "material-class",
+      "class": "pg-terrazzo",
+      "w": 320,
+      "h": 320,
+      "sha256": "6a23fa74e61c48aec75fb660b963a62c5d4b282eca6f958839b773256fb7e6d4"
+    },
+    {
+      "file": "tex-pg-stone.png",
+      "kind": "svg-token",
+      "token": "pg-stone",
+      "tile_w": 180,
+      "tile_h": 180,
+      "w": 360,
+      "h": 360,
+      "sha256": "19d868851d2479938847fe9487f955f00292713143967bc501927e6e30514087"
+    },
+    {
+      "file": "tex-pg-brick.png",
+      "kind": "svg-token",
+      "token": "pg-brick",
+      "tile_w": 120,
+      "tile_h": 56,
+      "w": 240,
+      "h": 112,
+      "sha256": "69863934131c024f8a4b54b957259573a8e291500583963f5eadfa9260e7d0e2"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 1736,
+      "sha256": "051335bc7daf05ba7ddde312e4ec236b17f76d4fdda0da759ec679e70ab57f82"
+    }
+  ],
+  "unknown_material_like": []
+}

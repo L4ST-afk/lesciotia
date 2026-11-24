@@ -1,0 +1,4 @@
+# 本地虚拟环境（闸门依赖，见 SELFTEST.md §0）
+.venv/
+__pycache__/
+*.pyc

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>提问 · 梁架一族</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../assets/themes/guanglan-rd.css">
+<link rel="stylesheet" href="../../assets/animations/animations.css">
+</head><body class="single">
+<!-- 梁架「quiz」（提问）：3 式，三段是同一道题的三态——问 / 揭 / 讲。择式先看这一页，别背旧名。 -->
+<div class="deck">
+
+<section data-style="quiz-ask" class="slide is-active" data-title="Quiz Ask">
+  <p class="kicker">Quiz · 先问，再讲</p>
+  <h2 class="h2">换一个主题，要改几处？</h2>
+  <div class="quiz">
+    <div class="opts">
+      <div class="opt"><span class="key">A</span><p>每一页的配色逐页改</p></div>
+      <div class="opt"><span class="key">B</span><p>改 <code>theme-link</code> 的 href，一处</p></div>
+      <div class="opt"><span class="key">C</span><p>重做一版 deck</p></div>
+      <div class="opt"><span class="key">D</span><p>看运气，主题会自己换</p></div>
+    </div>
+    <p class="q-hint">先想三秒，再翻下一页。</p>
+  </div>
+<p class="params">三态同题：<code>quiz-ask</code> 问、<code>quiz-reveal</code> 揭、<code>quiz-explain</code> 讲</p></section>
+
+<section data-style="quiz-reveal" class="slide is-active" data-title="Quiz Reveal">
+  <p class="kicker">Quiz · 揭晓</p>
+  <h2 class="h2">换一个主题，要改几处？</h2>
+  <div class="quiz">
+    <div class="opts">
+      <div class="opt"><span class="key">A</span><p>每一页的配色逐页改</p></div>
+      <div class="opt ok"><span class="key">B</span><p>改 <code>theme-link</code> 的 href，一处</p></div>
+      <div class="opt"><span class="key">C</span><p>重做一版 deck</p></div>
+      <div class="opt no"><span class="key">D</span><p>看运气，主题会自己换</p></div>
+    </div>
+    <p class="why">对：配色只有主题一个来源，页里不写死颜色。</p>
+  </div>
+<p class="params">正确项加 <code>.ok</code>，错项加 <code>.no</code>；一句为什么写在 <code>.why</code> 里</p></section>
+
+<section data-style="quiz-explain" class="slide is-active" data-title="Quiz Explain">
+  <p class="kicker">Quiz · 讲透</p>
+  <h2 class="h2">为什么一处就够</h2>
+  <div class="quiz-two">
+    <div class="card"><h4>对的那条</h4><p>页里只认 token：<code>var(--accent)</code>、<code>var(--text-1)</code>。主题换了，token 的值跟着换，页面一个字都不用动。</p></div>
+    <div class="card dim-card"><h4>错的那条</h4><p>页里写死 <code>#3b5bff</code> 这类字面 hex，换主题时它不跟着走，于是要么逐页改，要么整册重做。</p></div>
+  </div>
+  <p class="hook">记一句：<b>页写 token，色进主题</b>——色板只在一个文件里改。</p>
+<p class="params">两栏各讲一条，底部一行 <code>.hook</code> 收成一句能背的话</p></section>
+
+  </div></body></html>

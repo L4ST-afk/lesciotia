@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<title>字体安装检测 · 来雪亭</title>
+<style>
+@font-face{font-family:'probe-wanhang-fy-WanhangXimaiBold';src:local('Wanhang Ximai'),local('WanhangXimai-Bold');font-display:swap}
+@font-face{font-family:'probe-longhua-si-FahwaWenkai';src:local('法华文楷标准版'),local('FahwaWenkai-Standard');font-display:swap}
+@font-face{font-family:'probe-longhua-si-SongguHei';src:local('宋骨黑体'),local('宋骨黑体 Medium'),local('SGH-Medium');font-display:swap}
+@font-face{font-family:'probe-fuzhou-rd-NanxiYoumosong';src:local('NanxiYoumosong'),local('NanxiYoumosong-Regualr');font-display:swap}
+@font-face{font-family:'probe-fuzhou-rd-SongguHei';src:local('宋骨黑体'),local('宋骨黑体 Medium'),local('SGH-Medium');font-display:swap}
+@font-face{font-family:'probe-qiu-r-CheeseFoamOolongSong';src:local('Cheese Foam Oolong Song'),local('CheeseFoamOolongSong-Bold');font-display:swap}
+@font-face{font-family:'probe-panyu-rd-AidianFengYaHei';src:local('Aidian Feng YaHei'),local('AidianFengYaHei-Regular');font-display:swap}
+@font-face{font-family:'probe-friendship-bldg-YaoxingYouthHei';src:local('摇醒青年黑1.0'),local('1.0-Regular');font-display:swap}
+body{font-family:-apple-system,'PingFang SC',sans-serif;max-width:900px;margin:40px auto;padding:0 20px;color:#241C15;background:#FDFAF1}
+h1{font-size:22px;margin-bottom:6px}
+.sub{color:#6b7071;font-size:13px;margin-bottom:24px}
+.row{display:flex;align-items:baseline;gap:16px;padding:10px 0;border-bottom:1px solid #E8E1D4}
+.lbl{width:260px;font-size:13px;color:#3f4a45}
+.val{width:110px;font-size:13px;font-weight:600}
+.ok{color:#3F6449}.miss{color:#AD6A45}
+.sample{flex:1;font-size:20px;text-align:right;color:#241C15}
+.note{margin-top:24px;padding:14px;background:#F6F1E4;border-left:3px solid #3F6449;font-size:13px;line-height:1.7}
+</style></head><body>
+<h1>字体安装检测</h1>
+<div class="sub">在浏览器里实测 <code>local()</code> 能否命中你系统里装的字体。装了但显示「未命中」＝族名对不上。</div>
+<div class="row"><span class="lbl">万航渡喜脉体 [wanhang-fy]</span><span class="val" id="r-probe-wanhang-fy-WanhangXimaiBold">检测中…</span><span class="sample" style="font-family:'probe-wanhang-fy-WanhangXimaiBold',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">法华文楷标准版 [longhua-si]</span><span class="val" id="r-probe-longhua-si-FahwaWenkai">检测中…</span><span class="sample" style="font-family:'probe-longhua-si-FahwaWenkai',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">宋骨黑体 [longhua-si]</span><span class="val" id="r-probe-longhua-si-SongguHei">检测中…</span><span class="sample" style="font-family:'probe-longhua-si-SongguHei',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">南西油墨宋 [fuzhou-rd]</span><span class="val" id="r-probe-fuzhou-rd-NanxiYoumosong">检测中…</span><span class="sample" style="font-family:'probe-fuzhou-rd-NanxiYoumosong',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">宋骨黑体 [fuzhou-rd]</span><span class="val" id="r-probe-fuzhou-rd-SongguHei">检测中…</span><span class="sample" style="font-family:'probe-fuzhou-rd-SongguHei',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">芝士奶盖乌龙宋 [qiu-r]</span><span class="val" id="r-probe-qiu-r-CheeseFoamOolongSong">检测中…</span><span class="sample" style="font-family:'probe-qiu-r-CheeseFoamOolongSong',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">爱点风雅黑 [panyu-rd]</span><span class="val" id="r-probe-panyu-rd-AidianFengYaHei">检测中…</span><span class="sample" style="font-family:'probe-panyu-rd-AidianFengYaHei',serif">万航渡 Aa 0123</span></div>
+<div class="row"><span class="lbl">摇醒青年黑 [friendship-bldg]</span><span class="val" id="r-probe-friendship-bldg-YaoxingYouthHei">检测中…</span><span class="sample" style="font-family:'probe-friendship-bldg-YaoxingYouthHei',serif">万航渡 Aa 0123</span></div>
+<div class="note">
+<b>说明</b>：命中＝浏览器会直接用你系统里的字体，不加载随包子集。<br>
+未命中不影响使用：走随包子集或回退链，页面照常渲染，只是标题笔意不同。<br>
+获取方式见 <code>assets/fonts/FONTS.md</code>。
+</div>
+<script>
+const items = [{"fam": "probe-wanhang-fy-WanhangXimaiBold", "label": "万航渡喜脉体 [wanhang-fy]"}, {"fam": "probe-longhua-si-FahwaWenkai", "label": "法华文楷标准版 [longhua-si]"}, {"fam": "probe-longhua-si-SongguHei", "label": "宋骨黑体 [longhua-si]"}, {"fam": "probe-fuzhou-rd-NanxiYoumosong", "label": "南西油墨宋 [fuzhou-rd]"}, {"fam": "probe-fuzhou-rd-SongguHei", "label": "宋骨黑体 [fuzhou-rd]"}, {"fam": "probe-qiu-r-CheeseFoamOolongSong", "label": "芝士奶盖乌龙宋 [qiu-r]"}, {"fam": "probe-panyu-rd-AidianFengYaHei", "label": "爱点风雅黑 [panyu-rd]"}, {"fam": "probe-friendship-bldg-YaoxingYouthHei", "label": "摇醒青年黑 [friendship-bldg]"}];
+// ⛔ 不能用 document.fonts.check()：字体尚未加载时它默认返回 true，
+//    会把「没装」误报成「已命中」（2026-11-21 实测踩到，7 项全假阳性）。
+//    正确做法是 document.fonts.load() —— 它会真的去解析 src，
+//    local() 全部失败时抛错，据此判定。
+(async () => {
+  for (const it of items) {
+    const el = document.getElementById('r-' + it.fam);
+    let hit = false;
+    try {
+      const faces = await document.fonts.load('16px "' + it.fam + '"');
+      // load() 成功但返回空数组＝没有可用 face
+      hit = faces.length > 0;
+    } catch (e) {
+      hit = false;
+    }
+    if (hit) { el.textContent = '✓ 已命中'; el.className = 'val ok'; }
+    else { el.textContent = '· 未命中'; el.className = 'val miss'; }
+  }
+})();
+</script>
+</body></html>

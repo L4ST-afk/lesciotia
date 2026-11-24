@@ -1,0 +1,56 @@
+{
+  "theme": "guanglan-rd",
+  "source": "../themes/guanglan-rd.css",
+  "source_sha256": "98c96fc2f125ad4edcf91486c3f6585f31b6f12acf48a22809ca32c8e8df1e2f",
+  "generated": "2026-11-23T12:44:40",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#000A0F",
+    "#168F70",
+    "#173B52",
+    "#1A7FB8",
+    "#4B6875",
+    "#4B6C7D",
+    "#9C8FEB",
+    "#A04018",
+    "#D58A26",
+    "#D65B65",
+    "#EAF7FF",
+    "#F2FBFB",
+    "#FFFFFF"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "42d750f08e1f93c88659d1050862ddf593389108779b7349d9038956be0df007"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "57c08660c6aba6d30426eaf94a731083538302198c502467fe6d92202e08a5a0"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "970158ed49a7bbc6f8f8011ddd69ac22c5258bc4340ef375032f0a63e10bcfff"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 524,
+      "sha256": "b12733e65b151e541500fe5331e23c331417c64e497dfecd98576c3837fa799c"
+    }
+  ],
+  "unknown_material_like": []
+}

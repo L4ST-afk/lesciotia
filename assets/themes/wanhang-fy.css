@@ -1,0 +1,444 @@
+/* theme: wanhang-fy - 万航渡 Wanhang Ferry ｜ 纸与水的手工 · 渡口与河岸 · 铅笔描线
+   命名：万航渡路（Wanhangdu Rd），静安与长宁之间、沿苏州河南岸的一条 4830 米老街。
+   这名字是三度转写的结果，每一层都值得记：
+     ① 1864 年公共租界越界筑路，名极司菲尔路（Jessfield Road），取自沪西一处英侨花园 Jessfield；
+     ② 1943 年租界交还，以河上渡口改称梵皇渡路——渡口在沪杭铁路二号桥东首（今凯旋路桥堍），
+        《法华乡志》记其原名法华渡，因法华寺得名；附近有范家巷，乡民又称范巷渡，沪语谐音写作梵皇渡；
+     ③ 1964 年按谐音定今名万航渡——「万航」与「梵皇」同音，渡口其实早已被桥取代，只剩名字。
+   立意：这条路真正的主角不是渡，是「纸与水」的手工。1957 年上海美术电影制片厂在万航渡路 618 号建厂，
+   水墨动画、剪纸片、折纸片与手绘赛璐璐都在此成形——一层宣纸、一支描线笔、一遍遍罩染，
+   与这个主题要的是同一套材料。⛔ 不写成「日式水彩滤镜」，⛔ 文案不出现任何具体作品名与角色名，
+   ⛔ 不自称官方皮肤；对外标注一律写作「万航渡 ｜ 纸绘动画印象（Wanhang Ferry · Paper & Cel）」。
+   与龙华寺的分工：龙华寺是「真寺」——香灰、塔檐、白墙，供着的静物；万航渡是「工艺」——纸、水、线，
+   画着的手。两者同为纸白底，一个供着，一个画着。与番禺路的反差照旧：番禺路是硬黑线与实心投影，此处是棕灰铅笔线与柔影。
+   纪律（防止滑成廉价滤镜的底线）：
+     ① 线是铅笔不是墨块：边框取棕灰 #8a7660 一族，粗细 1.5–2px，允许手绘的钝角与不等宽。
+     ② 影是柔化的：一律高斯、零偏移放大，⛔ 不做 4px 4px 0 那种实心硬影（番禺路语汇）。
+     ③ 色是国画三料：花青、石绿、赭石，各压灰一档，只做面与线；⛔ 霓虹渐变，⛔ 卡通描边贴图。
+     ④ 肌理只做纸：纤维与纸屑 α .04–.10，只在空白处读得出，⛔ 不压正文。
+     ⑤ 母题只三件：水墨晕（.wf-wash，花青 / 石绿 / 赭石三团在宣纸上洇开）、河岸（.wf-bank，苏州河驳岸的缓坡）、
+        画稿纸（.wf-paper，拷贝纸的纤维与纸屑）——拱、砖、硬影一概不用。
+   字体：标题与引语走「万航渡喜脉体」——字制区喜脉喜欢体（FontQu Smile，签字笔手写，OFL 1.1）裁 GB2312 一级字子集后
+   机械加粗 +100/2048 em（每边约 2.4%，沿轮廓等距外扩，round join，不改字面比例），再按 OFL 保留字名条款改名内化；
+   笔画是手的，粗细是机器的，两件事都写在字体里。回落 Songti SC / STSong / SimSun。正文走思源黑体（不内化），
+   长句 30–40 字一行时读起来不黏；两套栈都留系统回落，缺字不空。
+   骨架承 century-sq.css：token 名（--plane / --lawn / --river / --brick / --brick-dk / --sepia）、
+   组件选择器、六档字号与 CJK 行盒补偿全部沿用，只换视觉。 */
+
+
+/* 标题字体：万航渡喜脉体（Wanhang Ximai，Bold）。
+   来源：字制区喜脉喜欢体 FontQu Smile v1.0（字制区 / 探火（深圳）品牌策划有限公司，SIL OFL 1.1，upem 2048，7787 字形）。
+   本件做了三件事：① 裁 GB2312 一级字 + ASCII + 常用标点（3997 字形）；
+   ② 机械加粗：沿每个字形的外轮廓向外偏移 100/2048 em（即每边约 2.4%，stroke round join 后与原形并集），
+      均匀、不随笔画方向变形——所以细的起笔还是细的，只是整体重了约一档半；
+   ③ 按 OFL 的保留字名条款改名（Wanhang Ximai），不改原字库的骨。
+   ⚠️ 只有 700 一档（usWeightClass 700），@font-face 声明 700–900 区间：标题写到 800 也不会伪粗。
+   ⚠️ 许可文本见 assets/fonts/ximai/OFL.txt；子集外的繁体与生僻字回落系统宋。 */
+@font-face{
+  font-family:'Wanhang Ximai';
+  src:local('Wanhang Ximai'),local('WanhangXimai-Bold'),url('../fonts/ximai/WanhangXimaiBold-Subset.woff2') format('woff2');
+  font-weight:700 900;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  /* —— 纸 —— */
+  --bg:#f6f1e4;                /* 画稿纸暖白（拷贝纸偏米），不用纯白 */
+  --bg-soft:#efe8d8;
+  --surface:#fdfaf1;
+  --surface-2:#f5efdf;
+  --paper-deep:#e6ddc9;
+  /* —— 树荫 · 河 · 砖 —— */
+  --plane:#3f6449;              /* 梧桐绿（法桐浓荫）：主色，对纸底 6.3:1 */
+  --plane-hi:#4e7757;           /* 亮一档的梧桐绿 */
+  --plane-lo:#2f4c38;           /* 深一档的梧桐绿 */
+  --lawn:#8ba370;             /* 草坪绿（圣约翰旧校园的大草坪）：只做面，⛔ 不承载正文（3.0:1） */
+  --lawn-lo:#6d8556;            /* 深草坪绿 */
+  --river:#9fbcc6;               /* 河青（苏州河水面）：只做面与晕，⛔ 不承载正文 */
+  --river-lo:#6f95a4;           /* 深河青：只做面（进度条、材质底），对纸白字 2.99:1 ⛔ 不承载文字 */
+  --brick:#a67f5c;             /* 老砖褐（梵皇渡车站与圣约翰红砖，日晒雨淋后）：只做面 */
+  --brick-dk:#66351f;              /* 深砖红：小面积标记，对纸底 5.2:1 */
+  --sepia:#33291f;              /* 墨褐：描线的墨，也做最深的面 */
+  /* —— 文字与线 —— */
+  --text-1:#3b322a;            /* 对纸底 10.4:1 */
+  --text-2:#584a3c;            /* 7.0:1 */
+  --text-3:#6f5f4d;            /* 5.2:1，页脚小字够用 */
+  --line:#8a7660;              /* 棕灰线：手绘轮廓的主色，⛔ 不用纯黑 */
+  --border:rgba(59,50,42,.18);
+  --border-strong:rgba(59,50,42,.34);
+  --primary:#3f6449;           /* 与 --plane 同值：预览生成器只读字面 hex */
+  --accent:var(--plane);
+  --accent-2:#22475e;          /* 深河青：链接与线（8.1:1），与梧桐绿拉开灰阶 */
+  --accent-3:var(--brick-dk);
+  --accent-ink:#faf6ea;        /* 梧桐绿上的字（6.0:1） */
+  /* 预览页模板沿用的旧名，一律别名到本主题实色，不新开 hex */
+  --primary-hi:var(--plane-hi);
+  --primary-lo:var(--plane-lo);
+  --line-2:#241c15;            /* 墨：正文与轮廓 */
+  --line-4:#7f9fb0;            /* 河青（深）：分类标签与线 */
+  --line-6:#ad6a45;            /* 砖红：轻警示与卡顶细条 */
+  --good:#3f6b4a;
+  --warn:#8a6a24;
+  --bad:#8b3b2c;
+  --grad:linear-gradient(135deg,#2f4c38,#3f6449 62%,#6f95a4);
+  --grad-soft:linear-gradient(135deg,#fdfaf1,#f0ead9);
+  /* 圆角与影：有机、松弛，影是光不是板 */
+  --radius:18px;
+  --radius-sm:10px;
+  --radius-lg:28px;
+  --shadow:0 14px 34px rgba(70,55,40,.10),0 2px 6px rgba(70,55,40,.06);
+  --shadow-lg:0 30px 64px rgba(70,55,40,.14),0 6px 14px rgba(70,55,40,.07);
+  --soft:rgba(80,60,40,.18);
+  /* 字体：标题手写加粗、正文黑 */
+  --ff-title:'Wanhang Ximai','万航渡喜脉体','Songti SC','STSong','SimSun','Noto Serif SC','Times New Roman',serif;
+  --ff-body:'Source Han Sans SC','思源黑体','Noto Sans CJK SC','PingFang SC','Heiti SC','SimHei',sans-serif;
+  --font-display:var(--ff-title);
+  --font-serif:var(--ff-title);
+  --font-sans:var(--ff-body);
+  --font-button:var(--ff-body);
+  --font-note:var(--ff-title);
+  --font-mono:var(--ff-body);
+  --letter-tight:0;            /* 中文不套英文负字距 */
+  --letter-normal:0;
+}
+
+html,body{background:var(--bg);color:var(--text-1);font-family:var(--font-sans);font-weight:400}
+body{background-color:var(--bg)}
+
+/* 环境层：顶上一点天光、纸面纤维、底部一层河岸。
+   纤维 3px 一道、α .03；河岸只占底部 96px 且向左淡出——⛔ 不许漫到正文行里。 */
+.deck{
+  background:
+    radial-gradient(96% 30% at 50% -8%,rgba(255,255,255,.72) 0%,rgba(214,226,224,.12) 48%,rgba(214,226,224,0) 76%),
+    repeating-linear-gradient(90deg,transparent 0 3px,rgba(90,74,58,.015) 3px 4px),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(90,74,58,.011) 3px 4px),
+    linear-gradient(180deg,#f7f3e7 0%,#f6f1e4 46%,#f3ecda 100%);
+}
+.deck::before{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:96px;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(58% 96% at 12% 118%,rgba(139,163,112,.44) 0%,rgba(139,163,112,.16) 58%,rgba(139,163,112,0) 76%),
+    radial-gradient(46% 82% at 46% 132%,rgba(109,133,86,.40) 0%,rgba(109,133,86,.14) 60%,rgba(109,133,86,0) 78%),
+    linear-gradient(180deg,rgba(246,241,228,0) 0%,rgba(139,163,112,.14) 62%,rgba(139,163,112,.28) 100%);
+}
+.slide{padding:80px 104px}  /* 正文基准由 base.css 给，主题只覆盖 padding */
+.progress-bar{height:4px;bottom:6px}
+.progress-bar > span{background:linear-gradient(90deg,var(--plane-lo),var(--river-lo));box-shadow:none}
+
+/* 标题：万航渡喜脉体（手写稿纸感，机械加粗一档 700），不描边；行高按中文给足（1.2–1.35），不靠字距拉气韵。
+   ⚠️ 2026-11-21：原注释写「宋体」，是吉祥寺时期的字体，改名重建时未跟改。
+   ⚠️ 2026-11-21 用户定：h1–h3 一律喜脉体，不再按字号降级到正文字体。
+      手写体同字号视觉偏小，故标题档整体上调（见下方字号段）。
+      仅 12px 脚注仍走 --font-sans——那个尺寸手写体笔画糊成一团。 */
+h1,h2,h3,h4,h1.title,h2.title,.h1,.h2,.h3,.h4{
+  font-family:var(--font-display);font-weight:400;color:var(--text-1);letter-spacing:0;
+}
+h1.title,.h1{line-height:1.16}
+h2.title,.h2{line-height:1.22}
+h3,.h3,h4,.h4{line-height:1.34}
+.lede{color:var(--text-2);font-weight:400}
+.kicker,.eyebrow{
+  font-family:var(--font-mono);font-weight:400;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* —— 四档「纸卡」：靠「有没有色面 / 有没有边」分档，影一律柔 —— */
+.card{
+  background:var(--surface);
+  border:1.5px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+/* 薄彩卡：整面压一层极淡的石绿（像罩过一遍淡彩的稿子），边上仍是棕灰细线 */
+.card-soft{
+  background:
+    radial-gradient(120% 90% at 18% 0%,rgba(139,163,112,.16),rgba(139,163,112,.04) 62%,rgba(139,163,112,0)),
+    var(--surface);
+  border:1.5px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:0 8px 20px rgba(70,55,40,.06);
+}
+/* 铅笔线稿卡：只有线，没有面、没有影——「还没上色的分镜」 */
+.card-outline{
+  background:transparent;
+  border:1.5px dashed rgba(90,74,58,.42);
+  border-radius:var(--radius);
+  box-shadow:none;
+}
+/* 河雾带卡：顶上一条软边的水气带（河上的晨雾，不是平涂色条），卡本身圆角 */
+.card-accent{
+  position:relative;
+  padding-top:42px;
+  background:var(--surface);
+  border:1.5px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.card-accent::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:26px;
+  background-image:
+    radial-gradient(54px 20px at 9% 72%,rgba(207,224,230,.88) 0 70%,rgba(207,224,230,0) 92%),
+    radial-gradient(34px 14px at 22% 48%,rgba(207,224,230,.72) 0 70%,rgba(207,224,230,0) 92%),
+    radial-gradient(62px 22px at 40% 66%,rgba(207,224,230,.84) 0 70%,rgba(207,224,230,0) 92%),
+    radial-gradient(30px 13px at 56% 44%,rgba(207,224,230,.66) 0 70%,rgba(207,224,230,0) 92%),
+    radial-gradient(58px 21px at 74% 70%,rgba(207,224,230,.86) 0 70%,rgba(207,224,230,0) 92%),
+    radial-gradient(32px 14px at 90% 46%,rgba(207,224,230,.70) 0 70%,rgba(207,224,230,0) 92%);
+  background-repeat:no-repeat;
+}
+.card-hover:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+
+/* 浮层：一张抬起来的纸——柔影 + 棕灰细线，⛔ 不给玻璃、不给硬影 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+  border-radius:var(--radius-lg);corner-shape:squircle;
+  background:rgba(253,250,241,.94);
+  border:1.5px solid var(--border-strong);
+  box-shadow:0 24px 54px rgba(70,55,40,.14);
+}
+
+/* 胶囊三态：梧桐绿实心 / 河青实心 / 棕灰幽灵。
+   内距 13/11：CJK 1.7 行高下 11/13 让墨心正好落在胶囊中线（实测偏差 <1px）。 */
+.pill{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--accent-2);
+  border:1.5px solid var(--accent-2);
+  box-shadow:0 6px 14px rgba(34,71,94,.22);
+}
+/* 主按钮＝梧桐绿实心（纸白字 6.21:1）。
+   ⛔ 不用 --river-lo 河青做底：河青对纸白字只有 2.99:1，不到 4.5。
+   河青在本主题里的职责是「面与晕」（见头部注释），⛔ 不承载文字。 */
+.pill-accent{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--accent-2);
+  border:1.5px solid var(--accent-2);
+  box-shadow:0 6px 14px rgba(34,71,94,.22);
+}
+.pill-ghost{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:rgba(253,250,241,.86);
+  border:1.5px solid var(--border-strong);
+  box-shadow:none;
+}
+.pill-good{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:#faf6ea;
+  background:var(--lawn-lo);
+  border:1.5px solid #58704a;
+  box-shadow:0 6px 14px rgba(88,112,74,.20);
+}
+
+.divider{background:var(--border-strong);height:1.5px;border-radius:999px}
+/* 笔触分隔：一根棕灰线，右端收成一撇（用渐隐与圆头模拟毛笔提按，不是几何色块） */
+.divider-accent{
+  height:3px;width:148px;border-radius:999px;box-shadow:none;
+  background:
+    linear-gradient(90deg,rgba(138,118,96,.95) 0%,rgba(138,118,96,.72) 58%,rgba(138,118,96,.28) 82%,rgba(138,118,96,0) 100%);
+}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);font-weight:400;letter-spacing:.08em;color:var(--text-3);
+}
+.deck-footer{border-top:1.5px solid rgba(90,74,58,.22);padding-top:9px}
+
+/* 选项：纸卡；判对走草坪绿面，选错走砖红面，字一律深墨 */
+.quiz-opt{
+  display:flex;align-items:center;min-height:58px;padding:12px 20px;line-height:1.35;
+  border:1.5px solid var(--border-strong);
+  border-radius:var(--radius-sm);
+  background:var(--surface);
+  box-shadow:0 6px 16px rgba(70,55,40,.06);
+  font-family:var(--font-button);font-weight:400;
+}
+.quiz-opt:hover{background:var(--surface-2);box-shadow:0 10px 22px rgba(70,55,40,.10)}
+.quiz-opt.correct{background:rgba(139,163,112,.22);color:#3c4a30}
+.quiz-opt.chosen-wrong{background:rgba(139,74,44,.14);color:#6f3a23}
+.quiz-reveal{border-top:1.5px solid var(--border-strong);background:var(--surface);box-shadow:0 8px 22px rgba(70,55,40,.08)}
+
+/* 图版框：一圈棕灰细线 + 纸底衬，四角 10px——不做硬边框、不做投影板 */
+.img-frame{
+  border-radius:var(--radius-sm);padding:8px;
+  background:var(--surface);
+  border:1.5px solid var(--border-strong);
+  box-shadow:0 12px 28px rgba(70,55,40,.08);
+}
+/* 图版号：纸底小牌，棕灰线，字取 umber */
+.img-tag{
+  border-radius:6px;background:rgba(166,127,92,.20);color:#4a3a2c;
+  border:1.5px solid rgba(90,74,58,.34);
+  text-transform:none;letter-spacing:.04em;font-family:var(--font-note);
+}
+.img-cap,.deck-header,.deck-footer{font-family:var(--font-note)}
+.mono{font-family:var(--font-mono)}
+
+/* —— 母题层：水墨晕、河岸、画稿纸 ——
+   .wf-wash：花青 / 石绿 / 赭石三团低 α 墨，边缘不留硬切线，读成「宣纸上洇开的一片」；
+   .wf-bank：两道坡形叠出的岸线，坡度缓、坡脚圆，坡脚下面是水——苏州河的石砌驳岸没有一条水平硬顶；
+   .wf-paper：拷贝纸的纤维与纸屑，只在空白处读得出来。 */
+/* 水墨晕：白宣上三团墨——花青在上、石绿偏右、赭石垫底。
+   ⛔ 不加描边、不做高光：一勾边就是贴纸，不是洇。 */
+.wf-wash{
+  background-color:#fcf9f2;
+  background-image:
+    radial-gradient(62% 66% at 16% 24%,rgba(159,188,198,.30) 0 18%,rgba(159,188,198,.10) 62%,rgba(159,188,198,0) 80%),
+    radial-gradient(56% 60% at 74% 34%,rgba(139,163,112,.26) 0 16%,rgba(139,163,112,.09) 60%,rgba(139,163,112,0) 80%),
+    radial-gradient(70% 72% at 48% 88%,rgba(166,127,92,.23) 0 18%,rgba(166,127,92,.08) 60%,rgba(166,127,92,0) 82%);
+}
+.wf-bank{
+  /* 河岸：土黄底上一层草坡。底色 #c0b28f(L*72.9)：与画稿纸 84.5 拉开 11.6 级、
+     与苏州河 60.7 拉开 12.2 级。样片可分辨性判据见 references/theme-preview.md。 */
+  background-color:#c0b28f;
+  background-image:
+    linear-gradient(180deg,rgba(114,152,169,0) 0 76%,rgba(114,152,169,.62) 86%,rgba(114,152,169,.95) 100%),
+    radial-gradient(88% 80% at 18% 88%,#7c965f 0 58%,rgba(143,169,113,.36) 70%,rgba(143,169,113,0) 84%),
+    radial-gradient(72% 70% at 76% 104%,#4f6740 0 52%,rgba(97,121,76,.28) 66%,rgba(97,121,76,0) 80%),
+    linear-gradient(180deg,#d5c9ac 0%,#bfb091 56%,#af9d7c 100%);
+}
+/* 画稿纸：拷贝纸的斜纤维与两粒纸屑，压在字上就脏——⛔ 不铺在文字层。 */
+.wf-paper{
+  background-color:#ded2b6;
+  background-image:
+    repeating-linear-gradient(112deg,rgba(120,96,64,.075) 0 1px,transparent 1px 4px),
+    repeating-linear-gradient(22deg,rgba(120,96,64,.055) 0 1px,transparent 1px 5px),
+    radial-gradient(circle 1.2px at 24% 32%,rgba(90,74,58,.16) 0 100%,transparent 0),
+    radial-gradient(circle 1px at 68% 72%,rgba(90,74,58,.13) 0 100%,transparent 0);
+  background-size:auto,auto,74px 82px,64px 76px;
+}
+.wf-paper{
+  /* 位图层（2026-11-22）：拷贝纸的纤维；CSS 的 112deg/22deg 两道斜线只给方向，纤维的粗细不匀由 tile 给。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.wf-paper::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/fiber/fiber-gray-512.png");
+  background-repeat:repeat;
+  background-size:512px 512px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.75;
+}
+/* 回退：.wf-paper--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.wf-paper--flat::after{content:none}
+.wf-river{
+/* 苏州河：水面横纹与一道天光带。渡口不在了，水还在。 */
+  background-color:#7298a9;
+  background-image:
+    repeating-radial-gradient(ellipse 150px 34px at 18% 108%,rgba(36,66,86,.32) 0 2px,transparent 2px 20px),
+    repeating-radial-gradient(ellipse 190px 40px at 84% 128%,rgba(159,188,198,.26) 0 2px,transparent 2px 22px),
+    linear-gradient(180deg,rgba(255,255,255,.34) 0%,rgba(255,255,255,0) 34%,rgba(23,52,70,.16) 100%);
+}
+/* 梧桐：法桐树冠的斑驳——四团深绿、一团透光，读成叶隙不是噪声。 */
+.wf-grove{
+  /* 底色 #4c6236(L*38.8)：与驳岸 49.8 拉开 11.0 级、与老砖 28.0 拉开 10.8 级。
+     窗口只有 1.8 级宽（上下都被邻居夹住）。 */
+  background-color:#4c6236;
+  background-image:
+    radial-gradient(46% 38% at 14% 20%,rgba(47,76,56,.50),rgba(47,76,56,.10) 62%,rgba(47,76,56,0) 78%),
+    radial-gradient(52% 42% at 78% 14%,rgba(63,100,73,.52),rgba(63,100,73,.10) 60%,rgba(63,100,73,0) 78%),
+    radial-gradient(58% 46% at 88% 78%,rgba(47,76,56,.44),rgba(47,76,56,.08) 60%,rgba(47,76,56,0) 80%),
+    radial-gradient(44% 34% at 26% 92%,rgba(63,100,73,.40),rgba(63,100,73,.06) 58%,rgba(63,100,73,0) 76%),
+    radial-gradient(70% 60% at 52% 48%,rgba(109,133,86,.30),rgba(109,133,86,0) 74%);
+}
+/* 驳岸：苏州河的石砌岸，横向条石一层层错开。 */
+.wf-quay{
+  background-color:#90714a;
+  background-image:
+    repeating-linear-gradient(180deg,rgba(58,42,24,.30) 0 1.5px,transparent 1.5px 7px),
+    radial-gradient(74% 58% at 30% 92%,rgba(94,48,28,.30),rgba(94,48,28,0) 72%),
+    radial-gradient(60% 40% at 82% 12%,rgba(255,255,255,.22),rgba(255,255,255,0) 68%);
+}
+/* 站台黄昏：梵皇渡车站旧址的夕照，暖而不饱和——只做底色。 */
+.wf-dusk{
+  background-color:#f3e3cd;
+  background-image:
+    radial-gradient(80% 62% at 24% 8%,rgba(239,201,150,.60),rgba(239,201,150,0) 70%),
+    radial-gradient(90% 60% at 82% 84%,rgba(150,120,92,.22),rgba(150,120,92,0) 72%);
+}
+.wf-plane{background:var(--plane)}
+.wf-plane-lo{background:var(--plane-lo)}
+.wf-river-swatch{background:var(--river)}
+.wf-lawn{background:var(--lawn)}
+.wf-brick-swatch{background:var(--brick-dk)}
+.wf-ink{background:var(--sepia)}
+
+/* —— 组件层：cp-*（预览页模板依赖，与 century-sq 同几何、只换视觉）—— */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:9px 24px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:var(--surface);
+  border:1.5px solid var(--border-strong);
+  box-shadow:0 6px 14px rgba(70,55,40,.06);
+}
+/* 轻提示：深砖红只做 10px 圆头条，绝不铺底 */
+.cp-alert{height:10px;width:262px;max-width:82%;border-radius:999px;background:var(--brick-dk);opacity:.86}
+/* 已选锚点：纸底胶囊 + 前置一枚树影圆点 */
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:9px 18px;border-radius:999px;
+  background:var(--surface);color:var(--text-1);
+  font-family:var(--font-button);font-weight:400;
+  border:1.5px solid var(--border-strong);
+  box-shadow:0 6px 14px rgba(70,55,40,.06);
+}
+.cp-anchor::before{
+  content:"";flex:0 0 auto;width:14px;height:14px;
+  border-radius:60% 60% 55% 55%/70% 70% 40% 40%;
+  background:var(--lawn-lo);
+}
+/* 进度：纸槽 + 梧桐绿条；槽不描黑，只留细线 */
+.cp-progress{height:8px;border-radius:999px;background:var(--paper-deep);border:1px solid rgba(90,74,58,.22);overflow:hidden}
+.cp-progress > span{display:block;height:100%;width:28%;background:var(--plane)}
+/* 材质底：河青水面 / 梧桐树影 / 纸 */
+.cp-steel{
+  background-color:var(--river-lo);
+  background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(43,81,104,.12));
+}
+.cp-tile{
+  background-color:#dfe3cc;
+  background-image:
+    radial-gradient(circle 2px at 20% 30%,rgba(63,100,73,.34) 0 100%,transparent 0),
+    radial-gradient(circle 1.6px at 66% 62%,rgba(109,133,86,.34) 0 100%,transparent 0);
+  background-size:58px 62px,66px 70px;
+}
+.cp-marble{
+  background-color:var(--bg);
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 2px,rgba(90,74,58,.05) 2px 3px),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(90,74,58,.04) 3px 4px);
+}
+
+/* —— 字号与间距：六档收口（沿用 century-sq 的档位，2026-11-20）
+   ⚠️ 2026-11-21 标题档整体上调一档：本主题标题走喜脉体（手写），同字号下
+   视觉比黑体/宋体小，92/68/44 读着偏弱。上调后 116/88/56（2026-11-21 二次上调），与手写体的
+   实际视觉重量对齐。⛔ 别照抄 century-sq 的读数——那是黑体主题的档位。 —— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h1);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h3);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill,.pill-accent,.pill-good,.pill-ghost,.img-tag,.img-cap,.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}
+
+/* 链接：正文语境不拿装饰色当文字色，改主文字色 + 梧桐绿下划 */
+a{color:var(--text-1);text-decoration-color:var(--plane)}

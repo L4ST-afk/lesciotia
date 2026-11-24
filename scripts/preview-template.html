@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>世纪广场 Century Sq · 来雪亭 B 出口主题预览</title>
+<style>
+/* theme: century-sq - 世纪广场 Century Sq ｜ 模度几何 · 清水混凝土 · 磨砂玻璃
+   命名：上海浦东 · 世纪广场（世纪大道站，2 / 4 / 6 / 9 号线四线换乘）。
+   骨架承 guanglan-rd.css：完整保留 token 名、组件选择器、六档字号与 CJK 行盒补偿，
+   只把「天蓝 Aqua 玻璃」整套视觉换成「柯布西耶模度 × 公共广场材质」。
+   视觉真源＝云主机会话《世纪广场 UI 风格卡》（豆包文字规范 + 磨砂玻璃版三张图）：
+     主色 交通标线黄（2026-11-20 压暗到 #DAB406）；次色 Line 2 蓝 / Line 4 紫 / Line 6 玫红；
+     ⚠️ 本模板的 hex 只是默认值，产物一律由 gen-theme-preview.py 的 sync_palette 从目标主题 :root 覆盖。
+     基底 清水混凝土 #E8E8E4·#B8B8B4 / 大理石 #F4F4F2 / 拉丝不锈钢 #DCDFE2 /
+     玻璃天光 #C8D8E8 / 草坪 #96B878 / 哑光瓷砖 #EEEEEC / 正文黑 #222222 / 辅助灰 #777777。
+   ⚠️ 参考图上小色块的 HEX 是文生图渲染的近似值（部分乱码），不作色值依据；
+      以会话里的原始文字规范为准。辅助灰为过对比度压深到 #6b7071。
+   铁则：单视图最多「主黄 + 一个次色」，三色只做小面积标记不铺底；肌理低透明度只做暗示；
+   漫射顶光、柔和浅影、直角为主；⛔ 无硬投影 / 粗黑框 / 强折射水晶玻璃（玻璃是磨砂雾面）。 */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#eef3f7;
+  --bg-soft:#f4f4f2;
+  --surface:#f7f7f5;
+  --surface-2:#eceeec;
+  /* 世纪广场色板（锁定线路） */
+  --primary:#dab406;         /* 默认值＝世纪广场真值；sync_palette 会按目标主题整组覆盖 */
+  --primary-hi:#eccb3d;
+  --primary-lo:#c2a005;
+  --line-2:#0090cd;           /* 次要操作 / 导航 / 链接 / 进度条 */
+  --line-4:#84318e;           /* 分类标签 / 辅助标注 */
+  --line-6:#721538;           /* 轻警示 / 特色模块 / 动态标记（小面积）：默认＝世纪广场真值，sync_palette 覆盖 */
+  /* 基底材质色组 */
+  --concrete:#e8e8e4;
+  --concrete-deep:#b8b8b4;
+  --marble:#f4f4f2;
+  --steel:#dcdfe2;
+  --glass-tint:#c8d8e8;
+  --lawn:#96b878;
+  --tile:#eeeeec;
+  --border:rgba(34,34,34,.14);
+  --border-strong:rgba(34,34,34,.26);
+  --text-1:#222222;
+  --text-2:#5a5f60;           /* 辅助灰 #777777 压深：混凝土底上要过 4.5:1 */
+  --text-3:#6b7071;
+  --accent:var(--primary);    /* 主黄：⛔ 不写第二份 hex，与 --primary 同源 */
+  --accent-2:#0090cd;
+  --accent-3:#84318e;
+  --accent-ink:#222222;       /* 深字压主黄 ≈ 8:1，充裕 */
+  --good:#5f8a5b;
+  --warn:#b4791c;
+  --bad:#b23a4d;
+  --grad:linear-gradient(135deg,#1f4f6b,#0090cd);
+  --grad-soft:linear-gradient(135deg,#eef3f8,#f4f4f2);
+  /* 直角为主；只有胶囊按钮 / 小标签用大圆角 */
+  --radius:6px;
+  --radius-sm:4px;
+  --radius-lg:14px;           /* 磨砂玻璃浮层 */
+  --shadow:0 10px 24px rgba(34,42,48,.07),0 1px 3px rgba(34,42,48,.04);
+  --shadow-lg:0 20px 44px rgba(34,42,48,.10),0 3px 8px rgba(34,42,48,.05);
+  /* 英文题名 Space Mono、UI 标签 Archivo、中文阿里巴巴普惠体 3.0、注释 HarmonyOS Sans；
+     后两者按本地字体名声明，未安装时逐级回落，⛔ 不依赖网络字体渲染中文。 */
+  --font-sans:'Archivo','Alibaba PuHuiTi 3.0','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-display:'Space Mono','Alibaba PuHuiTi 3.0','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans SC',sans-serif;
+  --font-mono:'Space Mono','JetBrains Mono','IBM Plex Mono',SFMono-Regular,Menlo,monospace;
+  --font-note:'HarmonyOS Sans','Alibaba PuHuiTi 3.0','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  --letter-tight:0;              /* 中文不套英文负字距 */
+  --letter-normal:0;
+}
+
+html,body{
+  background:#e6eef6;
+  color:var(--text-1);
+  font-family:var(--font-sans);
+  font-weight:500;
+}
+
+/* 环境层：顶部漫射天光 + 底部草地带 + 左右下角瓷砖网格。
+   三层都是低透明度「暗示」，不铺厚重建筑贴图，也不压正文可读性。 */
+body{background:linear-gradient(180deg,#dce9f6 0%,#eef3f7 42%,#f4f4f2 100%)}
+.deck{
+  background:
+    radial-gradient(120% 44% at 50% -10%,rgba(255,255,255,.96) 0%,rgba(222,236,248,.58) 48%,rgba(222,236,248,0) 78%),
+    linear-gradient(0deg,rgba(150,184,120,.72) 0%,rgba(150,184,120,.72) 4.2%,rgba(168,198,145,.30) 4.2%,rgba(168,198,145,0) 6.4%),
+    repeating-linear-gradient(90deg,transparent 0 6px,rgba(74,104,54,.07) 6px 7px) 0 100%/100% 5% no-repeat,
+    linear-gradient(180deg,#dfeaf6 0%,#eef3f7 34%,#f4f4f2 100%);
+}
+/* 下角两块哑光瓷砖网格：左右各一块，细缝、低对比 */
+.deck::before,.deck::after{
+  content:"";position:absolute;bottom:0;width:180px;height:150px;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 29px,rgba(110,118,118,.14) 29px 30px),
+    repeating-linear-gradient(90deg,transparent 0 29px,rgba(110,118,118,.14) 29px 30px),
+    linear-gradient(180deg,rgba(238,238,236,0),rgba(238,238,236,.78));
+}
+.deck::before{left:0}
+.deck::after{right:0}
+.slide{padding:80px 104px;font-size:24px;line-height:1.7}   /* 引擎无正文基准，主题必须给 */
+
+h1.title,h2.title,.h1,.h2,h3,.h3,h4,.h4{
+  font-family:var(--font-display);
+  color:var(--text-1);
+}
+h1.title,.h1{font-weight:700;line-height:1.06}
+h2.title,.h2{font-weight:700;line-height:1.1}
+h3,.h3,h4,.h4{font-weight:700}
+.lede{color:var(--text-2);font-weight:500}
+.kicker,.eyebrow{
+  font-family:var(--font-mono);
+  font-weight:700;
+  color:var(--text-3);
+  letter-spacing:.08em;
+}
+
+/* —— 材质板：直角容器，细灰分割线，柔和浅影 —— */
+.card{
+  background-color:var(--concrete);
+  background-image:
+    radial-gradient(rgba(34,34,34,.035) .7px,transparent .7px),
+    linear-gradient(180deg,rgba(255,255,255,.58),rgba(184,184,180,.12));
+  background-size:4px 4px,auto;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80),var(--shadow);
+}
+/* 大理石标题台：极淡流动纹理，低对比度 */
+.card-soft{
+  background-color:var(--marble);
+  background-image:
+    linear-gradient(112deg,transparent 0 31%,rgba(120,126,130,.075) 32%,transparent 33.5% 57%,rgba(120,126,130,.055) 58%,transparent 59.5%),
+    repeating-linear-gradient(100deg,transparent 0 46px,rgba(120,126,130,.04) 47px,transparent 48px),
+    linear-gradient(180deg,#ffffff,#efefed);
+  border-color:rgba(34,34,34,.10);
+  box-shadow:inset 0 1px 0 #ffffff,var(--shadow);
+}
+/* Line 2 蓝：描边 / 轻填充，只做导航与次要操作 */
+.card-outline{
+  background:rgba(0,144,205,.045);
+  border:1px solid rgba(0,144,205,.65);
+  border-radius:var(--radius-sm);
+  box-shadow:none;
+}
+/* Line 6 玫红：短提示条落在卡片上沿，绝不大面积铺色 */
+.card-accent{
+  border-top:3px solid var(--line-6);
+  border-left:0;
+  background-color:var(--concrete);
+  background-image:radial-gradient(rgba(34,34,34,.03) .7px,transparent .7px);
+  background-size:4px 4px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80),var(--shadow);
+}
+.card-hover:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+
+/* 磨砂玻璃浮层：雾面半透、淡天光蓝调、轻微背景模糊、边缘只有柔和高光。
+   ⛔ 不做厚倒角 / 明亮白色折射边 / 焦散——那是被否掉的「玻璃升级版」。 */
+.glass{
+  /* ⚠️ 2026-11-21：原缺 position:relative，浮层里的 .x（absolute）会逃到最近的定位祖先
+     .spec-cell 右上角，实测脱离卡片 95.5px（9 个主题全中）。补 relative 锁住。 */
+  position:relative;
+  border-radius:var(--radius-lg);
+  background:
+    linear-gradient(160deg,rgba(255,255,255,.30),rgba(255,255,255,0) 58%),
+    linear-gradient(135deg,rgba(232,240,248,.64),rgba(200,216,232,.44));
+  -webkit-backdrop-filter:blur(14px) saturate(112%);
+  backdrop-filter:blur(14px) saturate(112%);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:
+    0 18px 40px rgba(34,48,60,.10),
+    inset 0 1px 0 rgba(255,255,255,.82);
+}
+
+/* 胶囊三态：主黄实心 / Line 2 蓝描边 / Line 4 紫标签。
+   上下内距 10 / 14 沿用同源的 CJK 行盒补偿（1.7 行高下字墨偏低约 2px）。 */
+.pill{
+  padding:10px 20px 14px;
+  border-radius:999px;
+  font-family:var(--font-sans);
+  font-weight:700;
+  font-size:16px;
+  color:var(--accent-ink);
+  background:linear-gradient(180deg,var(--primary-hi) 0%,var(--primary) 46%,var(--primary-lo) 100%);
+  border:1px solid rgba(120,96,0,.26);
+  box-shadow:0 2px 6px rgba(90,75,10,.12),inset 0 1px 0 rgba(255,255,255,.55);
+}
+.pill-accent{
+  padding:10px 20px 14px;
+  border-radius:999px;
+  font-family:var(--font-sans);
+  font-weight:700;
+  font-size:16px;
+  color:#006a98;
+  background:rgba(0,144,205,.07);
+  border:1px solid rgba(0,144,205,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80);
+}
+.pill-good{
+  padding:10px 20px 14px;
+  border-radius:999px;
+  font-family:var(--font-sans);
+  font-weight:700;
+  font-size:16px;
+  color:#ffffff;
+  background:linear-gradient(180deg,#95519e,#84318e);
+  border:1px solid rgba(60,20,66,.34);
+  box-shadow:0 2px 6px rgba(70,30,80,.14),inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+.divider{background:var(--border)}
+/* 高亮标线：平涂主黄细条，不是玻璃棒 */
+.divider-accent{height:4px;width:72px;border-radius:2px;background:var(--accent);box-shadow:none}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);
+  letter-spacing:.06em;
+  color:var(--text-3);
+}
+.progress-bar > span{background:var(--accent);box-shadow:none}
+
+/* 选项：静息态是哑光瓷砖托盘；判对 / 选错才用线路色点一下 */
+.quiz-opt{
+  border:1px solid rgba(34,34,34,.16);
+  border-radius:var(--radius-sm);
+  background:
+    repeating-linear-gradient(0deg,transparent 0 27px,rgba(110,118,118,.07) 27px 28px),
+    linear-gradient(180deg,#ffffff,#f2f2f0);
+  box-shadow:inset 0 1px 0 #ffffff,0 6px 16px rgba(34,42,48,.06);
+  font-family:var(--font-sans);
+  font-weight:600;
+}
+.quiz-opt:hover{
+  border-color:rgba(0,144,205,.60);
+  box-shadow:0 0 0 1px rgba(0,144,205,.18),0 8px 20px rgba(34,42,48,.08);
+}
+.quiz-opt.correct{
+  border:1px solid rgba(0,144,205,.70);
+  color:#0b4f6e;
+  background:rgba(0,144,205,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+.quiz-opt.chosen-wrong{
+  border:1px solid rgba(214,39,104,.62);
+  color:#7a1c3c;
+  background:rgba(214,39,104,.07);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.quiz-reveal{border-top:3px solid var(--accent);background:var(--marble);box-shadow:inset 0 1px 0 rgba(255,255,255,.95)}
+
+/* 相框：拉丝不锈钢细边 + 白瓷内衬，不加玻璃反光 */
+.img-frame{
+  border-radius:var(--radius);
+  padding:6px;
+  background:linear-gradient(180deg,#ffffff,#e9ecee);
+  border:1px solid rgba(34,34,34,.14);
+  box-shadow:var(--shadow);
+}
+.img-tag{
+  background:rgba(249,211,40,.95);
+  color:var(--accent-ink);
+  border:1px solid rgba(120,96,0,.24);
+  text-transform:none;
+  letter-spacing:.04em;
+  font-family:var(--font-note);
+}
+.mono{font-family:var(--font-mono)}
+.img-cap,.deck-header,.deck-footer{font-family:var(--font-note)}
+
+/* —— 世纪广场材质 / 标记工具类（本主题新增，供风格板与导览面板直接使用） —— */
+.cp-marble{
+  background-color:var(--marble);
+  background-image:
+    linear-gradient(112deg,transparent 0 31%,rgba(120,126,130,.075) 32%,transparent 33.5% 57%,rgba(120,126,130,.055) 58%,transparent 59.5%),
+    repeating-linear-gradient(100deg,transparent 0 46px,rgba(120,126,130,.04) 47px,transparent 48px),
+    linear-gradient(180deg,#ffffff,#efefed);
+}
+.cp-steel{
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.42) 0 1px,rgba(120,128,134,.10) 1px 2px,transparent 2px 4px),
+    linear-gradient(180deg,#eef0f2,#c9ced2);
+}
+.cp-tile{
+  background:
+    repeating-linear-gradient(0deg,transparent 0 27px,rgba(110,118,118,.16) 27px 28px),
+    repeating-linear-gradient(90deg,transparent 0 27px,rgba(110,118,118,.16) 27px 28px),
+    var(--tile);
+}
+.cp-lawn{background:
+  repeating-linear-gradient(90deg,rgba(74,104,54,.10) 0 1px,rgba(255,255,255,.05) 1px 3px,transparent 3px 7px),
+  linear-gradient(180deg,#a8c58c,#8fb271)}
+.cp-alert{height:12px;width:260px;max-width:82%;border-radius:2px;background:var(--line-6)}
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:8px 16px;border-radius:999px;
+  background:var(--primary);color:var(--accent-ink);
+  font-weight:700;border:1px solid rgba(120,96,0,.26);
+}
+.cp-anchor::before{content:"";width:8px;height:8px;border-radius:50%;background:#222222}
+/* 次按钮＝描边幽灵：实心填充会与主色按钮抢层级，次色只做描边与文字 */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 26px;border-radius:12px;
+  font-family:var(--font-sans);font-weight:700;color:var(--line-2);
+  background:rgba(255,255,255,.72);
+  border:1.5px solid var(--line-2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+}
+.cp-progress{height:8px;border-radius:2px;background:var(--concrete-deep);overflow:hidden}
+.cp-progress > span{display:block;height:100%;width:28%;background:var(--primary)}
+
+/* —— 字号与间距：六档收口（承 guanglan-rd.css，2026-11-18）——
+   相邻级差全部 ≥25%，正文基准在 .slide 里给 —— */
+h1.title,.h1{font-size:92px;margin:32px 0 16px}
+h2.title,.h2{font-size:68px;margin:24px 0 12px}
+h3,.h3{font-size:44px;margin:0 0 12px}
+h4,.h4{font-size:30px;margin:0 0 8px}
+.lede{font-size:30px;margin-top:16px}
+.eyebrow{font-size:16px}
+.kicker{font-size:16px}
+.pill{font-size:16px;padding:10px 18px 14px}
+.img-cap{font-size:16px}
+.img-tag{font-size:16px;padding:8px 16px}
+.deck-header,.deck-footer{font-size:16px}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:24px}
+
+/* 正文语境不拿亮黄当文字色（对浅底只有 1.6:1），改主文字色 + 主黄下划线 */
+a{color:var(--text-1);text-decoration-color:var(--accent)}
+
+
+/* ===================== 预览页专用版式（不属于主题） ===================== */
+*{box-sizing:border-box}
+body{margin:0;padding:30px 0 54px;background:#e9eef3;color:var(--text-1);font-family:var(--font-sans)}
+.wrap{width:1080px;margin:0 auto}
+.lead{margin:0 0 26px;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(34,34,34,.14);padding-bottom:14px}
+.lead .mono{font-size:12px;letter-spacing:.16em;color:var(--text-2)}
+.lead h1{margin:6px 0 0;font-size:30px;font-weight:400;letter-spacing:.01em}
+.lead h1 small{font-family:var(--font-mono);font-size:14px;font-weight:400;letter-spacing:.12em;color:var(--text-2);margin-left:10px}
+.lead .meta{text-align:right;font-size:12px;line-height:1.7;color:var(--text-2)}
+.lead .meta code{font-family:var(--font-mono);font-size:12px}
+.board-tag{width:1080px;margin:0 auto 10px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--text-2)}
+.board-tag span{display:inline-block;background:var(--primary);color:var(--accent-ink);padding:2px 8px;margin-right:10px;border-radius:2px;font-weight:700}
+.board{
+  position:relative;width:1080px;height:720px;margin:0 auto 46px;overflow:hidden;
+  border:1px solid rgba(34,34,34,.10);
+  box-shadow:0 22px 54px rgba(30,44,56,.14);
+  background:linear-gradient(180deg,#dfeaf6 0%,#eef3f7 38%,#f4f4f2 100%);
+  font-family:var(--font-sans);color:var(--text-1);
+}
+/* 底部草地带：三张板统一的环境层 */
+.board::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:56px;z-index:1;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,rgba(74,104,54,.10) 0 1px,rgba(255,255,255,.05) 1px 3px,transparent 3px 7px),
+    linear-gradient(180deg,#a8c58c,#8fb271);
+  border-top:1px solid rgba(74,104,54,.18);
+}
+.board > .inner{position:relative;z-index:2;padding:24px 32px 0}
+.sec-h{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--text-2);margin:0 0 10px;text-transform:uppercase}
+.hair{height:1px;background:rgba(34,34,34,.14)}
+.mono{font-family:var(--font-mono)}
+/* 覆盖主题里为 1920×1080 deck 写的尺寸，预览板是 1080×720 */
+.board .card{padding:16px 18px;border-radius:6px}
+.board .pill{font-size:13px;padding:7px 16px 9px}
+.board .glass{border-radius:14px}
+
+/* ---------- 共用：大理石标题台 ---------- */
+.titlebar{
+  position:relative;height:104px;border:1px solid rgba(34,34,34,.10);
+  box-shadow:0 8px 18px rgba(30,44,56,.08);
+  padding:12px 24px;display:flex;flex-direction:column;justify-content:center;
+}
+.titlebar .mark{position:absolute;top:-8px;left:20px;width:16px;height:16px;background:var(--primary)}
+.titlebar h2{margin:0;font-size:44px;line-height:1.06;font-weight:800;letter-spacing:.02em;color:var(--text-1)}
+.titlebar .en{margin-top:5px;font-family:var(--font-mono);font-size:13px;letter-spacing:.22em;color:var(--text-2)}
+.titlebar .rule{position:absolute;bottom:12px;left:24px;width:340px;height:4px;background:var(--primary)}
+
+/* ---------- 01 风格板 ---------- */
+.palette{margin-top:14px}
+/* 用色比例条：把「主色铺面、次色只做小面积标记」这条铁则画出来，
+   取代原先四块等权满饱和色卡（并排时互相抢，读作油漆色卡而非配色系统）。 */
+.spec-bar{display:flex;height:46px;border-radius:4px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(34,34,34,.12),0 5px 12px rgba(30,44,56,.10)}
+.spec-bar i{display:block;height:100%}
+.spec-bar i + i{box-shadow:inset 1px 0 0 rgba(255,255,255,.60)}
+.spec-legend{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+.spec-legend .lg{display:flex;flex-direction:column;gap:2px}
+.spec-legend .r1{display:flex;align-items:center;gap:5px}
+.spec-legend .r1 i{width:10px;height:10px;border-radius:2px;border:1px solid rgba(34,34,34,.14);flex:0 0 auto}
+.spec-legend b{font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.02em}
+.spec-legend span{font-family:var(--font-mono);font-size:12px;color:var(--text-2)}
+.spec-legend em{font-style:normal;font-size:12px;line-height:1.45;color:var(--text-3)}
+.mini-row{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(34,34,34,.12)}
+.mini{display:flex;align-items:center;gap:5px}
+.mini i{display:block;width:15px;height:15px;border-radius:2px;border:1px solid rgba(34,34,34,.10)}
+.mini b{font-family:var(--font-mono);font-size:12px;font-weight:400;color:var(--text-2)}
+.mats{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:6px}
+.mat{text-align:center}
+.mat .disc{position:relative;width:82px;height:82px;border-radius:50%;margin:0 auto;overflow:hidden;
+  border:1px solid rgba(34,34,34,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),inset 0 -3px 8px -4px rgba(30,44,56,.30),0 8px 18px rgba(30,44,56,.14)}
+/* 镜面弧 + 右下暗收：高光只占左上一条，不能把整枚样片洗白 */
+.mat .disc::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 20%,rgba(255,255,255,.38) 0,rgba(255,255,255,.08) 16%,transparent 30%),
+    radial-gradient(circle at 74% 86%,rgba(20,40,55,.16) 0,transparent 52%)}
+.mat .n{font-family:var(--font-mono);font-size:12px;line-height:1.25;color:var(--text-2);margin-top:6px}
+/* 清水混凝土：明显的气孔点阵 + 偏冷灰底，不能与大理石同明度 */
+.d-concrete{background:radial-gradient(rgba(34,34,34,.26) .8px,transparent .8px) 0 0/4px 4px,
+  radial-gradient(rgba(34,34,34,.14) .6px,transparent .6px) 2px 2px/4px 4px,
+  linear-gradient(160deg,#dcdcd6,#c2c2bc)}
+/* 抛光大理石：暖白底 + 明确斜向脉纹 */
+.d-marble{background:
+  linear-gradient(112deg,transparent 0 26%,rgba(120,126,130,.34) 27%,rgba(120,126,130,.10) 29%,transparent 31% 54%,rgba(120,126,130,.26) 55%,transparent 58%),
+  linear-gradient(64deg,transparent 0 62%,rgba(120,126,130,.20) 63%,transparent 66%),
+  linear-gradient(180deg,#ffffff,#eeece8)}
+/* 拉丝不锈钢：高对比竖向丝纹 + 冷灰金属底 */
+.d-steel{background:
+  repeating-linear-gradient(90deg,rgba(255,255,255,.85) 0 1px,rgba(96,108,118,.30) 1px 2px,rgba(255,255,255,.30) 2px 3px,transparent 3px 4px),
+  linear-gradient(180deg,#e4e8ec,#a8b2ba)}
+.d-frost{background:linear-gradient(150deg,rgba(255,255,255,.75),rgba(200,216,232,.55) 55%,rgba(232,240,248,.65)),radial-gradient(circle at 30% 30%,rgba(249,211,40,.22),transparent 45%),radial-gradient(circle at 70% 70%,rgba(0,144,205,.25),transparent 48%)}
+.d-tile{background:repeating-linear-gradient(0deg,transparent 0 15px,rgba(110,118,118,.20) 15px 16px),repeating-linear-gradient(90deg,transparent 0 15px,rgba(110,118,118,.20) 15px 16px),#eeeeec}
+.d-square{background:repeating-linear-gradient(0deg,transparent 0 15px,rgba(110,118,118,.32) 15px 16px),repeating-linear-gradient(90deg,transparent 0 15px,rgba(110,118,118,.32) 15px 16px),#e6e9e8}
+.d-lawn{background:repeating-linear-gradient(90deg,rgba(74,104,54,.18) 0 1px,rgba(255,255,255,.06) 1px 3px,transparent 3px 6px),radial-gradient(circle at 40% 40%,#a7c486,#6f9659)}
+.d-day{background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.9),transparent 46%),linear-gradient(150deg,#cfe4f7,#eaf2f8 48%,#f6efe4 78%,#e8d8c8)}
+.bottom2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+/* ⚠️ 2026-11-21：原写死 height:150px，但 Geometry 格的内容实测 151.5px
+   （sec-h 17.5 + mb10 + mod-scale 85 + mt10 + geo-grid 49），加 22px 上下内距要 173.5px，
+   第二行铺装格整排溢出 panel 底边 33.5px（9 个主题全中）。
+   改 min-height：内容少时仍是 150px 的视觉基准，内容多时自己撑开。 */
+.panel{border:1px solid rgba(34,34,34,.10);background:rgba(255,255,255,.44);min-height:150px;padding:11px 14px}
+/* 模度阶梯：宽度按 1 : 0.618 递减并标出数值，取代原先四条无含义的随机灰条 */
+.mod-scale{display:flex;flex-direction:column;gap:5px;margin-top:2px}
+.mod-scale .ms{display:grid;grid-template-columns:1fr 26px;align-items:center;gap:6px}
+/* 模度阶梯的四条：材料 token（--concrete-deep/--steel/--lawn）只有世纪广场一系主题定义过，
+   其余主题直接读会成透明条（2026-11-24 实测：虹口/虬江三条全空）。故每条都带 var() 兜底，
+   落到每个主题都有的墨色阶；有自备模度色的主题（广兰路/龙华寺/福州路/万航渡/番禺路）由各自
+   override 后写覆盖，照旧。 */
+.mod-scale .ms i{display:block;height:11px;border-radius:1px;background:var(--concrete-deep,var(--text-3))}
+.mod-scale .ms:nth-child(2) i{background:var(--steel,var(--text-2))}
+.mod-scale .ms:nth-child(3) i{background:var(--primary,var(--text-1))}
+.mod-scale .ms:nth-child(4) i{background:var(--lawn,var(--text-3))}
+.mod-scale .ms b{font-family:var(--font-mono);font-size:12px;font-weight:400;color:var(--text-3);text-align:right}
+/* 边角样片：同一形状三档圆角，半径一律读主题 token，⛔ 不许写死 px（2026-11-24 补）
+   单行排版：四格竖排会顶出 720 高的板（实测溢出约 40px），压成一行只占 14px */
+.corner-row{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:nowrap}
+.corner-row .corner-h{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-2);white-space:nowrap}
+.corner-row .cr{display:block;flex:0 0 auto;width:34px;height:14px;background:var(--primary);opacity:.86}
+.corner-row b{font-family:var(--font-mono);font-size:9px;font-weight:400;color:var(--text-3);
+  letter-spacing:.02em;white-space:nowrap}
+.geo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:10px}
+/* 铺装网格：中性混凝土底，选中格用主色实心、关联格用次色描边；
+   原先 on/gl 两色随机散布读作噪声，没有秩序感 */
+.geo-grid i{display:block;height:22px;background:#e4e4e0;border:1px solid rgba(110,118,118,.20)}
+.geo-grid i.on{background:var(--primary);border-color:rgba(120,96,0,.30)}
+.geo-grid i.gl{background:rgba(0,144,205,.14);border-color:rgba(0,144,205,.42)}
+/* 分类标签：用线网次色小面积标记，不占按钮形态（避免与主按钮抢层级） */
+.tag-chip{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;
+  background:var(--line-4);color:#fff;letter-spacing:.02em}
+/* 导航未选中项：次色描边幽灵，只有当前项用主色实心 */
+.pill-ghost{color:var(--line-2);background:rgba(255,255,255,.70);border:1.5px solid var(--line-2);box-shadow:none}
+.pill-ghost::before{display:none}
+.comp-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.comp-row .cp-alert{width:150px;height:9px}
+.mini-glass{width:96px;height:64px;border-radius:12px;position:relative}
+.mini-glass .x{position:absolute;top:4px;right:9px;font-size:12px;color:var(--text-2)}
+
+/* ---------- 02 组件规范卡 ---------- */
+.spec-title{height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.spec-title h2{margin:0;font-size:36px;font-weight:800;letter-spacing:.04em}
+.spec-title .en{margin-top:4px;font-family:var(--font-mono);font-size:12px;letter-spacing:.24em;color:var(--text-2)}
+.spec-title .rule{position:absolute;bottom:8px;width:300px;height:4px;background:var(--primary)}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:16px}
+.spec-cell{
+  position:relative;height:112px;display:flex;align-items:center;justify-content:center;gap:9px;
+  background:radial-gradient(rgba(34,34,34,.035) .7px,transparent .7px) 0 0/4px 4px,#e8e8e4;
+  border:1px solid rgba(34,34,34,.10);box-shadow:0 6px 14px rgba(30,44,56,.08);
+}
+.spec-cell .cap{position:absolute;left:12px;top:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--text-3)}
+/* 浮层格：.glass 在 112px 格里 flex 居中（86px 高，上下各 13px），
+   左上角标签会与浮层左缘重叠 11×14px（2026-11-20 实测）。
+   这一格的标签挪到右下角，其余格不动。 */
+.spec-cell.glass-cell .glass{height:72px;margin-left:40px}
+.spec-cell.glass-cell .cap{left:12px;top:auto;bottom:4px}
+.spec-cell .glass .sub{color:var(--text-2)}
+.spec-cell.glass-cell::before{
+  content:"";position:absolute;left:38%;top:22%;width:150px;height:70px;border-radius:50%;
+  background:radial-gradient(circle at 30% 40%,rgba(249,211,40,.75),transparent 55%),radial-gradient(circle at 70% 60%,rgba(0,144,205,.7),transparent 55%),radial-gradient(circle at 55% 30%,rgba(214,39,104,.55),transparent 55%);
+  filter:blur(6px);
+}
+.spec-cell .glass{width:238px;height:86px;padding:13px 18px;z-index:1}
+.spec-cell .glass b{font-size:15px}
+.spec-cell .glass .sub{font-size:12px;color:var(--text-2);margin-top:2px}
+.spec-cell .glass .x{position:absolute;top:8px;right:14px;font-size:14px;color:var(--text-2)}
+.spec-cell .cp-progress{width:250px}
+
+/* ---------- 03 导览面板 ---------- */
+.guide-board{background:linear-gradient(180deg,#b9d6f1 0%,#cfe2f3 34%,#e8eef4 72%,#f4f4f2 100%)}
+.skyline{position:absolute;left:0;bottom:50px;width:1080px;height:166px;z-index:0;opacity:.55}
+.tile-corner{position:absolute;bottom:0;width:150px;height:150px;z-index:1;opacity:.82}
+.tile-corner.l{left:0}.tile-corner.r{right:0}
+.guide-panel{
+  /* 高度 468→480：卡片行底边在 440px，脚注 444+18px 行盒，原 468 只剩 6px 贴边。
+     加 12px 让脚注距面板底 18px，与卡片上方的 18px 内距对称。
+     ⚠️ .g-glow(top 438) 与 .g-modal(top 446) 是相对面板顶定位，值不动，
+     面板加高只让它们相对底边的超出量从 120/146px 减到 108/134px，仍浮在天际线上。 */
+  position:absolute;left:86px;top:52px;width:908px;height:480px;z-index:3;
+  border:1px solid rgba(34,34,34,.12);box-shadow:0 22px 48px rgba(30,50,70,.18);
+  background:rgba(238,243,247,.60);
+}
+.g-head{position:relative;height:112px;padding:16px 26px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid rgba(34,34,34,.10)}
+.g-head .mark{position:absolute;top:-9px;left:22px;width:16px;height:16px;background:var(--primary)}
+.g-head h2{margin:0;font-size:34px;line-height:1.1;font-weight:800}
+.g-head .en{margin-top:3px;font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;color:var(--text-2)}
+.g-head .rule{position:absolute;bottom:12px;left:26px;width:390px;height:4px;background:var(--primary)}
+.g-nav{height:56px;display:flex;align-items:center;gap:8px;padding:0 18px;border-bottom:1px solid rgba(34,34,34,.10)}
+.g-nav .pill{font-size:12px;padding:6px 13px 8px;border-radius:6px}
+.g-body{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:18px}
+.g-card{height:252px;overflow:hidden}
+.g-card .k{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--text-2)}
+.g-card h3{margin:6px 0 8px;font-size:24px;font-weight:800;line-height:1.15}
+.g-card p{margin:0;font-size:12px;line-height:1.75;color:var(--text-2)}
+.g-card .note{position:absolute;bottom:12px;font-family:var(--font-note);font-size:12px;color:var(--text-3)}
+.g-card .tag{display:inline-block;font-size:12px;padding:4px 12px;border-radius:999px;background:var(--line-4);color:#fff;font-weight:700;margin-bottom:8px}
+.g-card.alert-card{border-top:3px solid var(--line-6)}
+/* 浮层与光斑：原先 left386/top162 正好压在卡片行（.g-body 卡片自 186 起）上，
+   广兰路盖住「植被与休憩」、友好大厦盖住「提示信息」，正文全被遮。
+   面板内卡片下方只剩 30px，放不下 264px 浮层，因此改挂在面板下缘之外，
+   浮在天际线上方——既演示玻璃材质，又不压任何正文。
+   ⚠️ 2026-11-20 补校准：上一版 top:422/430 仍压卡片 16px/8px，与上面这句「不压任何正文」
+   自相矛盾（8 个主题全中，不是个别主题的问题）。卡片行底边在面板内 440px，
+   故光斑改 438（净距 0，模糊层贴边不算压）、浮层改 446（净距 8px，与自身 1.6px 描边同量级，
+   读作「浮起」而不是「贴着」）。两个值都只动 top，left 不动，避免横向牵出新的重叠。 */
+.g-glow{
+  position:absolute;left:594px;top:438px;width:262px;height:150px;z-index:4;pointer-events:none;
+  background:radial-gradient(circle at 72% 20%,rgba(214,39,104,.42),transparent 58%),
+             radial-gradient(circle at 28% 42%,rgba(0,144,205,.38),transparent 60%),
+             radial-gradient(circle at 60% 72%,rgba(249,211,40,.34),transparent 62%);
+  filter:blur(14px);
+}
+.g-modal{
+  position:absolute;left:600px;top:446px;width:250px;height:186px;z-index:5;
+  padding:16px 22px;
+}
+.g-modal .x{position:absolute;top:10px;right:16px;font-size:16px;color:#6b7071}
+.g-modal h4{margin:8px 0 2px;font-size:18px;font-weight:800}
+.g-modal .sub{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:#4f5f6b}
+.g-modal p{margin-top:14px;font-size:12px;line-height:1.8;color:#2f3a42}
+/* 脚注：卡片行底边在面板内 440px，面板高 468px。原 bottom:14px 让 18px 行盒顶到 436px，
+   压进卡片 4px（8 个主题全中）。改 top:444px 与卡片行留 4px 净距，与 .g-glow 的 438 不冲突
+   （脚注在左，光斑在右，横向不交）。 */
+.g-foot{position:absolute;left:26px;top:444px;font-family:var(--font-note);font-size:12px;color:var(--text-3);z-index:4}
+
+/* ============ 主题专属材质与标记（2026-11-20 从主题 CSS 迁入）============
+   这些类只服务本预览板，36 个版式与 5 套整册一个都不使用。原先住在
+   assets/themes/<主题>.css 里，等于主题文件同时承担「主题」和「预览板样式表」
+   两个职责。迁到这里后，主题文件只留 token 与通用组件。
+   作用域用 [data-theme="X"]，由 gen-theme-preview.py 写到 <html> 上。 */
+
+/* ---- friendship-bldg：友好大厦 ---- */
+[data-theme="friendship-bldg"] .fb-birch{
+  background-color:#efe2c4;
+  background-image:
+    repeating-linear-gradient(92deg,transparent 0 21px,rgba(120,84,42,.30) 21px 23px),
+    repeating-linear-gradient(93.4deg,transparent 0 7px,rgba(120,84,42,.085) 7px 7.9px),
+    linear-gradient(180deg,rgba(255,255,255,.32),rgba(196,158,104,.12));
+}
+[data-theme="friendship-bldg"] .fb-doll{
+  display:inline-block;width:126px;height:80px;
+  background-repeat:no-repeat;background-position:center;background-size:contain;
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20158%20100%22%20width%3D%22158%22%20height%3D%22100%22%3E%3Cg%20transform%3D%22translate%280%2C0%29%20translate%2850%2C92%29%20scale%281.0%29%20translate%28-50%2C-92%29%22%20stroke-width%3D%222.1%22%20fill%3D%22none%22%20stroke%3D%22%23B08A2B%22%20stroke-linecap%3D%22round%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2226%22%20r%3D%2215%22%2F%3E%3Cpath%20d%3D%22M38%2040C29%2046%2022%2061%2022%2077c0%2010%204%2015%2010%2015h36c6%200%2010-5%2010-15%200-16-7-31-16-37%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%2850%2C0%29%20translate%2850%2C92%29%20scale%280.72%29%20translate%28-50%2C-92%29%22%20stroke-width%3D%221.7%22%20fill%3D%22none%22%20stroke%3D%22%23B08A2B%22%20stroke-linecap%3D%22round%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2226%22%20r%3D%2215%22%2F%3E%3Cpath%20d%3D%22M38%2040C29%2046%2022%2061%2022%2077c0%2010%204%2015%2010%2015h36c6%200%2010-5%2010-15%200-16-7-31-16-37%22%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%2894%2C0%29%20translate%2850%2C92%29%20scale%280.5%29%20translate%28-50%2C-92%29%22%20stroke-width%3D%221.4%22%20fill%3D%22none%22%20stroke%3D%22%23B08A2B%22%20stroke-linecap%3D%22round%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2226%22%20r%3D%2215%22%2F%3E%3Cpath%20d%3D%22M38%2040C29%2046%2022%2061%2022%2077c0%2010%204%2015%2010%2015h36c6%200%2010-5%2010-15%200-16-7-31-16-37%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+/* —— 材质 / 标记工具类（重建新增，供风格板与导览面板直接使用） —— */
+/* 彩色水磨石：浅绿底 + 四种石子，周期互质避免看出平铺 */
+[data-theme="friendship-bldg"] .fb-terrazzo{
+  background-color:var(--terrazzo);
+  background-image:
+    var(--fb-terrazzo-tile),
+    var(--fb-grain),
+    radial-gradient(120% 90% at 20% 0%,rgba(255,255,255,.30) 0%,rgba(255,255,255,0) 66%);
+  background-size:170px 170px,150px 150px,100% 100%;
+}
+[data-theme="friendship-bldg"] .fb-mint{
+  background-color:var(--mint);
+  background-image:
+    radial-gradient(90% 58% at 50% 4%,rgba(255,255,255,.78) 0%,rgba(255,255,255,0) 56%),
+    repeating-radial-gradient(circle at 50% 118%,
+      rgba(176,138,43,.11) 0 1.5px,transparent 1.5px 46px),
+    radial-gradient(96% 92% at 50% 44%,rgba(62,110,88,0) 40%,rgba(62,110,88,.15) 100%);
+}
+/* 水刷石石墙：噪声骨料 + 几颗粗石 + 一道石缝（只作样本，不进卡片正文） */
+[data-theme="friendship-bldg"] .fb-stone{
+  background-color:var(--stone);
+  background-image:
+    var(--fb-grain),
+    var(--fb-grain),
+    radial-gradient(ellipse 5px 4px at 24% 32%,rgba(120,96,60,.12) 0%,rgba(120,96,60,0) 100%),
+    radial-gradient(ellipse 4px 5px at 71% 74%,rgba(120,96,60,.10) 0%,rgba(120,96,60,0) 100%),
+    repeating-linear-gradient(0deg,transparent 0 57px,rgba(120,96,60,.10) 57px 58px),
+    linear-gradient(180deg,rgba(255,255,255,.34),rgba(214,190,147,.16));
+  background-size:96px 96px,58px 58px,97px 89px,73px 101px,auto,auto;
+}
+/* 鎏金面：竖向金色阶 + 斜向一道薄光 + 顶亮倒角 */
+[data-theme="friendship-bldg"] .fb-gold{
+  background-color:var(--gold);
+  background-image:
+    linear-gradient(104deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.20) 46%,rgba(255,255,255,0) 62%),
+    linear-gradient(180deg,#e8d086 0%,#cda845 38%,#b08a2b 74%,#8a6a18 100%);
+  border-top:1px solid rgba(255,255,255,.55);
+  border-bottom:1px solid rgba(90,66,10,.40);
+}
+[data-theme="friendship-bldg"] .fb-frieze{
+  height:9px;
+  border-top:1px solid rgba(176,138,43,.44);
+  border-bottom:1px solid rgba(176,138,43,.26);
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(176,138,43,.52) 0 1px,transparent 1px 4px,
+      rgba(176,138,43,.34) 4px 6px,transparent 6px 8px,
+      rgba(176,138,43,.52) 8px 9px,transparent 9px 16px),
+    linear-gradient(180deg,rgba(176,138,43,.20) 0%,rgba(176,138,43,.10) 46%,rgba(176,138,43,.03) 100%);
+}
+[data-theme="friendship-bldg"] .fb-redglass{
+  background-color:#881e21;
+  background-image:
+    linear-gradient(118deg,rgba(255,255,255,0) 22%,rgba(255,214,206,.42) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(120% 110% at 34% 26%,#c2454a 0%,#9c2226 42%,#881e21 68%,#5c1215 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -2px 6px -3px rgba(40,6,8,.70);
+}
+[data-theme="friendship-bldg"] .fb-daylight{
+  background-color:#fbf6ec;
+  background-image:
+    radial-gradient(74% 74% at 50% 34%,#ffffff 0%,#fdfaf3 38%,#f2e8d2 74%,#e2d4b8 100%),
+    radial-gradient(120% 90% at 50% 0%,rgba(255,255,255,.90),rgba(255,255,255,0) 62%);
+}
+[data-theme="friendship-bldg"] .fb-star{
+  --fb-star-shape:polygon(50% 0%,61.8% 34.5%,98% 34.5%,68.6% 56.6%,79.4% 90.5%,50% 69.4%,20.6% 90.5%,31.4% 56.6%,2% 34.5%,38.2% 34.5%);
+  /* 尺寸抽成 token：星形在 12–14px 时五个尖角会被抗锯齿吃掉，读作模糊红点。
+     默认提到 20px；用在行内标记时按需覆盖 --fb-star-size。 */
+  --fb-star-size:20px;
+  position:relative;display:inline-block;
+  width:var(--fb-star-size);height:var(--fb-star-size);
+  background:none;border:none;transform:none;
+  flex:0 0 auto;
+}
+[data-theme="friendship-bldg"] .fb-star::before{
+  content:"";position:absolute;inset:-1px;
+  background:var(--gold);
+  clip-path:var(--fb-star-shape);
+}
+[data-theme="friendship-bldg"] .fb-star::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,#c23a36 0%,#9c2226 46%,#6f1013 100%);
+  clip-path:var(--fb-star-shape);
+}
+[data-theme="friendship-bldg"] .fb-anchor{
+  display:inline-flex;align-items:center;gap:11px;
+  padding:10px 18px 13px;border-radius:var(--radius);
+  background:linear-gradient(180deg,#fdf9f0,#f3e8cf);
+  color:var(--text-1);
+  font-family:var(--font-button);font-weight:400;
+  border:1px solid rgba(176,138,43,.58);
+}
+[data-theme="friendship-bldg"] .fb-anchor::before{
+  content:"";flex:0 0 auto;width:18px;height:18px;
+  background:linear-gradient(180deg,#c23a36 0%,#9c2226 46%,#6f1013 100%);
+  clip-path:polygon(50% 0%,61.8% 34.5%,98% 34.5%,68.6% 56.6%,79.4% 90.5%,50% 69.4%,20.6% 90.5%,31.4% 56.6%,2% 34.5%,38.2% 34.5%);
+  filter:drop-shadow(0 0 1px rgba(176,138,43,.95));
+}
+[data-theme="friendship-bldg"] .fb-progress{height:8px;border-radius:0;background:var(--terrazzo-deep);overflow:hidden}
+[data-theme="friendship-bldg"] .fb-progress > span{display:block;height:100%;width:28%;background:linear-gradient(90deg,var(--gold-lo),var(--gold-hi))}
+
+/* ---- qiu-r：虬江 ---- */
+/* —— 虬江材质 / 标记工具类 —— */
+/* 方格稿纸：26px 格 + 左缘一像素砖红界——习题纸的做法 */
+[data-theme="qiu-r"] .qj-grid{
+  background-color:var(--surface);
+  background-image:
+    linear-gradient(90deg,transparent 0 38px,rgba(138,57,50,.42) 38px 39px,transparent 39px),
+    repeating-linear-gradient(0deg,transparent 0 25px,rgba(37,59,92,.13) 25px 26px),
+    repeating-linear-gradient(90deg,transparent 0 25px,rgba(37,59,92,.10) 25px 26px);
+}
+/* 河面波带：微幅正弦水线（±1.6px 摆幅、34px 一周期）——直线读成横格纸，弧度才读成水 */
+[data-theme="qiu-r"] .qj-wave{
+  background-color:rgba(60,117,126,.06);
+  background-image:
+    var(--qj-ripple),
+    linear-gradient(180deg,rgba(60,117,126,.02),rgba(36,74,82,.20));
+  background-size:240px 34px,auto;
+  background-repeat:repeat,no-repeat;
+}
+[data-theme="qiu-r"] .qj-brick{
+  background-color:var(--brick-wall);
+  background-image:
+    var(--qj-brick-tile),
+    linear-gradient(180deg,rgba(255,255,255,.16),rgba(29,36,33,.08) 58%,rgba(29,36,33,.20));
+  background-size:120px 56px,auto;
+  background-repeat:repeat,no-repeat;
+}
+/* 图版双线框：粗 3px + 细 1px，中间留纸色 */
+[data-theme="qiu-r"] .qj-plate{
+  border:1px solid rgba(29,36,33,.46);
+  box-shadow:inset 0 0 0 4px var(--surface),inset 0 0 0 5px rgba(29,36,33,.34);
+}
+/* 河埠石：石面 + 麻点 + 上沿一道高光——麻点用 140px 点阵，别堆到成砂目 */
+[data-theme="qiu-r"] .qj-stone{
+  background-color:var(--stone);
+  background-image:
+    var(--qj-speck),
+    var(--qj-fiber),
+    linear-gradient(180deg,rgba(255,255,255,.40),rgba(201,198,184,.06) 44%,rgba(29,36,33,.10));
+  background-size:140px 140px,220px 220px,auto;
+  background-repeat:repeat,repeat,no-repeat;
+  border-top:1px solid rgba(255,255,255,.72);
+}
+/* 硫酸纸：半透的薄纸，叠在别的纸面上才看得出「薄」（预览页与 deck 共用） */
+[data-theme="qiu-r"] .qj-paper{
+  background-color:rgba(230,223,201,.92);
+  background-image:
+    linear-gradient(168deg,rgba(255,255,255,.62),rgba(255,255,255,0) 58%),
+    var(--qj-fiber);
+  background-size:auto,220px 220px;
+}
+/* 纸白天光：整页最亮的一档，只做环境，不压字 */
+[data-theme="qiu-r"] .qj-day{
+  background-image:
+    radial-gradient(120% 90% at 50% 0%,rgba(255,255,255,.94),rgba(255,255,255,0) 62%),
+    linear-gradient(180deg,#fbfaf3,#efece0);
+}
+/* 深水面：河青压到最暗，做引语页与反白底 */
+[data-theme="qiu-r"] .qj-deep{
+  background-image:
+    var(--qj-ripple),
+    linear-gradient(180deg,var(--water-deep),var(--water-abyss));
+  background-size:240px 34px,auto;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="lead">
+    <div>
+      <div class="mono">来雪亭Lesciotia / B 出口主题</div>
+      <h1>世纪广场 <small>CENTURY SQ</small></h1>
+    </div>
+    <div class="meta">
+      <code>assets/themes/century-sq.css</code><br>
+      磨砂玻璃版 · 2026-11-19
+    </div>
+  </div>
+
+  <!-- 01 · UI 风格板 -->
+  <div class="board-tag"><span>01</span> UI 风格板 / STYLE BOARD</div>
+  <section class="board style-board">
+    <div class="inner">
+      <div class="titlebar cp-marble">
+        <span class="mark"></span>
+        <h2>世纪广场</h2>
+        <div class="en">CENTURY SQ</div>
+        <span class="rule"></span>
+      </div>
+
+      <div class="palette">
+        <div class="sec-h">Color palette · 用色比例</div>
+        <div class="spec-bar">
+          <i style="background:#DAB406;flex:58"></i>
+          <i style="background:#0090CD;flex:15"></i>
+          <i style="background:#84318E;flex:14"></i>
+          <i style="background:#721538;flex:13"></i>
+        </div>
+        <div class="spec-legend">
+          <div class="lg"><div class="r1"><i style="background:#DAB406"></i><b>Primary</b></div><span>#DAB406</span><em>主色 · 按钮 / 强调 / 进度</em></div>
+          <div class="lg"><div class="r1"><i style="background:#0090CD"></i><b>Line 2</b></div><span>#0090CD</span><em>导航 / 链接 / 次按钮</em></div>
+          <div class="lg"><div class="r1"><i style="background:#84318E"></i><b>Line 4</b></div><span>#84318E</span><em>分类标签 / 辅助标注</em></div>
+          <div class="lg"><div class="r1"><i style="background:#721538"></i><b>Line 6</b></div><span>#721538</span><em>轻警示 / 卡顶细条</em></div>
+        </div>
+        <div class="mini-row">
+          <div class="mini"><i style="background:#E8E8E4"></i><b>#E8E8E4</b></div>
+          <div class="mini"><i style="background:#B8B8B4"></i><b>#B8B8B4</b></div>
+          <div class="mini"><i style="background:#F4F4F2"></i><b>#F4F4F2</b></div>
+          <div class="mini"><i style="background:#DCDFE2"></i><b>#DCDFE2</b></div>
+          <div class="mini"><i style="background:#C8D8E8"></i><b>#C8D8E8</b></div>
+          <div class="mini"><i style="background:#96B878"></i><b>#96B878</b></div>
+          <div class="mini"><i style="background:#EEEEEC"></i><b>#EEEEEC</b></div>
+          <div class="mini"><i style="background:#222222"></i><b>#222222</b></div>
+          <div class="mini"><i style="background:#777777"></i><b>#777777</b></div>
+        </div>
+      </div>
+
+      <div class="mats-wrap" style="margin-top:12px">
+        <div class="sec-h">Material swatches</div>
+        <div class="mats">
+          <div class="mat"><div class="disc d-concrete"></div><div class="n">Raw Concrete</div></div>
+          <div class="mat"><div class="disc d-marble"></div><div class="n">Polished Marble</div></div>
+          <div class="mat"><div class="disc d-steel"></div><div class="n">Brushed Steel</div></div>
+          <div class="mat"><div class="disc d-frost"></div><div class="n">Frosted Glass</div></div>
+          <div class="mat"><div class="disc d-tile"></div><div class="n">Matte Tile</div></div>
+          <div class="mat"><div class="disc d-square"></div><div class="n">Matte Square</div></div>
+          <div class="mat"><div class="disc d-lawn"></div><div class="n">Green Lawn</div></div>
+          <div class="mat"><div class="disc d-day"></div><div class="n">Soft Daylight</div></div>
+        </div>
+      </div>
+
+      <div class="bottom2">
+        <div class="panel">
+          <div class="sec-h">Geometry · 模度 1 : 1.618</div>
+          <div class="mod-scale">
+            <div class="ms"><i style="width:100%"></i><b>100</b></div>
+            <div class="ms"><i style="width:61.8%"></i><b>62</b></div>
+            <div class="ms"><i style="width:38.2%"></i><b>38</b></div>
+            <div class="ms"><i style="width:23.6%"></i><b>24</b></div>
+          </div>
+          <div class="geo-grid">
+            <i class="on"></i><i></i><i></i><i class="gl"></i><i></i><i></i>
+            <i></i><i class="on"></i><i></i><i></i><i class="gl"></i><i></i>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="sec-h">Component</div>
+          <div class="comp-row">
+            <span class="pill">Submit</span>
+            <span class="cp-btn-2">Cancel</span>
+            <span class="tag-chip">Categories</span>
+          </div>
+          <div class="comp-row">
+            <div class="cp-alert"></div>
+            <span class="cp-anchor" style="font-size:12px;padding:6px 12px">ANCHOR</span>
+            <div class="glass mini-glass"><span class="x">×</span></div>
+          </div>
+          <div class="corner-row" data-block="corners">
+            <span class="corner-h">Corners · 边角</span>
+            <i class="cr" style="border-radius:var(--radius-sm)"></i><b>--radius-sm</b>
+            <i class="cr" style="border-radius:var(--radius)"></i><b>--radius</b>
+            <i class="cr" style="border-radius:var(--radius-lg)"></i><b>--radius-lg</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · 组件规范卡 -->
+  <div class="board-tag"><span>02</span> 组件规范卡 / COMPONENT SPECIFICATIONS</div>
+  <section class="board spec-board">
+    <div class="inner">
+      <div class="spec-title cp-marble">
+        <h2>世纪广场</h2>
+        <div class="en">COMPONENT SPECIFICATIONS</div>
+        <span class="rule"></span>
+      </div>
+      <div class="spec-grid">
+        <div class="spec-cell"><span class="pill">主按钮</span><span class="cap">PRIMARY / #DAB406</span></div>
+        <div class="spec-cell"><span class="cp-btn-2">次按钮</span><span class="cap">SECONDARY / LINE 2</span></div>
+        <div class="spec-cell"><span class="tag-chip">分类标签</span><span class="cap">CATEGORY / LINE 4</span></div>
+        <div class="spec-cell"><div class="cp-alert"></div><span class="cap">ALERT STRIPE / LINE 6</span></div>
+        <div class="spec-cell"><span class="cp-anchor">已选锚点</span><span class="cap">SELECTED / FIXED YELLOW</span></div>
+        <div class="spec-cell"><span class="pill">首页</span><span class="pill pill-ghost">服务</span><span class="pill pill-ghost">产品</span><span class="cap">NAV GROUP</span></div>
+        <div class="spec-cell glass-cell">
+          <div class="glass"><span class="x">×</span><b>标题</b><div class="sub">子标题 · FROSTED GLASS</div></div>
+          <span class="cap">FROSTED PANEL</span>
+        </div>
+        <div class="spec-cell"><div class="cp-progress"><span></span></div><span class="cap">PROGRESS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · 导览面板 -->
+  <div class="board-tag"><span>03</span> 导览面板 / GUIDE PANEL</div>
+  <section class="board guide-board">
+    <svg class="skyline" viewBox="0 0 1080 166" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="#8fa9c4" opacity=".55">
+        <rect x="70" y="96" width="26" height="70"/><rect x="104" y="72" width="18" height="94"/>
+        <rect x="132" y="110" width="34" height="56"/><rect x="176" y="60" width="22" height="106"/>
+        <rect x="206" y="88" width="30" height="78"/><rect x="246" y="42" width="20" height="124"/>
+        <rect x="272" y="104" width="38" height="62"/><rect x="320" y="78" width="24" height="88"/>
+        <rect x="352" y="30" width="16" height="136"/><rect x="376" y="96" width="28" height="70"/>
+        <rect x="414" y="66" width="26" height="100"/><rect x="448" y="18" width="14" height="148"/>
+        <rect x="470" y="86" width="36" height="80"/><rect x="514" y="52" width="22" height="114"/>
+        <rect x="544" y="100" width="30" height="66"/><rect x="582" y="34" width="18" height="132"/>
+        <rect x="608" y="82" width="28" height="84"/><rect x="644" y="110" width="34" height="56"/>
+        <rect x="686" y="70" width="20" height="96"/><rect x="714" y="24" width="16" height="142"/>
+        <rect x="738" y="92" width="32" height="74"/><rect x="778" y="58" width="24" height="108"/>
+        <rect x="810" y="104" width="36" height="62"/><rect x="854" y="76" width="22" height="90"/>
+        <rect x="884" y="44" width="18" height="122"/><rect x="910" y="98" width="32" height="68"/>
+        <rect x="950" y="68" width="24" height="98"/><rect x="982" y="108" width="30" height="58"/>
+      </g>
+    </svg>
+    <div class="tile-corner l cp-tile"></div>
+    <div class="tile-corner r cp-tile"></div>
+
+    <div class="guide-panel">
+      <div class="g-head cp-marble">
+        <span class="mark"></span>
+        <h2>世纪广场</h2>
+        <div class="en">CENTURY SQ</div>
+        <span class="rule"></span>
+      </div>
+      <div class="g-nav cp-steel">
+        <span class="pill pill-accent">首页</span>
+        <span class="pill pill-accent">广场</span>
+        <span class="pill pill-accent">餐饮</span>
+        <span class="pill pill-accent">服务</span>
+        <span class="pill pill-accent">公园</span>
+        <span class="pill pill-accent">植被</span>
+        <span class="pill pill-accent">休憩</span>
+        <span class="pill">关于我们</span>
+      </div>
+      <div class="g-body">
+        <div class="card g-card">
+          <div class="k">PLAZA</div>
+          <h3>Century Sq</h3>
+          <p>导览面板示例页。标题台用磨光大理石，卡片用清水混凝土；正文按标题—正文—注释三级排布，行距与留白服从模度。</p>
+        </div>
+        <div class="card g-card">
+          <span class="tag">Category</span>
+          <h3>植被与休憩</h3>
+          <p>分类标记固定用 4 号线紫；草坪与瓷砖只作底部环境层，低透明度暗示材质，不盖住文字。</p>
+        </div>
+        <div class="card g-card alert-card">
+          <div class="k">MESSAGES</div>
+          <h3>提示信息</h3>
+          <p>6 号线玫红仅作卡顶细条与轻提示，绝不铺底。此处为版式占位文案，非真实公告。</p>
+        </div>
+      </div>
+      <div class="g-glow"></div>
+      <div class="g-modal glass">
+        <span class="x">×</span>
+        <h4>导览信息</h4>
+        <div class="sub">FROSTED GLASS / 磨砂浮层</div>
+        <p>半透明雾面、轻微背景模糊、淡天光蓝调；边缘只有柔和高光，不做厚倒角与强折射。</p>
+      </div>
+      <div class="g-foot">示例文案 · 用于展示层级与材质，不代表真实广场公告</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

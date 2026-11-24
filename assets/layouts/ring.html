@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>环 · 梁架一族</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../assets/themes/guanglan-rd.css">
+<link rel="stylesheet" href="../../assets/animations/animations.css">
+</head><body class="single">
+<!-- 梁架「ring」（环）：3 式，一段一式。择式先看这一页，别背旧名。 -->
+<div class="deck">
+
+    <section data-style="ring-hub" class="slide is-active" data-title="Hub">
+  <p class="kicker">Hub · 一个中心五个方向</p>
+  <h2 class="h2">所有内容都从这一处长出来</h2>
+  <div class="ring">
+    <div class="spoke" style="height:170px;transform:rotate(-52deg)"></div>
+    <div class="spoke" style="height:170px;transform:rotate(52deg)"></div>
+    <div class="spoke" style="height:190px;transform:rotate(180deg)"></div>
+    <div class="spoke" style="height:170px;transform:rotate(128deg)"></div>
+    <div class="spoke" style="height:170px;transform:rotate(-128deg)"></div>
+    <div class="hub"><b>一套 tokens</b><span>颜色 · 字号 · 间距</span></div>
+    <div class="sat" style="left:20%;top:26%"><b>版式族</b><span>17 族 34 式</span></div>
+    <div class="sat" style="left:80%;top:26%"><b>主题</b><span>9 套，一键换</span></div>
+    <div class="sat" style="left:50%;top:12%"><b>动效</b><span>27 个命名</span></div>
+    <div class="sat" style="left:20%;top:76%"><b>导出</b><span>PNG · PDF · PPTX</span></div>
+    <div class="sat" style="left:80%;top:76%"><b>互转</b><span>PPTX ⇄ HTML</span></div>
+  </div>
+  <div class="notes">环：把「一个中心、几个方向」画出来。卫星位置给百分比 (left/top)，连线用 .spoke 旋转对准 —— 不用手工摆像素。</div>
+<p class="params">辐条数即分支：五向＝hub，任意 n＝原 mindmap</p></section>
+
+<section data-style="ring-cycle" class="slide is-active" data-title="Cycle">
+  <p class="kicker">Cycle · 四步一循环</p>
+  <h2 class="h2">写完这一圈，才回到起点</h2>
+  <div class="cycle">
+    <div class="hub">循环<br>四步</div>
+    <div class="sat s1"><i>01</i><b>写</b><span>先把要说的写成一句</span></div>
+    <div class="sat s2"><i>02</i><b>排</b><span>挑一族，按结构放</span></div>
+    <div class="sat s3"><i>03</i><b>删</b><span>删到只剩必要的东西</span></div>
+    <div class="sat s4"><i>04</i><b>讲</b><span>讲一遍，听不顺就回 01</span></div>
+  </div>
+  <div class="notes">环流程：四个节点绕中心转。顺序用 .s1–.s4 定位，改步数就改这两条 CSS。</div>
+<p class="params">辐条数即分支：五向＝hub，任意 n＝原 mindmap</p></section>
+
+  
+
+    <section data-style="ring-map" class="slide is-active" data-title="Map">
+  <p class="kicker">Map · 环上挂六个节点</p>
+  <h2 class="h2">一页讲完一条产品线，中心只留一句话</h2>
+  <div class="rmap">
+    <div class="hub"><b>材质库</b><span>六个环节，一个中心</span></div>
+    <div class="node" style="left:calc(50% + 202px);top:calc(50% - 106px)"><i>02</i><img src="../../assets/textures/travertine/travertine-gray-512.png" alt=""><b>开料</b></div>
+    <div class="node" style="left:calc(50% + 202px);top:calc(50% + 106px)"><i>03</i><img src="../../assets/textures/grain/grain-gray-512.png" alt=""><b>拼花</b></div>
+    <div class="node" style="left:calc(50% + 0px);top:calc(50% + 236px)"><i>04</i><img src="../../assets/textures/fiber/fiber-gray-512.png" alt=""><b>打磨</b></div>
+    <div class="node" style="left:calc(50% - 202px);top:calc(50% + 106px)"><i>05</i><img src="../../assets/textures/marble/marble-vein-1024.png" alt=""><b>防护</b></div>
+    <div class="node" style="left:calc(50% - 202px);top:calc(50% - 106px)"><i>06</i><img src="../../assets/textures/grain/grain-gray-512.png" alt=""><b>验收</b></div>
+    <div class="node" style="left:calc(50% + 0px);top:calc(50% - 236px)"><i>01</i><img src="../../assets/textures/marble/marble-gray-1024.png" alt=""><b>选石</b></div>
+  </div>
+  <div class="notes">环上挂缩略图：中心一句话、周边六个节点各带一张圆切小图与编号。角度写 --a，节点自动落在圆周上，不用手摆 x/y。</div>
+<p class="params">节点 6 个为上限；超过 6 个改用 ring-hub，缩略图会挤</p></section>
+</div></body></html>

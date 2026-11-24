@@ -1,0 +1,241 @@
+/* 来雪亭 :: 基座层（2026-11-23 自写，不再沿用上游 html-ppt）
+   这一层管四件事：色板与字号两套 token、画布与翻页、常规排版原语、印刷落页。
+   判据先写在这里，族页与主题只负责「差异」，不得各自发明第二套。
+
+   —— 色板三律（与 references/palette-atlas.md 同源）——
+   ① 一页只许一个强调色相。第二强调只能是同 hue 的明度差，或 accent 与底色的混合。
+   ② 明度阶梯至少四档：--bg → --surface → --surface-2 → --border，少一档卡片就粘住。
+   ③ --accent-ink 逐主题算（白字压 accent 须 ≥4.5:1，算不够就换墨字），⛔ 不许硬写 #fff。
+   补充：主色压底不足 3:1 的主题（浅黄、浅青这类），色块一律带 1px 描边 —— 见 --accent-edge，
+   这是「让边界被看见」，不是把主色调暗；主色本身不改。 */
+
+:root{
+  /* 表面与墨色 */
+  --bg:#ffffff;
+  --bg-soft:#f7f7f8;
+  --surface:#ffffff;
+  --surface-2:#f2f2f4;
+  --border:rgba(0,0,0,.08);
+  --border-strong:rgba(0,0,0,.16);
+  --text-1:#111216;
+  --text-2:#55596a;
+  --text-3:#8a8f9e;
+  /* 强调与功能色：默认只有一套蓝；主题各自覆盖 */
+  --accent:#3b6cff;
+  --accent-ink:#000000;   /* 默认取墨字：#3b6cff 上白 4.40:1、墨 4.77:1，只有墨过 AA */
+  --accent-edge:color-mix(in srgb,var(--text-1) 30%,transparent); /* 主色块描边：压底<3:1 时靠它立边界 */
+  --accent-2:#7a5cff;
+  --accent-3:#ff5c8a;
+  --good:#1aaf6c;
+  --warn:#f5a524;
+  --bad:#e0445a;
+  --grad:linear-gradient(135deg,#3b6cff,#7a5cff 55%,#ff5c8a);
+  --grad-soft:linear-gradient(135deg,#eef2ff,#f5ecff 55%,#ffeef5);
+
+  /* 字号九档（2026-11-23 量 50 套真件 1011 页得出）
+     画布 1920×1080 = 960×540pt ⇒ 1pt=2px；档位照 PPT 菜单：40/32/24/20/16/14/12pt。
+     页标题 32pt（众数 356/1011）、卡标题 24pt、副标 20pt、正文 14–16pt、图注 12pt、巨数 66–115pt。
+     ⛔ 族页不写死 px，主题不另开档 —— 阶梯只有这一份。 */
+  --t-hero:200px;    /* 100pt 巨数/章节号，只给 data、section */
+  --t-display:144px; /* 72pt 引号、Thanks —— 真件 66–80pt 档 */
+  --t-h1:80px;       /* 40pt 封面主标 */
+  --t-h2:64px;       /* 32pt 页标题 */
+  --t-h3:48px;       /* 24pt 小节/卡标题 */
+  --t-h4:40px;       /* 20pt 卡副标 */
+  --t-body:32px;     /* 16pt 正文 */
+  --t-body-sm:28px;  /* 14pt 密排（长段、表格单元） */
+  --t-cap:24px;      /* 12pt 图注/页脚/标签 —— 投影下限，不得更小 */
+  --t-eye:24px;      /* 12pt 眉标，靠字距拉开 */
+  --lh-body:1.6;
+  --lh-tight:1.15;
+
+  --radius:18px;
+  --radius-sm:12px;
+  --radius-lg:26px;
+  --shadow:0 10px 30px rgba(18,24,40,.08),0 2px 6px rgba(18,24,40,.04);
+  --shadow-lg:0 24px 60px rgba(18,24,40,.14),0 6px 16px rgba(18,24,40,.06);
+
+  /* 字体栈：思源黑体显式点名在前。⛔ 别只写 'Noto Sans SC'——本机有款
+     「（字由心雨）筑紫柔黑」把内 family 名伪装成 Noto Sans SC，会静默顶替掉思源黑体。 */
+  --font-sans:'Inter','Source Han Sans SC','思源黑体','Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC',Helvetica,Arial,sans-serif;
+  --font-serif:'Playfair Display','Source Han Serif SC','思源宋体','Noto Serif SC',Georgia,serif;
+  --font-mono:'JetBrains Mono','IBM Plex Mono',SFMono-Regular,Menlo,monospace;
+  --font-display:var(--font-sans);
+
+  /* 罗蛇 T07：中文不用负字距，默认 0；要收紧的拉丁大标题在该条规则里单独写。 */
+  --letter-tight:0;
+  --letter-normal:0;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+
+/* —— 重置与中文排版默认值 —— */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text-1);
+  font-family:var(--font-sans);font-weight:400;line-height:1.6;letter-spacing:var(--letter-normal);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  /* 罗蛇 T08：中文无真斜体，font-style 会让字形硬歪；全局禁合成，英文该斜的走真 italic */
+  font-synthesis:none;
+  /* 中西文自动四分空；不支持的浏览器忽略，不坏版 */
+  text-autospace:normal;
+  line-break:strict;          /* 按标点断，不劈词 */
+  overflow-wrap:break-word}
+body{width:100vw;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+img,svg,video{max-width:100%;display:block}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code,kbd,pre,samp{font-family:var(--font-mono)}
+
+/* —— 画布：固定 1920×1080 设计画布，由 runtime 缩放到窗口 ——
+   判据：所有 px 在浏览器、演讲者预览、缩略图、无头渲染里必须是同一个意思。
+   逃逸口：<body data-fit="fluid"> 回到视口自适应；.deck[data-w][data-h] 换画布（如 3:4）。 */
+.deck{position:relative;flex:none;width:var(--deck-w,1920px);height:var(--deck-h,1080px);
+  overflow:hidden;background:var(--bg);transform:scale(var(--deck-scale,1));transform-origin:center center}
+body[data-fit="fluid"]{display:block}
+body[data-fit="fluid"] .deck{width:100vw;height:100vh;transform:none}
+
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:72px 112px;                                   /* 页边距：左右 112px≈6%，与真件众数一致 */
+  font-size:var(--t-body);line-height:var(--lh-body);   /* 正文基准只在这里给一次 */
+  box-sizing:border-box;overflow:hidden;
+  opacity:0;pointer-events:none;transform:translateX(30px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.slide.is-active{opacity:1;pointer-events:auto;transform:translateX(0);z-index:2}
+.slide.is-prev{transform:translateX(-30px)}
+/* 单页直开（族页被单独打开时） */
+body.single .slide{position:relative;width:100%;height:100%;opacity:1;transform:none;pointer-events:auto}
+body[data-fit="fluid"].single .slide{width:100vw;height:100vh}
+
+/* —— 排版原语 —— */
+.eyebrow{font-size:var(--t-eye);font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
+.kicker{font-size:var(--t-eye);font-weight:600;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+h1.title,.h1{font-family:var(--font-display);font-size:var(--t-h1);line-height:var(--lh-tight);font-weight:800;letter-spacing:var(--letter-tight);margin:0 0 18px;color:var(--text-1)}
+h2.title,.h2{font-family:var(--font-display);font-size:var(--t-h2);line-height:var(--lh-tight);font-weight:700;letter-spacing:var(--letter-tight);margin:0 0 14px}
+h3,.h3{font-size:var(--t-h3);line-height:1.25;font-weight:600;letter-spacing:var(--letter-normal);margin:0 0 10px}
+h4,.h4{font-size:var(--t-h4);line-height:1.3;font-weight:600;margin:0 0 8px}
+.lede{font-size:var(--t-body);line-height:1.5;color:var(--text-2);font-weight:300;max-width:62ch}
+.dim{color:var(--text-2)}
+.dim2{color:var(--text-3)}
+.mono{font-family:var(--font-mono)}
+.serif{font-family:var(--font-serif)}
+.gradient-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+
+/* —— 栅格与间距：族页只许组合这些，不另写 gap —— */
+.stack>*+*{margin-top:14px}
+.row{display:flex;gap:24px;align-items:center}
+.row.wrap{flex-wrap:wrap}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.center{display:flex;align-items:center;justify-content:center;text-align:center}
+.fill{flex:1}
+.sp-t{padding-top:24px}.sp-b{padding-bottom:24px}
+.mt-s{margin-top:8px}.mt-m{margin-top:18px}.mt-l{margin-top:32px}
+.mb-s{margin-bottom:8px}.mb-m{margin-bottom:18px}.mb-l{margin-bottom:32px}
+
+/* —— 卡与签：一律走 surface 阶梯＋1px border，阴影只做「抬起来」一件事 —— */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card-soft{background:var(--surface-2);border:1px solid var(--border)}
+.card-outline{background:transparent;border:1.5px solid var(--border-strong);box-shadow:none}
+.card-accent{background:var(--surface);border-top:3px solid var(--accent)}
+.card-hover{transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.card-hover:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.pill{display:inline-block;padding:6px 14px;border-radius:999px;font-size:var(--t-cap);font-weight:500;
+  background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+.pill-accent{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 28%,transparent)}
+/* 主色实底的元素统一带一道描边：浅色主色（世纪广场的标线黄）压底只有 1.79:1，
+   靠 --accent-edge 把边界立住，主色不动。 */
+.accent-fill{background:var(--accent);color:var(--accent-ink);
+  box-shadow:inset 0 0 0 1px var(--accent-edge)}
+
+/* —— 分隔—— */
+.divider{height:1px;background:var(--border);width:100%}
+.divider-accent{height:3px;width:72px;background:var(--accent);border-radius:2px}
+
+/* —— 图框：框管比例与裁切，<img> 只负责填满 ——
+   .img-frame.contain 改为留白不裁（截图/图表/logo）；--img-ratio 换比例；--img-pos 保护标题区。 */
+.img-frame{position:relative;margin:0;overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow);
+  background:var(--surface-2);aspect-ratio:var(--img-ratio,16/10)}
+.img-frame > img{width:100%;height:100%;object-fit:cover;object-position:var(--img-pos,center)}
+.img-frame.contain{background:var(--bg-soft);box-shadow:none;border:1px solid var(--border)}
+.img-frame.contain > img{object-fit:contain}
+.img-frame.fill{height:100%;aspect-ratio:auto}
+.img-scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(8,10,20,.72))}
+.img-cap{margin:10px 2px 0;font-size:var(--t-cap);line-height:1.5;color:var(--text-3)}
+.img-tag{position:absolute;top:14px;left:14px;padding:5px 12px;border-radius:999px;
+  background:rgba(10,12,20,.55);color:#fff;font-size:12px;letter-spacing:.06em;
+  text-transform:uppercase;backdrop-filter:blur(6px)}
+
+/* —— 页眉页脚：只做定位与字距，不承载内容 —— */
+.deck-header{position:absolute;top:24px;left:40px;right:40px;display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;z-index:10;pointer-events:none}
+.deck-footer{position:absolute;bottom:24px;left:40px;right:40px;display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--text-3);z-index:10;pointer-events:none}
+.slide-number::before{content:attr(data-current)}
+.slide-number::after{content:" / " attr(data-total)}
+.progress-bar{position:fixed;left:0;right:0;bottom:0;height:3px;background:transparent;z-index:20}
+.progress-bar > span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s var(--ease)}
+
+/* —— logo：一册一枚，落在 .deck 内随画布缩放 ——
+   两种入口：手写 <img class="deck-logo" data-pos="…">，或 <body data-logo data-logo-position> 由 runtime 生成。
+   印刷时不靠这个元素（.deck 会被压成整页流），改由下面的 @media print 逐页画。 */
+.deck-logo{position:absolute;z-index:11;pointer-events:none;
+  height:var(--logo-size,44px);width:auto;max-width:30%;object-fit:contain;opacity:var(--logo-opacity,.9)}
+.deck-logo[data-pos="top-left"]{top:var(--logo-inset-y,28px);left:var(--logo-inset-x,40px)}
+.deck-logo[data-pos="top-right"]{top:var(--logo-inset-y,28px);right:var(--logo-inset-x,40px)}
+.deck-logo[data-pos="bottom-left"]{bottom:var(--logo-inset-y,28px);left:var(--logo-inset-x,40px)}
+.deck-logo[data-pos="bottom-right"]{bottom:var(--logo-inset-y,28px);right:var(--logo-inset-x,40px)}
+.deck-logo:not([data-pos]){top:28px;right:40px}
+
+/* —— 讲稿与总览：讲稿对观众永不显示（.notes / .speaker-notes 两种写法都收） ——
+   ⛔ 这份选择器表要与 runtime 的取稿逻辑同步，漏一个就等于把稿子投在墙上。 */
+.notes,.speaker-notes{display:none!important}
+.notes-overlay{position:fixed;inset:auto 0 0 0;max-height:42vh;background:rgba(20,22,30,.95);color:#e8ebf4;
+  padding:20px 32px;font-size:16px;line-height:1.6;border-top:1px solid rgba(255,255,255,.1);
+  transform:translateY(100%);transition:transform .3s var(--ease);z-index:40;overflow:auto;font-family:var(--font-sans)}
+.notes-overlay.open{transform:translateY(0)}
+.overview{position:fixed;inset:0;background:rgba(10,12,18,.92);backdrop-filter:blur(12px);z-index:50;
+  display:none;padding:40px;overflow:auto}
+.overview.open{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;align-content:start}
+.overview .thumb{background:var(--surface);border:1px solid var(--border);border-radius:12px;corner-shape:squircle;
+  aspect-ratio:16/9;overflow:hidden;cursor:pointer;position:relative;color:var(--text-1);padding:16px;
+  font-size:11px;transition:transform .2s var(--ease)}
+.overview .thumb:hover{transform:scale(1.04)}
+.overview .thumb .n{position:absolute;top:8px;left:10px;font-weight:700;font-size:14px;color:var(--text-3)}
+.overview .thumb .t{position:absolute;bottom:10px;left:14px;right:14px;font-weight:600;color:var(--text-1)}
+
+/* —— 出图态（`?render`）：无头截图专用，掐掉过渡与入场动效 ——
+   ⛔ 只掐 .slide 的过渡与它**子元素**的动效，别把 .slide 的 opacity 也 !important 抬起来：
+   那会让所有页叠在一起显影。 */
+html[data-render="1"] .slide{transition:none!important}
+html[data-render="1"] .slide *{transition:none!important;animation:none!important;opacity:1!important;transform:none!important}
+
+/* —— 工具类 —— */
+.hidden{display:none!important}
+.nowrap{white-space:nowrap}
+.tr{text-align:right}.tc{text-align:center}.tl{text-align:left}
+.uppercase{text-transform:uppercase;letter-spacing:.12em}
+
+/* —— 印刷：一律 !important ——
+   模板样式常写成 `.tpl-name .slide`（(0,2,0)），压得过裸 `.slide`（(0,1,0)）；
+   少了 !important，屏幕布局会被带进纸面（历史上曾 8 页印成 1 页）。
+   判据：决定分页的每一条都必须带上，不只是 opacity/transform 那两条。 */
+@media print{
+  body{display:block!important;width:auto!important;height:auto!important;overflow:visible!important}
+  .deck{transform:none!important;width:100%!important;height:auto!important;min-height:0!important;display:block!important}
+  .slide{position:relative!important;inset:auto!important;opacity:1!important;transform:none!important;
+    page-break-after:always;break-after:page;width:100%!important;height:100vh!important;max-height:100vh!important}
+  .slide:last-child{page-break-after:auto;break-after:auto}
+  .deck-header,.deck-footer,.progress-bar,.notes-overlay,.overview{display:none!important}
+
+  /* 印刷时一页即一张 slide，logo 改由每页 ::after 画；runtime 会把图片地址与落点镜像到 .deck 上 */
+  .deck[data-logo-print] > .deck-logo{display:none!important}
+  .deck[data-logo-print] .slide:not([data-no-logo])::after{
+    content:"";position:absolute;z-index:11;pointer-events:none;width:30%;height:var(--logo-size,44px);
+    background-image:var(--logo-print);background-repeat:no-repeat;background-size:contain;opacity:var(--logo-opacity,.9)}
+  .deck[data-logo-print="top-left"] .slide:not([data-no-logo])::after{top:var(--logo-inset-y,28px);left:var(--logo-inset-x,40px);background-position:left top}
+  .deck[data-logo-print="top-right"] .slide:not([data-no-logo])::after{top:var(--logo-inset-y,28px);right:var(--logo-inset-x,40px);background-position:right top}
+  .deck[data-logo-print="bottom-left"] .slide:not([data-no-logo])::after{bottom:var(--logo-inset-y,28px);left:var(--logo-inset-x,40px);background-position:left bottom}
+  .deck[data-logo-print="bottom-right"] .slide:not([data-no-logo])::after{bottom:var(--logo-inset-y,28px);right:var(--logo-inset-x,40px);background-position:right bottom}
+}

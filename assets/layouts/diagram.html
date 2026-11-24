@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>关系图 · 梁架一族</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../assets/themes/guanglan-rd.css">
+<link rel="stylesheet" href="../../assets/animations/animations.css">
+</head><body class="single">
+<!-- 梁架「diagram」（关系图）：2 式，一段一式。择式先看这一页，别背旧名。 -->
+<div class="deck">
+
+    <section data-style="flow" class="slide is-active" data-title="Flow">
+  <p class="kicker">Pipeline · 渲染管线</p>
+  <h2 class="h2">从 Markdown 到 PNG，共 5 步</h2>
+  <div class="flow anim-stagger-list" data-anim-target>
+    <div class="node"><div class="ic">📝</div><h4>Markdown</h4><p>你的内容源</p></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="ic">🧩</div><h4>Layouts</h4><p>选择页型</p></div>
+    <div class="arr">→</div>
+    <div class="node hl"><div class="ic">🎨</div><h4>Theme</h4><p>换装</p></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="ic">🌐</div><h4>HTML</h4><p>运行时接管</p></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="ic">📸</div><h4>PNG</h4><p>headless Chrome</p></div>
+  </div>
+</section>
+
+<section data-style="arch" class="slide is-active" data-title="Architecture">
+  <p class="kicker">Architecture · 系统总览</p>
+  <h2 class="h2">一套三层栈</h2>
+  <div class="arch anim-stagger-list" data-anim-target>
+    <div class="tier"><div class="tname">UI Layer</div>
+      <div class="cells"><div class="cell"><div class="ic">🧱</div><h4>Layouts</h4><p>17 族 34 式</p></div>
+        <div class="cell"><div class="ic">🎨</div><h4>Themes</h4><p>24 tokens 主题</p></div>
+        <div class="cell"><div class="ic">✨</div><h4>Animations</h4><p>25 个命名动效</p></div>
+        <div class="cell"><div class="ic">⌨️</div><h4>Runtime</h4><p>键盘导航</p></div>
+      </div>
+    </div>
+    <div class="tier hl"><div class="tname">Core · tokens</div>
+      <div class="cells three"><div class="cell"><div class="ic">🎯</div><h4>base.css</h4><p>排版 + 网格</p></div>
+        <div class="cell"><div class="ic">🔤</div><h4>fonts.css</h4><p>中英字体</p></div>
+        <div class="cell"><div class="ic">🪞</div><h4>:root vars</h4><p>语义颜色</p></div>
+      </div>
+    </div>
+    <div class="tier"><div class="tname">Tooling</div>
+      <div class="cells three"><div class="cell"><div class="ic">🧪</div><h4>render.sh</h4><p>headless Chrome</p></div>
+        <div class="cell"><div class="ic">🆕</div><h4>new-deck.sh</h4><p>脚手架</p></div>
+        <div class="cell"><div class="ic">📦</div><h4>AgentSkill</h4><p>Claude 接入点</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div></body></html>

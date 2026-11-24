@@ -1,0 +1,520 @@
+#!/usr/bin/env python3
+"""Markdown 入口：一份 `.md` 直接出一册单文件 HTML deck（B 出口）。
+
+这不是"任意 Markdown 无脑转成漂亮幻灯片"——那会违背本库「先选族再排」的边界。
+它只做四件事：认结构、配族、落 token、给出可继续手改的 HTML。写完仍然要过
+`check-fit.py`，装不下就删字或换族，别指望脚本替你决定。
+
+映射（只有这几条，其余一律当正文）：
+  `# 标题`            → cover 族（副标题取紧随的第一段）
+  `## 小节`           → 一页；其下 `### 分节` 各自再占一页（章名退成小注）
+  正文里有什么就配什么族：
+      1 张 `![alt](src)`   → image 族（image-single，图不裁）
+      只有 `> 引用`        → quote 族（下一段当署名）
+      ≥2 张 `![alt](src)`  → image-set 族（3 张＝image-set / 4-5 张＝image-round / 6 张＝image-card）
+      ``` 代码块 ```       → code 族
+      `- ` 列表            → text 族（卡片列，默认 data-build 逐条揭示）
+      其余                 → text 族（lede 段）
+  `---` 之后的 `# 收束`  → end 族（可省，脚本自动补一页）
+
+用法：
+  python3 scripts/md2deck.py 讲稿.md -o deck.html [--theme guanglan-rd] [--title "..."]
+  python3 scripts/md2deck.py 讲稿.md -o deck.html --no-build   # 关掉逐条揭示
+"""
+import argparse
+import html as H
+import os
+import pathlib
+import re
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+THEME_DIR = ROOT / 'assets' / 'themes'
+
+
+def esc(s):
+    return H.escape(s, quote=False)
+
+
+def inline(s):
+    """行内：`代码`、**粗**、*斜*、[文字](链接) —— 只做这几样，别指望完整 CommonMark。"""
+    s = esc(s)
+    s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
+    s = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', s)
+    s = re.sub(r'\*([^*]+)\*', r'<i>\1</i>', s)
+    s = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', s)
+    return s
+
+
+def split_front(text):
+    meta, body = {}, text
+    m = re.match(r'^---\n(.*?)\n---\n', text, re.S)
+    if m:
+        for line in m.group(1).splitlines():
+            if ':' in line:
+                k, v = line.split(':', 1)
+                meta[k.strip()] = v.strip().strip('"\'')
+        body = text[m.end():]
+    return meta, body
+
+
+def parse_pages(body):
+    """按 `## ` 切页；`# ` 只在最前面当封面标题。"""
+    lines = body.splitlines()
+    title, lead, pages, cur = None, [], [], None
+    for ln in lines:
+        s = ln.rstrip()
+        if s.startswith('# ') and not s.startswith('## '):
+            if title is None and cur is None:
+                title = s[2:].strip()
+            else:
+                cur = {'head': s[2:].strip(), 'body': []}
+                pages.append(cur)
+        elif s.startswith('## '):
+            cur = {'head': s[3:].strip(), 'body': [], 'parent': None}
+            pages.append(cur)
+        elif s.startswith('### '):
+            parent = cur['parent'] or cur['head'] if cur else None
+            if cur is not None and not cur['parent'] and not any(x.strip() for x in cur['body']):
+                # `##` 后紧跟 `###`：`##` 只当章名，不单独占一页
+                pages.pop()
+            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent}
+            pages.append(cur)
+        else:
+            if cur is None:
+                if s.strip():
+                    lead.append(s)
+            else:
+                cur['body'].append(s)
+    return title, lead, pages
+
+
+def blocks(items):
+    """把一页正文切成块：para / list / code / img / table。"""
+    out, i, n = [], 0, len(items)
+    while i < n:
+        s = items[i]
+        t = s.strip()
+        if not t:
+            i += 1
+            continue
+        if t.startswith('```'):
+            lang = t[3:].strip() or 'text'
+            j, buf = i + 1, []
+            while j < n and not items[j].strip().startswith('```'):
+                buf.append(items[j])
+                j += 1
+            out.append(('code', lang, '\n'.join(buf)))
+            i = j + 1
+            continue
+        if t.startswith('>'):
+            out.append(('quote', inline(t.lstrip('>').strip())))
+            i += 1
+            continue
+        m = re.match(r'!\[([^\]]*)\]\(([^)]+)\)', t)
+        if m:
+            out.append(('img', m.group(1), m.group(2)))
+            i += 1
+            continue
+        if re.match(r'- ', t):
+            buf = []
+            while i < n and re.match(r'(?:- |  - )', items[i].strip() or ' '):
+                buf.append(inline(items[i].strip()[2:].strip()))
+                i += 1
+            out.append(('list', buf))
+            continue
+        if re.match(r'\d+\. ', t):
+            buf = []
+            while i < n and re.match(r'\d+\. ', items[i].strip() or ' '):
+                buf.append(inline(re.sub(r'^\d+\.\s*', '', items[i].strip())))
+                i += 1
+            out.append(('num', buf))
+            continue
+        if t.startswith('|'):
+            buf = []
+            while i < n and items[i].strip().startswith('|'):
+                row = [c.strip() for c in items[i].strip().strip('|').split('|')]
+                if not all(re.fullmatch(r'[-:\s]*', c) for c in row):
+                    buf.append(row)
+                i += 1
+            out.append(('table', buf))
+            continue
+        buf = [t]
+        i += 1
+        while i < n and items[i].strip() and not re.match(r'(- |\d+\. |```|!\[|\|)', items[i].strip()):
+            buf.append(items[i].strip())
+            i += 1
+        out.append(('para', ' '.join(buf)))
+    return out
+
+
+def family_of(bl):
+    kinds = [b[0] for b in bl]
+    if kinds in (['quote'], ['quote', 'para'], ['para', 'quote']):
+        return 'quote'
+    if kinds.count('img') == 1 and 'code' not in kinds and 'table' not in kinds:
+        return 'image1'
+    if kinds.count('img') >= 2:
+        return 'image'
+    if 'code' in kinds:
+        return 'code'
+    if 'table' in kinds and 'list' not in kinds:
+        return 'table'
+    if kinds.count('num') and sum(len(b[1]) for b in bl if b[0] == 'num') >= 3:
+        return 'process'
+    return 'text'
+
+
+def render_text(head, bl, build, kick=''):
+    paras = [b for b in bl if b[0] == 'para']
+    lists = [b for b in bl if b[0] == 'list']
+    nums = [b for b in bl if b[0] == 'num']
+    out = []
+    out.append('  <p class="kicker">%s</p>' % kick)
+    out.append('  <h2 class="h2">%s</h2>' % inline(head))
+    if paras:
+        out.append('  <p class="lede mb-l">%s</p>' % inline(paras[0][1]))
+    for p in paras[1:]:
+        out.append('  <p class="dim">%s</p>' % inline(p[1]))
+    tag = ' data-build' if build else ''
+    if lists:
+        items = [x for l in lists for x in l[1]]
+        cls = 'grid g2 anim-stagger-list' if len(items) > 3 else 'grid g1 anim-stagger-list'
+        out.append('  <div class="%s"%s data-anim-target style="align-items:start;align-content:start;grid-auto-rows:min-content">' % (cls, tag))
+        for it in items:
+            out.append('    <div class="card card-accent step"><p>%s</p></div>' % it)
+        out.append('  </div>')
+    if nums:
+        items = [x for l in nums for x in l[1]]
+        out.append('  <div class="grid g3 anim-stagger-list"%s data-anim-target style="align-items:start;align-content:start;grid-auto-rows:min-content">' % tag)
+        for k, it in enumerate(items, 1):
+            out.append('    <div class="card step"><p class="eyebrow">%02d</p><p>%s</p></div>' % (k, it))
+        out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_quote(head, bl, kick=''):
+    q = [b for b in bl if b[0] == 'quote'][0][1]
+    paras = [b for b in bl if b[0] == 'para']
+    out = ['  <p class="kicker">%s</p>' % kick]
+    out.append('  <div style="max-width:1180px">')
+    out.append('    <div class="serif" style="font-size:var(--t-display);line-height:.9;color:var(--accent);opacity:.55">“</div>')
+    out.append('    <blockquote class="serif" style="font-size:var(--t-h3);line-height:1.35;margin:-6px 0 22px;font-weight:600">%s</blockquote>' % q)
+    if paras:
+        out.append('    <p class="dim" style="font-size:var(--t-cap);letter-spacing:.08em">%s</p>' % inline(paras[-1][1]))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_image_single(head, bl, build, fix=None):
+    img = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img'][0]
+    paras = [b for b in bl if b[0] == 'para']
+    out = ['  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <div class="fig anim-fade-up"%s><figure class="img-frame contain"><img src="%s" alt="%s"></figure>' % (' data-anim="fade-up"' if build else '', img[1], esc(img[0])))
+    if paras:
+        out.append('    <p class="img-cap">%s</p>' % inline(paras[0][1]))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_images(head, bl, build, fix=None):
+    imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
+    paras = [b for b in bl if b[0] == 'para']
+    n = len(imgs)
+    mode, cls = ('image-grid', 'gg') if n <= 3 else (('image-round', 'gal rnd') if n <= 5 else ('image-card', 'gal card'))
+    out = ['  <h2 class="h2">%s</h2>' % inline(head)]
+    if paras:
+        out.append('  <p class="lede mb-l">%s</p>' % inline(paras[0][1]))
+    tag = ' data-build' if build else ''
+    if mode == 'image-card':
+        out.append('  <div class="%s"%s data-anim-target>' % (cls, tag))
+        for alt, src in imgs:
+            out.append('    <figure class="step"><img src="%s" alt="%s"><figcaption>%s</figcaption></figure>' % (src, esc(alt), esc(alt)))
+        out.append('  </div>')
+    elif mode == 'image-round':
+        out.append('  <div class="%s"%s>' % (cls, tag))
+        for alt, src in imgs:
+            out.append('    <figure class="step"><img src="%s" alt="%s"><figcaption>%s</figcaption></figure>' % (src, esc(alt), esc(alt)))
+        out.append('  </div>')
+    else:
+        out.append('  <div class="%s"%s data-anim-target>' % (cls, tag))
+        for alt, src in imgs:
+            out.append('    <figure class="step"><img src="%s" alt="%s"><figcaption>%s</figcaption></figure>' % (src, esc(alt), esc(alt)))
+        out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_code(head, bl, kick=''):
+    code = [b for b in bl if b[0] == 'code'][0]
+    paras = [b for b in bl if b[0] == 'para']
+    out = ['  <p class="kicker">%s</p>' % kick] if kick else []
+    out.append('  <h2 class="h2">%s</h2>' % inline(head))
+    if paras:
+        out.append('  <p class="lede mb-l">%s</p>' % inline(paras[0][1]))
+    out.append('<pre class="card mt-m" style="padding:24px"><code class="language-%s">%s</code></pre>' % (esc(code[1]), esc(code[2])))
+    return '\n'.join(out)
+
+
+def render_process(head, bl, build, kick=''):
+    nums = [x for b in bl if b[0] == 'num' for x in b[1]]
+    paras = [b for b in bl if b[0] == 'para']
+    out = ['  <p class="kicker">%s</p>' % (kick or '步骤 · %d 步' % len(nums))]
+    out.append('  <h2 class="h2">%s</h2>' % inline(head))
+    if paras:
+        out.append('  <p class="lede mb-l">%s</p>' % inline(paras[0][1]))
+    tag = ' data-build' if build else ''
+    out.append('  <div class="steps anim-stagger-list"%s data-anim-target>' % tag)
+    for k, it in enumerate(nums, 1):
+        out.append('    <div class="step" style="padding-right:72px"><div class="num">%d</div><p>%s</p></div>' % (k, it))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_table(head, bl):
+    tbl = [b for b in bl if b[0] == 'table'][0][1]
+    paras = [b for b in bl if b[0] == 'para']
+    out = ['  <h2 class="h2">%s</h2>' % inline(head)]
+    if paras:
+        out.append('  <p class="lede mb-l">%s</p>' % inline(paras[0][1]))
+    out.append('  <div class="split6"><div class="main"><table class="t">')
+    head_row, *rows = tbl
+    out.append('    <thead><tr>%s</tr></thead>' % ''.join('<th class="num">%s</th>' % inline(c) if re.fullmatch(r'[\d.,%¥+\-]+', c or '') else '<th>%s</th>' % inline(c) for c in head_row))
+    out.append('    <tbody>')
+    for r in rows:
+        out.append('      <tr>%s</tr>' % ''.join('<td class="num">%s</td>' % inline(c) if re.fullmatch(r'[\d.,%¥+\-]+', c or '') else '<td>%s</td>' % inline(c) for c in r))
+    out.append('    </tbody>')
+    quotes = [b for b in bl if b[0] == 'quote']
+    aside = quotes[0][1] if quotes else '<span class="dim">表在左，结论在右：在 md 里写一行 <code>&gt; 结论</code>。</span>'
+    out.append('  </table></div><div class="aside"><p class="eyebrow">结论</p><p class="dim">%s</p></div></div>' % aside)
+    return '\n'.join(out)
+
+
+
+def split_item(s: str, limit: int = 19):
+    """C 出口的 bullets 正文 32px、单条只有 19 字的位置；长句要拆成「主句 + 小注」。
+
+    在 6–22 字之间找第一个标点断开（优先 `：`，其次 `，。；`），找不到就硬切并加省略号。
+    返回 (主句, 小注)，小注可为空。
+    """
+    s = s.strip()
+    if len(s) <= limit:
+        return s, ''
+    for mark in ('：', '，', '。', '；'):
+        cut = s.find(mark, 5)
+        if 0 < cut <= 24:
+            return s[:cut + 1], s[cut + 1:].strip()
+    return s[:limit] + '…', s[limit:].strip()
+
+
+def to_spec(pages, meta, title, brand, a_src_dir=None):
+    """把 md 的页映射成 C 出口的 spec。**只映射 C 里真有的页型**，其余跳过并明说。
+
+    对照：cover/bullets/quote/table/end 有对应；image 系列与 code 在 C 出口没有等价页型
+    （C 的图片只能是版式里的装饰，不是「一图一页」），跳过往 `skipped` 里记，不硬塞。
+    """
+    out, skipped = [], []
+    slide = {'type': 'cover', 'title': [title],
+             'kicker': meta.get('kicker', ''),
+             'lede': '', 'source': meta.get('source', brand),
+             'footer': brand}
+    out.append(slide)
+    for idx, pg in enumerate(pages, 1):
+        bl = blocks(pg['body'])
+        fam = family_of(bl)
+        head = pg['head']
+        foot = f'{brand} · {idx:02d}'
+        if fam == 'quote':
+            q = [b for b in bl if b[0] == 'quote'][0][1]
+            paras = [b for b in bl if b[0] == 'para']
+            out.append({'type': 'quote', 'title': head, 'text': q,
+                        'size': 44 if len(q) > 24 else 56,
+                        'by': ('— ' + paras[-1][1].lstrip('—').strip()) if paras else '',
+                        'source': meta.get('source', brand), 'footer': foot})
+        elif fam == 'table':
+            tbl = [b for b in bl if b[0] == 'table'][0][1]
+            cols, rows = tbl[0], [t for t in tbl[1:]]
+            out.append({'type': 'table', 'title': head, 'cols': cols, 'rows': rows,
+                        'source': meta.get('source', brand), 'footer': foot})
+        elif fam == 'text':
+            lists = [x for b in bl if b[0] in ('list', 'num') for x in b[1]]
+            paras = [b[1] for b in bl if b[0] == 'para']
+            items = [re.sub(r'<[^>]+>', '', x) for x in lists] or [re.sub(r'<[^>]+>', '', p_) for p_ in paras[:3]]
+            if not items:
+                skipped.append((idx, head, '空页'))
+                continue
+            pairs = [split_item(x) for x in items[:5]]
+            out.append({'type': 'bullets', 'title': head, 'items': [p_[0] for p_ in pairs],
+                        'captions': [p_[1] for p_ in pairs],
+                        'source': meta.get('source', brand), 'footer': foot})
+        elif fam == 'process':
+            nums = [re.sub(r'<[^>]+>', '', x) for b in bl if b[0] == 'num' for x in b[1]]
+            pairs = [split_item(x, 15) for x in nums[:5]]
+            out.append({'type': 'bullets', 'title': head,
+                        'items': [f'{k}. {pairs[k - 1][0]}' for k in range(1, len(pairs) + 1)],
+                        'captions': [p_[1] for p_ in pairs],
+                        'source': meta.get('source', brand), 'footer': foot})
+        elif fam == 'image':
+            skipped.append((idx, head, '图组：C 出口没有「一图一页」的等价页型'))
+        elif fam == 'image1':
+            img = [b for b in bl if b[0] == 'img'][0]
+            paras = [b[1] for b in bl if b[0] == 'para']
+            src = img[2]
+            if src.lower().endswith('.svg'):
+                skipped.append((idx, head, '图是 SVG：C 出口只认位图（PNG/JPG），换图或留在 B 出口'))
+                continue
+            if not re.match(r'(https?:|data:|/)', src):
+                src = str((a_src_dir / src).resolve()) if a_src_dir else src
+            out.append({'type': 'figure', 'title': head, 'image': src,
+                        'caption': (re.sub(r'<[^>]+>', '', paras[0]) if paras else img[1]),
+                        'source': meta.get('source', brand), 'footer': foot})
+        elif fam == 'code':
+            blk = [b for b in bl if b[0] == 'code'][0]
+            paras = [b[1] for b in bl if b[0] == 'para']
+            out.append({'type': 'code', 'title': head, 'lang': blk[1],
+                        'lines': blk[2].splitlines(),
+                        'note': re.sub(r'<[^>]+>', '', paras[0]) if paras else '',
+                        'source': meta.get('source', brand), 'footer': foot})
+        else:
+            skipped.append((idx, head, '未映射'))
+    out.append({'type': 'end', 'title': '谢谢', 'lede': meta.get('outro', '讲完这一册，剩下的交给现场。'),
+                'source': meta.get('source', brand), 'footer': brand})
+    return {'slides': out, 'skipped': skipped}
+
+
+def emit_pptx(a, build_steps: bool) -> int:
+    """同一份 md 再出一件原生 PPTX：先映射成 spec，再调 export-pptx.py。"""
+    import json, subprocess, tempfile
+    meta, body = split_front(a.src.read_text(encoding='utf-8'))
+    title, _lead, pages = parse_pages(body)
+    title = a.title or meta.get('title') or title or a.src.stem
+    theme = meta.get('theme') or a.theme or 'guanglan-rd'
+    brand = meta.get('brand', '来雪亭')
+    spec = to_spec(pages, meta, title, brand, a.src.parent.resolve())
+    tmp = pathlib.Path(tempfile.mkdtemp()) / 'spec.json'
+    tmp.write_text(json.dumps({'slides': spec['slides']}, ensure_ascii=False), encoding='utf-8')
+    for idx, head, why in spec['skipped']:
+        print(f'  · 跳过第 {idx} 页「{head}」：{why}')
+    cmd = [sys.executable, str(ROOT / 'scripts' / 'export-pptx.py'), str(tmp),
+           '-o', str(a.pptx), '--theme', theme, '--allow-prose']
+    # md 是这册的正源：成稿闸的「字数够不够 / 单条太长」判据是给手写 spec 用的，
+    # 从 md 映射出来的页一律放行（跳过的页已逐条列出，不会悄悄丢内容）。
+    if a.pptx_animate or build_steps:
+        cmd.append('--animate')
+    return subprocess.call(cmd)
+
+
+def build(src_path, out, theme, title_override, build_steps):
+    src = src_path
+    meta, body = split_front(src.read_text(encoding='utf-8'))
+    title, lead, pages = parse_pages(body)
+    title = title_override or meta.get('title') or title or src.stem
+    theme = meta.get('theme') or theme
+    if theme and not (THEME_DIR / (theme + '.css')).is_file():
+        cand = sorted(p.stem for p in THEME_DIR.glob('*.css'))
+        print('✗ 主题 %s 不存在；可用：%s' % (theme, ', '.join(cand)), file=sys.stderr)
+        return 1
+    theme = theme or 'guanglan-rd'
+    out_dir = out.parent.resolve()
+
+    def link(p):
+        return pathlib.PurePosixPath(os.path.relpath(p, out_dir)).as_posix()
+
+    def fix_image(src):
+        """md 里的图片按 md 文件位置算，落到 deck 里要改成相对 deck 的路径。"""
+        if re.match(r'(https?:|data:|file:|/)', src):
+            return src
+        return link((src_path.parent / src).resolve())
+
+    A = ROOT / 'assets'
+    head = ['<!DOCTYPE html>', '<html lang="zh-CN">', '<head>', '<meta charset="utf-8">',
+            '<meta name="viewport" content="width=device-width,initial-scale=1">',
+            '<title>%s</title>' % esc(title),
+            '<link rel="stylesheet" href="%s">' % link(A / 'fonts.css'),
+            '<link rel="stylesheet" href="%s">' % link(A / 'base.css'),
+            '<link rel="stylesheet" href="%s">' % link(A / 'animations' / 'animations.css'),
+            '<link rel="stylesheet" href="%s">' % link(A / 'layouts.css'),
+            '<link rel="stylesheet" id="theme-link" href="%s">' % link(A / 'themes' / (theme + '.css')),
+            '</head>', '<body>', '<div class="deck">', '']
+
+    total_guess = len(pages) + 2
+    sec = []
+    sec.append('  <section data-style="cover" class="slide is-active" data-title="封面">')
+    sec.append('    <p class="kicker">%s</p>' % inline(meta.get('kicker', 'Markdown · 直接成册')))
+    sec.append('    <h1 class="h1 mt-s">%s</h1>' % inline(title))
+    if lead:
+        sec.append('    <p class="lede mt-m">%s</p>' % inline(' '.join(lead)))
+    sec.append('    <div class="deck-footer"><span>%s</span><span class="slide-number" data-current="1" data-total="%d"></span></div>' % (esc(meta.get('brand', '来雪亭')), total_guess))
+    sec.append('  </section>')
+
+    for idx, pg in enumerate(pages, 1):
+        bl = blocks(pg['body'])
+        fam = family_of(bl)
+        kick = pg.get('parent') or ('第 %02d 页' % idx)
+        if fam == 'quote':
+            inner = render_quote(pg['head'], bl, kick)
+        elif fam == 'image1':
+            inner = render_image_single(pg['head'], bl, build_steps, fix_image)
+        elif fam == 'text':
+            inner = render_text(pg['head'], bl, build_steps, kick)
+        elif fam == 'image':
+            inner = render_images(pg['head'], bl, build_steps, fix_image)
+        elif fam == 'process':
+            inner = render_process(pg['head'], bl, build_steps, kick)
+        elif fam == 'code':
+            inner = render_code(pg['head'], bl, kick if pg.get('parent') else '')
+        else:
+            inner = render_table(pg['head'], bl)
+        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': 'image-set' if len([b for b in bl if b[0] == 'img']) <= 3 else ('image-round' if len([b for b in bl if b[0] == 'img']) <= 5 else 'image-card'), 'code': 'code', 'table': 'split'}[fam]
+        sec.append('  <section data-style="%s" class="slide" data-title="%s">' % (style, esc(pg['head'])))
+        sec.append(inner)
+        sec.append('  </section>')
+
+    sec.append('  <section data-style="end" class="slide center tc" data-title="收束">')
+    sec.append('    <div><h1 class="h1" style="font-size:var(--t-display);line-height:1"><span class="gradient-text">谢谢</span></h1>')
+    sec.append('    <p class="lede" style="margin:18px auto 0">%s</p></div>' % inline(meta.get('outro', '讲完这一册，剩下的交给现场。')))
+    sec.append('    <div class="deck-footer"><span>%s</span><span class="slide-number" data-current="%d" data-total="%d"></span></div>' % (esc(meta.get('brand', '来雪亭')), total_guess, total_guess))
+    sec.append('  </section>')
+
+    foot = ['</div>', '<script src="%s"></script>' % link(A / 'runtime.js'), '</body>', '</html>', '']
+    out.write_text('\n'.join(head) + '\n' + '\n'.join(sec) + '\n' + '\n'.join(foot), encoding='utf-8')
+    print('✓ %s → %s（%d 页，主题 %s，%s）' % (src.name, out, total_guess, theme,
+                                             '逐条揭示开' if build_steps else '逐条揭示关'))
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(description='Markdown → 单文件 HTML deck（B 出口）')
+    ap.add_argument('src', type=pathlib.Path)
+    ap.add_argument('-o', '--out', type=pathlib.Path, required=True)
+    ap.add_argument('--theme', default=None, help='主题 slug，见 assets/themes/*.css')
+    ap.add_argument('--title', default=None)
+    ap.add_argument('--no-build', action='store_true', help='不加 data-build（不做逐条揭示）')
+    ap.add_argument('--inline', action='store_true', help='直接出单文件（css/js/图全内联，走 build-deck.py）')
+    ap.add_argument('--pptx', type=pathlib.Path, default=None,
+                    help='同一份 md 再出一件原生 PPTX（走 export-pptx.py；图/代码页没有对应页型，会跳过并列出）')
+    ap.add_argument('--pptx-animate', action='store_true',
+                    help='PPTX 逐组淡入（默认跟随 --no-build 的反面）')
+    a = ap.parse_args()
+    if not a.src.is_file():
+        print('✗ 找不到 %s' % a.src, file=sys.stderr)
+        return 1
+
+    if a.inline:
+        import subprocess, tempfile
+        tmp = pathlib.Path(tempfile.mkdtemp()) / 'deck.html'
+        rc = build(a.src, tmp, a.theme, a.title, not a.no_build)
+        if rc:
+            return rc
+        rc = subprocess.call([sys.executable, str(ROOT / 'scripts' / 'build-deck.py'),
+                              str(tmp), '-o', str(a.out), '--force'])
+    else:
+        rc = build(a.src, a.out, a.theme, a.title, not a.no_build)
+    if rc:
+        return rc
+    if a.pptx:
+        return emit_pptx(a, not a.no_build)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1,0 +1,33 @@
+/* 来雪亭 :: 字体层（自写，2026-11-23 全面重写，不再沿用上游）
+   分工：
+     ① 西文随包 —— Playfair Display / Inter / Space Grotesk / JetBrains Mono，各两字面（R/B），
+        OFL 1.1，许可原文在 fonts/latin/OFL.txt；与 export-pptx.py 量宽断行用同一批文件，
+        HTML 与 PPT 的字面才真同源。
+     ② 中文内化一件 —— 素材集市智造黑 1.02（OFL 1.1，随包），只承担标题/UI。
+     ③ 中文不内化的走系统 —— 思源宋体/思源黑体按本机安装取用，没装则按下方回退链落。
+     ④ 远程兜底 —— Noto Sans SC / Noto Serif SC / 等宽三族走 Google Fonts，只作最后一级；
+        离线打不开时上面三级已经够用，不影响版式。
+   ⛔ 主题文件不要重复写完整字体栈，只映射到本文件的 --font-* 槽位。 */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200;300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&display=swap');
+
+/* —— 西文：R/B 两字面 —— */
+@font-face{font-family:'Playfair Display';src:url('fonts/latin/PlayfairDisplay-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Playfair Display';src:url('fonts/latin/PlayfairDisplay-Bold.ttf') format('truetype');font-weight:700 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Inter';src:url('fonts/latin/Inter-Regular.ttf') format('truetype');font-weight:400 500;font-style:normal;font-display:swap}
+@font-face{font-family:'Inter';src:url('fonts/latin/Inter-Bold.ttf') format('truetype');font-weight:600 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url('fonts/latin/SpaceGrotesk-Regular.ttf') format('truetype');font-weight:300 500;font-style:normal;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url('fonts/latin/SpaceGrotesk-Bold.ttf') format('truetype');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('fonts/latin/JetBrainsMono-Regular.ttf') format('truetype');font-weight:400 500;font-style:normal;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('fonts/latin/JetBrainsMono-Bold.ttf') format('truetype');font-weight:600 900;font-style:normal;font-display:swap}
+
+/* —— 中文内化：智造黑（标题/按钮/标签） */
+@font-face{font-family:'SC Zhizao Hei';src:url('fonts/素材集市智造黑1.02.ttf') format('truetype');font-weight:400 900;font-style:normal;font-display:swap}
+
+/* —— 语义槽位：全库唯一真源 —— */
+:root{
+  --font-ui-zhizao:'SC Zhizao Hei','素材集市智造黑1.02','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  --font-body-song:'Source Han Serif SC','思源宋体','Noto Serif CJK SC','华文中宋','STZhongsong',serif;
+}

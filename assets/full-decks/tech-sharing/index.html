@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>技术分享 · 把演示稿当网页写</title>
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/base.css">
+<link rel="stylesheet" href="../../../assets/animations/animations.css">
+<link rel="stylesheet" href="../../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../../assets/themes/guanglan-rd.css">
+<style>
+  .ts-tbl{display:grid;grid-template-columns:110px 130px 1fr;gap:0;margin-top:28px;
+    border-top:1px solid var(--border)}
+  .ts-tbl > div{padding:12px 0;border-bottom:1px solid var(--border);font-size:var(--t-body-sm)}
+  .ts-tbl .k{color:var(--text-3);font-family:var(--font-mono);font-size:var(--t-cap)}
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <section class="slide" data-title="封面">
+    <div class="deck-header"><span>技术分享 · 40 分钟</span><span>来雪亭</span></div>
+    <p class="kicker">Front-end · 排版</p>
+    <h1 class="h1 mt-s">把演示稿<br>当网页写。</h1>
+    <p class="lede mt-m">幻灯片的问题不是不够好看，是没有规格。网页有规格，所以能测。</p>
+    <div class="deck-footer"><span>分享人：东十四</span><span class="slide-number" data-current="1" data-total="8"></span></div>
+  </section>
+
+  <section class="slide" data-title="痛点">
+    <p class="kicker">痛点</p>
+    <h2 class="h2">四个说不清的量</h2>
+    <div class="grid g2 mt-m">
+      <div class="card card-outline"><h4>字号靠手感</h4><p class="dim">同一个 32 号，在 4:3 和 16:9 里占的比例不同。</p></div>
+      <div class="card card-outline"><h4>边距靠对齐线</h4><p class="dim">拖动对齐，页与页之间差 3 到 8 像素，人眼看得出来。</p></div>
+      <div class="card card-outline"><h4>色彩靠色卡</h4><p class="dim">色卡不告诉你对比度够不够，投到墙上才知道糊。</p></div>
+      <div class="card card-outline"><h4>版式靠截图</h4><p class="dim">截图版式改不了字，改一个字要重做一张图。</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="画布">
+    <p class="kicker">第一件事</p>
+    <h2 class="h2">固定画布，再谈自适应</h2>
+    <p class="lede mt-s">1920×1080 是设计画布，不是屏幕尺寸。缩放只做等比，元素位置永不变形。</p>
+    <pre class="card mt-m" style="padding:24px 30px"><code class="language-css">/* 画布与缩放：所有 px 在投影、截图、导出里同一意思 */
+.deck { width: <span class="a">1920px; height: <span class="a">1080px; transform: scale(var(--deck-scale)); }
+.slide { padding: <span class="a">72px 112px; font-size: <span class="a">32px; }  /* 1pt = 2px */</code></pre>
+    <p class="dim2 mt-m" style="font-size:var(--t-cap)">逃逸口只有一个：<code>body[data-fit="fluid"]</code>，回到视口自适应，用于嵌进文档。</p>
+  </section>
+
+  <section class="slide" data-title="字号">
+    <p class="kicker">第二件事</p>
+    <h2 class="h2">字号九档，不许临时加</h2>
+    <div class="ts-tbl">
+      <div class="k"><b>token</b></div><div class="k"><b>px / pt</b></div><div class="k"><b>用途</b></div>
+      <div class="k">--t-hero</div><div>200 / 100</div><div>巨数与章节号</div>
+      <div class="k">--t-display</div><div>144 / 72</div><div>引号、收束大字</div>
+      <div class="k">--t-h1</div><div>80 / 40</div><div>封面主标</div>
+      <div class="k">--t-h2</div><div>64 / 32</div><div>页标题</div>
+      <div class="k">--t-h3</div><div>48 / 24</div><div>小节与卡标题</div>
+      <div class="k">--t-body</div><div>32 / 16</div><div>正文</div>
+      <div class="k">--t-cap</div><div>24 / 12</div><div>图注下限</div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="色板">
+    <p class="kicker">第三件事</p>
+    <h2 class="h2">色板三律</h2>
+    <div class="grid g3 mt-l">
+      <div class="card card-accent"><h4>一页一个强调</h4><p class="dim">第二强调只能同色相明度差，或与底色混合。</p></div>
+      <div class="card"><h4>明度台阶四档</h4><p class="dim">底、面、面二、边。少一档卡片就粘住。</p></div>
+      <div class="card"><h4>墨字逐主题算</h4><p class="dim">主色上放字要 ≥4.5:1，算不够就换墨色。</p></div>
+    </div>
+    <p class="dim2 mt-m" style="font-size:var(--t-cap)">补充律：主色压底不足 3:1 时加 1px 描边，把边界立住，不动主色。</p>
+  </section>
+
+  <section class="slide" data-title="闸门">
+    <p class="kicker">第四件事</p>
+    <h2 class="h2">能测的才叫规格</h2>
+    <pre class="card mt-m" style="padding:26px 30px"><code class="language-bash"># 逐页量元素越界与压卡
+python3 scripts/check-fit.py
+
+# 量字数与套话
+python3 scripts/check-prose.py spec.md
+
+# 对比度、明度步长、色相暧昧带
+python3 scripts/check-theme-colors.py assets/themes
+
+# 文档说的数字与代码是否一致
+python3 scripts/check_doc_claims.py</code></pre>
+    <p class="dim mt-m">红即拒，不做「先交了再补」。</p>
+  </section>
+
+
+  <section class="slide" data-title="出口对照">
+    <p class="kicker">出口 · 三条路</p>
+    <h2 class="h2">同一个源，三种交付，代价不同</h2>
+    <div class="split6">
+      <div class="main">
+        <table class="t">
+          <thead><tr><th>出口</th><th>可改到多细</th><th>适合</th></tr></thead>
+          <tbody>
+            <tr><td>单文件 HTML</td><td>元素级，可逐条</td><td>线上、现场讲</td></tr>
+            <tr><td>PNG / PDF</td><td>不可改，页级</td><td>归档、发人</td></tr>
+            <tr><td>原生 PPTX</td><td>形状与文本可编，逐组淡入</td><td>交给同事续改</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="aside">
+        <div class="kpi">同一源</div>
+        <p class="dim">三出口都从同一份 token 与同一批 section 出，不维护三套稿。差异只在「改到多细」与「谁来接着改」。</p>
+      </div>
+    </div>
+  </section>
+  <section class="slide" data-title="取舍">
+    <p class="kicker">取舍</p>
+    <h2 class="h2">明确不做的四件</h2>
+    <div class="grid g2 mt-m">
+      <div class="card card-soft"><h4>对象级动效</h4><p class="dim">B 出口按 <code>data-build</code> 逐条放；C 出口加 <code>--animate</code>，每页 ≤4 组、按回车逐组淡入。</p></div>
+      <div class="card card-soft"><h4>非 sRGB 渐变</h4><p class="dim">全部换算到可导出的近似，不承诺逐像素一致。</p></div>
+      <div class="card card-soft"><h4>布尔运算求值</h4><p class="dim">导出时求值，不在浏览器里跑几何引擎。</p></div>
+      <div class="card card-soft"><h4>无尽主题</h4><p class="dim">九件瓦作，每件有材质与出处，不批量生成。</p></div>
+    </div>
+  </section>
+
+  <section class="slide center tc" data-title="Q&A">
+    <div>
+      <p class="kicker">Q &amp; A</p>
+      <h1 class="h1">规格写完了，<br>剩下的都是内容。</h1>
+      <p class="lede" style="margin:18px auto">想试的话，拿一册旧稿，从换主题开始。</p>
+      <div class="row mt-l" style="justify-content:center;gap:16px">
+        <span class="pill">代码在库里</span>
+        <span class="pill pill-accent">问题现场提</span>
+      </div>
+    </div>
+    <div class="deck-footer"><span>分享 · 完</span><span class="slide-number" data-current="8" data-total="8"></span></div>
+  </section>
+
+</div>
+<script src="../../../assets/runtime.js"></script>
+</body></html>

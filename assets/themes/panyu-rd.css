@@ -1,0 +1,454 @@
+/* theme: panyu-rd - 番禺路 Panyu Rd ｜ 新粗野主义 × 意大利（拱、柱、赤陶与孟菲斯）
+   命名：上海长宁 · 番禺路。公共道路名，不是品牌名——可长期作项目代号，也可被任何人书写。
+   它真有一栋意大利的房子：番禺路 60 号孙科别墅（邬达克设计，1931），西班牙式外墙裹着意大利文艺复兴的拱与柱，
+   就在哥伦比亚圈的西边界上。所以这个名字不是给上海硬贴一个「意大利」，是这条路自己带着一段意大利语汇。
+   风格血缘（这是本主题站得住的理由，不是拼贴）：
+     · 1950 年代英国建筑的新粗野主义（New Brutalism）——1955 年班纳姆在《建筑评论》里造词，
+       本是一句嘲讽，被史密森夫妇接了下来；语汇是「诚实的材料、粗粝的表面、不修饰的构造」。
+     · 1981 年米兰的 Memphis 小组——高饱和平涂、粗黑轮廓、几何拼贴、反优雅，是新粗野主义最直接的视觉祖先。
+     · 意大利理性主义 / 新理性主义（Aldo Rossi）与米兰 Torre Velasca（BBPR，1958）——拱券、柱式、类型学、纪念碑式几何。
+   一句话：Memphis 给颜色和线，理性主义给拱和柱。两支同源，合流才不是贴纸。
+   三条风险与解法（写在这里，以免下一版走偏）：
+     ① 名实脱节——「番禺路」三个字看不出一丝意大利。解法：副标承担风格暗示，对外写「番禺路 · 拱廊 Panyu Arcade」。
+     ② 两种语法打架——粗野主义要「平、硬、无装饰」，意大利古典要「比例、弧、柱」。解法：只借母题不借装饰，
+        拱券只留外轮廓（.pg-arch 一个圆角壳），柱式只留凹槽竖纹（.pg-flute 的 repeating-linear-gradient），
+        ⛔ 不做柱头雕饰、不做涡卷、不做檐口线脚。
+     ③ 易滑向 Memphis 复刻——色一多、几何一乱就成了八十年代海报。纪律：一屏一个拱、两色高亮，第三色只做线。
+   ⚠️ 与本库 craft-floor 的一处有意冲突：craft-floor 把「硬偏移阴影」列为拒做项，因它在普通主题里读作廉价拟物。
+   本主题的核心语汇恰恰是它：实心黑投影 4px 4px 0、零模糊，只出现在按钮 / 卡片 / 胶囊 / 输入框这类「实体控件」上，
+   正文块、引语、图版一律不投影。这是「新粗野主义」的定义性特征，不是偷懒的拟物——登记在此，供复核。
+   配色取舍（体检读数见下）：赤陶 #C7523C 对纸底 3.81:1，只做面与主强调，⛔ 不承载正文；群青 #2F5D8C 5.84:1 才是正文链接色；
+   赭黄 #E0A32E 对纸底仅 1.89:1，只做小色块与胶囊底（其上写墨黑，8.29:1），⛔ 绝不做字；鼠尾草 #7B8A63 3.16:1，只做线与小面。
+   accent 三色分工：--accent 赤陶（面）、--accent-2 群青（线与链接）、--accent-3 鼠尾草（状态面），赭黄只作 --ochre 工具色，
+   不进 accent 序列——否则赭黄与赤陶 ΔH 28°、面积又都在 5% 以上，体检会按暧昧色对报警。
+   骨架承 century-sq.css：token 名、组件选择器、六档字号与 CJK 行盒补偿全部沿用，只换视觉。 */
+
+/* 标题字体：爱点风雅黑（Aidian FengYaHei）——**只走 local()，不随包**。
+   2026-11-21 改为自备，原因与摇醒青年黑同：授权不含网页字体嵌入。
+   zfont.cn（font_657）把许可范围标为**嵌入禁止、衍生禁止**，商标也禁止；
+   只允许文稿 / 互联网 / 视频 / 印刷。作者官网的《使用须知》只有一句
+   「个人及企业可永久免费使用」，没提嵌入、没提再分发，也没有任何标准协议
+   （zfont 记作「无标准协议（作者文字声明）」）。字体 name 表 nameID 13/14 无许可声明，
+   nameID 0 只写「Typeface © (ideavi.cn). 2024. All Rights Reserved」。
+   本库的用法正是把 woff2 当网页字体嵌入——落在被禁止的那一项里。
+
+   所以这里**只保留 local()**：用户自己装了爱点风雅黑就用它（那是用户自己的
+   使用行为，不涉及本库再分发），没装就沿回退链落到宋骨黑体（SIL OFL 1.1，随包，
+   同为黑体，版式色板不受影响，只是少了风雅的方硬转折）。
+   ⛔ 子集文件已从仓库删除（2026-11-21），`assets/fonts/aidian/` 下只剩作者的《使用须知》。
+   ⛔ 别再把子集放回仓库——那正是这次要消除的再分发风险。
+
+   ⚠️ 该字体只有 Regular 一档（usWeightClass 400），所以 @font-face 声明 400–700 区间，
+   标题写 font-weight:400 也不会触发伪粗。⛔ 别写 700/800——浏览器会合成假粗，笔画糊成一坨。
+   ⚠️ local() 用英文族名 / PostScript 名都能命中（2026-11-21 实测）；
+   中文族名「爱点风雅黑」在 Chrome 里解析失败，别只写中文名。 */
+@font-face{
+  font-family:'Aidian FengYaHei';
+  src:local('Aidian FengYaHei'),local('AidianFengYaHei-Regular');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:block;
+}
+/* 标题兜底：宋骨黑体（SIL OFL 1.1，奇文云海 chivaltype.com，随包 assets/fonts/songgu/）。
+   爱点风雅黑没装时标题落这里。与 friendship-bldg / fuzhou-rd / longhua-si 共用同一个子集文件。
+   ⚠️ usWeightClass 500，声明 400–700 区间：标题写 400 取原字重，写 700 也不会伪粗。
+   ⚠️ 这个子集的 metrics 在 fuzhou-rd 那边被改过（typoAscender 868 / Descender -88 / lineGap 0），
+   行盒比常规黑体紧 3px（12px 字号）。本主题标题字号大，影响可忽略；
+   若将来拿它排小字正文，先读 ATTRIBUTION.md「宋骨黑体的 metrics 被改过」那一段。 */
+@font-face{
+  font-family:'SongguHei';
+  src:local('宋骨黑体'),local('宋骨黑体 Medium'),local('SGH-Medium'),
+      url('../fonts/songgu/SongguHei-Subset.woff2') format('woff2');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  --bg:#f3ece1;                /* 石灰华 / 灰泥暖白，不用纯白 */
+  --bg-soft:#ece2d3;
+  --surface:#fbf7ee;
+  --surface-2:#f7f0e2;
+  --paper-deep:#e6dbca;
+  --ink:#141414;               /* 唯一的黑：边框、投影、正文 */
+  --text-1:#141414;
+  --text-2:#4a423a;
+  --text-3:#63594e;            /* 纸底 5.83:1，页脚小字够用 */
+  --terracotta:#ba4a33;        /* 赤陶砖：面用；对纸底 4.52:1，压白字 4.96:1（2026-11-20 由 #C7523C 压深半档换对比度） */
+  --terracotta-lo:#963826;
+  --ochre:#e0a32e;             /* 赭黄：只做小色块底，其上墨黑 8.29:1 */
+  --ochre-hi:#eeb443;
+  --ultra:#2f5d8c;             /* 群青：文本安全 5.84:1 */
+  --ultra-lo:#24476c;
+  --sage:#7b8a63;              /* 鼠尾草：只做状态面与线，3.16:1 */
+  --sage-lo:#5e6b4b;
+  --line:3px;                  /* 粗黑实线，主题唯一边框宽 */
+  --hard:4px 4px 0 var(--ink); /* 实心硬投影，零模糊 */
+  --hard-sm:3px 3px 0 var(--ink);
+  --border:var(--ink);         /* base.css 的 .divider 等读它 */
+  --border-strong:#141414;
+  --accent:var(--terracotta);
+  --accent-hi:#c95d45;
+  --accent-lo:var(--terracotta-lo);
+  --accent-2:var(--ultra);
+  --accent-3:var(--sage);
+  --accent-ink:#ffffff;        /* 赤陶色块上的字用纸白（4.96:1）；墨黑压赤陶只有 3.47，不够 */
+  --good:#4e5a3d;
+  --warn:#8a6a18;
+  --bad:#963826;
+  --grad:linear-gradient(135deg,#ba4a33,#963826);
+  --grad-soft:linear-gradient(135deg,#fbf7ee,#f2e8d6);
+  /* 预览页模板沿用的旧名，一律别名到本主题实色，不新开 hex */
+  --primary:#ba4a33;
+  --primary-hi:#c95d45;
+  --primary-lo:#963826;
+  --line-2:#141414;
+  --line-4:#e0a32e;
+  --line-6:#3f4a31;           /* 压深到 #3F4A31，避开与赤陶的灰阶撞车（ΔL* 9.9 → 14+） */
+  /* 新粗野主义允许当代圆角：卡片 4px、胶囊 999px、拱只走 .pg-arch 的椭圆角 */
+  --radius:4px;
+  --radius-sm:2px;
+  --radius-lg:10px;
+  --shadow:var(--hard);
+  --shadow-lg:6px 6px 0 var(--ink);
+  /* 标题：内化爱点风雅黑（单字重，写 400 也不是伪粗）；副标给 Didone，制造「理性 vs 古典」的对位 */
+  --ff-display:'Aidian FengYaHei','爱点风雅黑','SongguHei','宋骨黑体','PingFang SC','Heiti SC','SimHei',sans-serif;
+  --ff-didone:'Bodoni 72','Bodoni 72 Oldstyle','Didot','Playfair Display','STSong','Songti SC',serif;
+  --ff-body:'Source Han Sans SC','思源黑体','Noto Sans CJK SC','PingFang SC','Heiti SC','SimHei',sans-serif;
+  --font-display:var(--ff-display);
+  --font-button:var(--ff-body);
+  --font-sans:var(--ff-body);
+  --font-serif:var(--ff-didone);
+  --font-note:var(--ff-body);
+  --font-mono:var(--ff-body);
+  --letter-tight:0;            /* 中文不套英文负字距 */
+  --letter-normal:0;
+}
+
+html,body{background:var(--bg);color:var(--text-1);font-family:var(--font-sans);font-weight:400}
+body{background-color:var(--bg)}
+
+/* 环境层：纸面暖白 + 极淡的水磨石颗粒 + 顶上一道灰泥渐光。
+   颗粒 180px 一档、α .05——只在空白处读成「纸里有石子」，⛔ 不许压到正文附近变重。 */
+.deck{
+  background:
+    radial-gradient(120% 42% at 50% -8%,rgba(255,255,255,.90) 0%,rgba(240,232,218,.44) 50%,rgba(240,232,218,0) 78%),
+    var(--pg-stone),
+    linear-gradient(180deg,#f0e7d8 0%,#f3ece1 40%,#f7f1e5 100%);
+}
+/* 页脚：3px 墨黑横杠 + 左端一枚赤陶方块（拱廊的剖面线，不铺满） */
+.deck::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:5px;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,var(--terracotta) 0 96px,transparent 96px),
+    linear-gradient(180deg,var(--ink) 0 3px,transparent 3px);
+}
+.slide{padding:80px 104px}  /* 正文基准由 base.css 给，主题只覆盖 padding */
+.progress-bar{height:4px;bottom:5px}
+.progress-bar > span{background:var(--terracotta);box-shadow:none}
+
+/* 标题：粗黑体，笔画老实、无装饰；行高靠字号压住，不靠字距 */
+h1,h2,h3,h4,h1.title,h2.title,.h1,.h2,.h3,.h4{
+  font-family:var(--font-display);font-weight:400;color:var(--text-1);letter-spacing:0;
+}
+h1.title,.h1{line-height:1.06}
+h2.title,.h2{line-height:1.12}
+h3,.h3,h4,.h4{line-height:1.24}
+.lede{color:var(--text-2);font-weight:400}
+/* 副标 / 图注号 / 引语署名走 Didone：古典衬线的细笔画与粗黑标题对位，是全篇唯一的「意大利旧字」 */
+.serif,.sub,.img-cap{font-family:var(--font-serif)}
+.kicker,.eyebrow{
+  font-family:var(--font-mono);font-weight:400;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;
+}
+
+/* —— 四档「实体卡」：粗黑框 + 实心硬投影，靠「有没有影子 / 有没有色面」分档 —— */
+.card{
+  background:var(--surface);
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--hard);
+}
+/* 赤陶薄卡：整面只压一层极淡的赤陶，仍是 3px 黑框；用于「已证实的说法」 */
+.card-soft{
+  background:
+    linear-gradient(180deg,rgba(199,82,60,.10),rgba(199,82,60,.04) 62%,rgba(199,82,60,0)),
+    var(--surface);
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--hard-sm);
+}
+/* 线稿卡：只有框，没有影子、没有面——「还没上色的立面」 */
+.card-outline{
+  background:transparent;
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:none;
+}
+/* 拱廊卡：顶上一道赤陶实心带 + 黑框硬影，卡本身还是方的，拱只在上边沿留一段弧 */
+.card-accent{
+  position:relative;
+  padding-top:40px;   /* 让出 22px 拱廊带，标题不贴洞口 */
+  background:var(--surface);
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--hard);
+  overflow:hidden;
+}
+.card-accent::before{
+  /* 拱廊带：赤陶实心条，下沿每隔 40px 挖一个 r=12 的半圆——读成「一排拱洞」，不是一条红线 */
+  content:"";position:absolute;left:0;right:0;top:0;height:22px;
+  background-color:var(--terracotta);
+  background-image:radial-gradient(circle 12px at 20px 22px,var(--surface) 0 11.5px,transparent 12px);
+  background-size:40px 22px;
+  background-repeat:repeat-x;
+}
+.card-hover:hover{box-shadow:var(--shadow-lg);transform:translate(-1px,-1px)}
+
+/* 浮层：不给玻璃。粗野主义的浮层是一张「抬起来的纸」——黑框、硬影、无模糊 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+
+  border-radius:var(--radius-lg);corner-shape:squircle;
+  background:var(--surface);
+  border:3px solid var(--ink);
+  box-shadow:6px 6px 0 var(--ink);
+}
+
+/* 胶囊三态：赭黄实心 / 群青实心 / 墨黑描边幽灵。
+   内距 13/11：CJK 1.7 行高下 11/13 会让墨心偏高 3px，反之正对（实测偏差 0.5px）；胶囊带 3px 硬影，按下才落回。 */
+.pill{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--ink);
+  background:var(--ochre);
+  border:3px solid var(--ink);
+  box-shadow:var(--hard-sm);
+}
+.pill-accent{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:#f7f2e6;
+  background:var(--ultra);
+  border:3px solid var(--ink);
+  box-shadow:var(--hard-sm);
+}
+/* 幽灵胶囊：导航里的非当前项——只留框，不留影 */
+.pill-ghost{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:rgba(251,247,238,.92);
+  border:3px solid var(--ink);
+  box-shadow:none;
+}
+.pill-good{
+  padding:13px 22px 11px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:#f7f2e6;
+  background:var(--sage-lo);
+  border:3px solid var(--ink);
+  box-shadow:var(--hard-sm);
+}
+
+.divider{background:var(--ink);height:3px;border-radius:0}
+/* 拱廊分隔：3px 墨黑横杠 + 右端一枚赤陶半圆拱（柱距的抽象，不是装饰花纹） */
+.divider-accent{
+  height:9px;width:132px;border-radius:0;box-shadow:none;
+  background:
+    radial-gradient(26px 18px at 118px 9px,var(--terracotta) 0 25px,transparent 26px) 0 0/132px 9px no-repeat,
+    linear-gradient(180deg,var(--ink) 0 3px,transparent 3px);
+}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);font-weight:400;letter-spacing:.08em;color:var(--text-3);
+}
+/* 页脚上沿：一根墨黑细线 + 左端赤陶和弦（与 .deck::after 的粗杠错开，读成两重拱脚） */
+.deck-footer{border-top:1px solid rgba(20,20,20,.55);padding-top:9px}
+
+/* 选项：纸底实体块；判对走鼠尾草面，选错走赤陶面，字一律墨黑 */
+.quiz-opt{
+  display:flex;align-items:center;min-height:58px;padding:12px 20px;line-height:1.35;
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  background:var(--surface);
+  box-shadow:var(--hard-sm);
+  font-family:var(--font-button);font-weight:400;
+}
+.quiz-opt:hover{background:var(--surface-2);box-shadow:var(--hard)}
+.quiz-opt.correct{background:rgba(123,138,99,.22);color:#3d4730}
+.quiz-opt.chosen-wrong{background:rgba(199,82,60,.16);color:#7a3123}
+.quiz-reveal{border-top:3px solid var(--ink);background:var(--surface);box-shadow:var(--hard-sm)}
+
+/* 图版框：三重线——外 3px 黑、内 1px 黑留白衬；不加任何柔边 */
+.img-frame{
+  border-radius:var(--radius);padding:6px;
+  background:var(--surface);
+  border:3px solid var(--ink);
+  box-shadow:var(--hard);
+}
+/* 图版号：赭黄小方牌 + 墨黑字（8.29:1），小面积，不铺 */
+.img-tag{
+  border-radius:2px;background:var(--ochre);color:var(--ink);
+  border:2px solid var(--ink);
+  text-transform:none;letter-spacing:.06em;font-family:var(--font-note);
+}
+.img-cap,.deck-header,.deck-footer{font-family:var(--font-note)}
+.mono{font-family:var(--font-mono)}
+
+/* —— 母题层：拱、柱、石子 ——
+   .pg-arch：拱券只留外轮廓。上方两角 50%/50% 的椭圆（宽高相等时即半圆），底边保持直角，读作「一段拱洞」，不做柱头与檐口。
+   .pg-flute：柱身凹槽，6px 间隔一道 2px 阴影线，墨黑 α.16——是柱子的剖面，不是装饰纹理。 */
+.pg-arch{
+  background:var(--surface);
+  border:3px solid var(--ink);
+  border-radius:50% 50% 0 0/50% 50% 0 0;   /* 宽高相等时上沿正好是半圆；拉宽才出现扁拱 */
+  box-shadow:var(--hard-sm);
+}
+.pg-flute{
+  background-color:var(--surface);
+  background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(20,20,20,.16) 6px 8px);
+}
+/* 水磨石颗粒（terrazzo）：radial-gradient 叠 8 层石子，不用 SVG——
+   SVG 套 var() 在 Chromium 样片上会掉图，gradient 稳。石子半透明，
+   直径 4–7px、α .32–.55，读成石材，读不成彩色波点。 */
+.pg-terrazzo{
+  background-color:var(--paper-deep);
+  background-image:
+    radial-gradient(circle 3.4px at 18px 24px,rgba(186,74,51,.55) 0 100%,transparent 0),
+    radial-gradient(circle 2.6px at 66px 12px,rgba(47,93,140,.48) 0 100%,transparent 0),
+    radial-gradient(circle 3px at 42px 62px,rgba(123,138,99,.45) 0 100%,transparent 0),
+    radial-gradient(circle 2.2px at 6px 74px,rgba(20,20,20,.30) 0 100%,transparent 0),
+    radial-gradient(circle 2.8px at 80px 54px,rgba(186,74,51,.40) 0 100%,transparent 0),
+    radial-gradient(circle 2.4px at 56px 88px,rgba(20,20,20,.26) 0 100%,transparent 0),
+    radial-gradient(circle 3.2px at 88px 84px,rgba(47,93,140,.34) 0 100%,transparent 0),
+    radial-gradient(circle 2.2px at 30px 44px,rgba(160,158,150,.55) 0 100%,transparent 0);
+  background-size:96px 96px;
+  background-repeat:repeat;
+}
+.pg-terrazzo{
+  /* 位图层（2026-11-22）：水磨石的骨料；彩色石子的色相留在 CSS，位图只补骨料的粒径与明暗（⛔ 不许把彩色石子做成像素）。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.pg-terrazzo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/grain/grain-gray-512.png");
+  background-repeat:repeat;
+  background-size:512px 512px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.80;
+}
+/* 回退：.pg-terrazzo--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.pg-terrazzo--flat::after{content:none}
+.pg-travertine{
+  /* 石灰华：暖白底 + 横向沉积纹，比水磨石更细、更静 */
+  background-color:var(--surface);
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0 7px,rgba(150,120,80,.13) 7px 8px),
+    repeating-linear-gradient(0deg,transparent 0 22px,rgba(120,90,60,.07) 22px 23px);
+}
+.pg-travertine{
+  /* 位图层（2026-11-22）：石灰华的横向沉积纹；CSS 的 7px/22px 两层硬线只给节奏，层厚不匀与孔洞感由 tile 给。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.pg-travertine::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/travertine/travertine-gray-512.png");
+  background-repeat:repeat;
+  background-size:512px 512px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.70;
+}
+/* 回退：.pg-travertine--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.pg-travertine--flat::after{content:none}
+.pg-terracotta{background:var(--terracotta)}
+.pg-ochre{background:var(--ochre)}
+.pg-ultra{background:var(--ultra)}
+.pg-sage{background:var(--sage)}
+.pg-ink{background:var(--ink)}
+.pg-fluted{
+  background-color:var(--surface);
+  background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(20,20,20,.16) 6px 8px);
+}
+
+/* —— 组件层：cp-* 选择器（预览页模板依赖，与 century-sq 同几何、只换材质）—— */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 22px;border-radius:var(--radius);
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:var(--surface);
+  border:3px solid var(--ink);
+  box-shadow:var(--hard-sm);
+}
+/* 轻警示条：赤陶只做 12px 细条，绝不铺底 */
+.cp-alert{height:12px;width:260px;max-width:82%;border-radius:2px;background:var(--terracotta)}
+/* 已选锚点：纸底 + 黑框 + 前置一枚拱形小窗 */
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:11px;
+  padding:8px 16px;border-radius:var(--radius);
+  background:var(--surface);color:var(--text-1);
+  font-family:var(--font-button);font-weight:400;
+  border:3px solid var(--ink);
+  box-shadow:var(--hard-sm);
+}
+.cp-anchor::before{
+  content:"";flex:0 0 auto;width:16px;height:16px;
+  border-radius:50% 50% 0 0/42% 42% 0 0;
+  background:var(--terracotta);
+  border:2px solid var(--ink);
+}
+/* 进度：纸槽 + 赤陶条，槽本身也上黑框 */
+.cp-progress{height:8px;border-radius:2px;background:var(--paper-deep);border:2px solid var(--ink);overflow:hidden}
+.cp-progress > span{display:block;height:100%;width:28%;background:var(--terracotta)}
+/* 材质底：群青平涂 / 赤陶砖 / 水磨石 */
+.cp-steel{
+  background-color:var(--ultra);
+  background-image:linear-gradient(180deg,rgba(255,255,255,.10),rgba(20,20,20,.12));
+}
+.cp-tile{
+  background-color:var(--terracotta);
+  background-image:var(--pg-brick);
+  background-size:120px 56px;
+  background-repeat:repeat;
+}
+.cp-marble{
+  background-color:var(--surface);
+  background-image:var(--pg-stone);
+}
+
+/* —— 图形素材（内联 SVG，全部单色或低 α，读成材料不读成贴图）—— */
+:root{
+  /* 水磨石：180×180 一档，四色石子各若干粒，最大 r=3.2——再大就变成波点（环境层用） */
+  --pg-stone:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cg fill='%23ba4a33' fill-opacity='0.16'%3E%3Ccircle cx='20' cy='30' r='2.6'/%3E%3Ccircle cx='96' cy='18' r='3.2'/%3E%3Ccircle cx='150' cy='96' r='2.2'/%3E%3Ccircle cx='70' cy='150' r='2.4'/%3E%3Ccircle cx='112' cy='60' r='1.6'/%3E%3C/g%3E%3Cg fill='%232f5d8c' fill-opacity='0.15'%3E%3Ccircle cx='52' cy='112' r='2.8'/%3E%3Ccircle cx='132' cy='52' r='1.8'/%3E%3C/g%3E%3Cg fill='%237b8a63' fill-opacity='0.16'%3E%3Ccircle cx='28' cy='150' r='2.4'/%3E%3Ccircle cx='164' cy='140' r='2.0'/%3E%3C/g%3E%3Cg fill='%23141414' fill-opacity='0.10'%3E%3Ccircle cx='72' cy='70' r='1.6'/%3E%3Ccircle cx='110' cy='146' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
+  /* 赤陶砖：120×56 两行四砖、错缝 30px，砖缝 2px 墨黑 α.22，砖面 ±4% 明度差 */
+  --pg-brick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='56'%3E%3Crect x='1' y='1' width='58' height='26' fill='%23ffffff' fill-opacity='0.05'/%3E%3Crect x='61' y='1' width='58' height='26' fill='%23000000' fill-opacity='0.04'/%3E%3Crect x='31' y='29' width='58' height='26' fill='%23000000' fill-opacity='0.045'/%3E%3Crect x='91' y='29' width='28' height='26' fill='%23ffffff' fill-opacity='0.06'/%3E%3Cg fill='%23141414' fill-opacity='0.22'%3E%3Crect y='0' width='120' height='2'/%3E%3Crect y='28' width='120' height='2'/%3E%3Crect x='0' y='2' width='2' height='26'/%3E%3Crect x='60' y='2' width='2' height='26'/%3E%3Crect x='30' y='30' width='2' height='26'/%3E%3Crect x='90' y='30' width='2' height='26'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* —— 字号与间距：六档收口（沿用 century-sq 的档位，2026-11-20）—— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h2);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h4);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body-sm);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill,.pill-accent,.pill-good,.img-tag,.img-cap,.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}

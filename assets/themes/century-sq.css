@@ -1,0 +1,434 @@
+/* 配色体检登记（BLK → BLKOK）：主色 #dab406 压 --bg #eef3f7 仅 1.79:1，色块边界不靠调色解决。
+   本主题主色**不作大面积底色**；凡以主色实心铺底的块（.flow .node.hl / .rm .col.now /
+   .gg .cell.c7 / .ring .hub / .mm .n.root）统一带 1px --accent-edge 描边，边界就地被看见。
+   ⛔ 别为了提高这个比值把标线黄压成褐黄——那是换掉了主题的身份。
+   blk-ok: primary | 五处主色实心块（.flow .node.hl / .rm .col.now / .gg .cell.c7 / .ring .hub / .mm .n.root）统一带 1px --accent-edge 描边，主色不作大面积底色 */
+/* theme: century-sq - 世纪广场 Century Sq ｜ 模度几何 · 清水混凝土 · 磨砂玻璃
+   文件名 2026-11-20 由 century-plaza.css 改为 century-sq.css，slug 与显示名对齐；显示名同日定为「世纪广场 Century Sq」（11-19 曾作 Century Square）。
+   命名：上海浦东 · 世纪广场（世纪大道站，2 / 4 / 6 / 9 号线四线换乘；中国大陆第一座四线换乘站）。
+   骨架承 guanglan-rd.css：完整保留 token 名、组件选择器、六档字号与 CJK 行盒补偿，
+   只把「天蓝 Aqua 玻璃」整套视觉换成「柯布西耶模度 × 公共广场材质」。
+   视觉真源＝云主机会话《世纪广场 UI 风格卡》（豆包文字规范 + 磨砂玻璃版三张图）：
+     主色 亮黄 #F9D328；次色 Line 9 蓝 #0090CD / Line 4 紫 #84318E / Line 6 玫红 #D62768；
+     （2026-11-20 配色体检后三处微调：主色 → #F6CB07，对底 ΔL* 从 10.1 提到 12.5；
+       Line 6 → #721538，原玫红与 Line 4 紫 ΔL* 仅 8.5、转灰要并级；
+       主色再压暗 → #DAB406（L* 83.1→74.5），因道路交通黄在真实标线上本就偏深偏土，
+       荧光柠檬读作「警示高亮」而非「路面标线」。源图色值留档在此。）
+     基底 清水混凝土 #E8E8E4·#B8B8B4 / 大理石 #F4F4F2 / 拉丝不锈钢 #DCDFE2 /
+     玻璃天光 #C8D8E8 / 草坪 #96B878 / 哑光瓷砖 #EEEEEC / 正文黑 #222222 / 辅助灰 #777777。
+   2026-11-19 换纹：白大理石（.card-soft / .cp-marble）由旧斜纹改为参考方案1「雅致现代白大理石」
+     （双层柔光斑 + 斜向细脉，分尺寸平铺）；底色仍取 --marble 暖白，仅换纹理，不动几何/字号/其他组件。
+   ⚠️ 参考图上小色块的 HEX 是文生图渲染的近似值（部分乱码），不作色值依据；
+      以会话里的原始文字规范为准。辅助灰为过对比度压深到 #6b7071。
+   铁则：单视图最多「主黄 + 一个次色」，三色只做小面积标记不铺底；肌理低透明度只做暗示；
+   漫射顶光、柔和浅影、直角为主；⛔ 无硬投影 / 粗黑框 / 强折射水晶玻璃（玻璃是磨砂雾面）。 */
+/* 仅编号/kicker 用 Space Mono；标题/按钮（智造黑）与正文（思源宋体）均不依赖网络字体 */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#eef3f7;
+  --bg-soft:#f4f4f2;
+  --surface:#f7f7f5;
+  --surface-2:#eceeec;
+  /* 世纪广场色板（锁定线路） */
+  /* 2026-11-20 压暗：色相 49.2° 与饱和度不动，只降明度（L* 83.1→74.5）。
+     理由：道路交通黄在真实标线上就是偏深、偏土的一档，不是荧光柠檬；
+     压暗后深色字压它从 10.2:1 提到 8.0:1 仍然充裕，且不再像贴纸。
+     ⛔ 别再提回 #f6cb07 或更亮——那会重新读作「警示高亮」而不是「路面标线」。 */
+  --primary:#dab406;
+  --primary-hi:#eccb3d;        /* 胶囊上沿高光：同色相提亮一档，不单独手调 */
+  --primary-lo:#c2a005;        /* 胶囊下沿暗部：同色相压深一档 */
+  --line-2:#0090cd;           /* 次要操作 / 导航 / 链接 / 进度条 */
+  --line-4:#84318e;           /* 分类标签 / 辅助标注 */
+  --line-6:#721538;           /* 轻警示 / 特色模块 / 动态标记（小面积）：L*25，与 Line4 紫差 11.2、与 Line2 蓝差 31.5 */
+  /* 基底材质色组 */
+  --concrete:#e8e8e4;
+  --concrete-deep:#b8b8b4;
+  --marble:#f4f4f2;
+  --steel:#dcdfe2;
+  /* 拉丝不锈钢共享 token：一处定义，导航条 / 材质圆 / 相框统一取用 */
+  --steel-hi:#fbfcfd;          /* 镜面高光 */
+  --steel-mid:#dfe4e8;         /* 中间调 */
+  --steel-lo:#b7c0c7;          /* 暗部/拉丝沟 */
+  --steel-rim:rgba(255,255,255,.92);  /* 上沿倒角高光 */
+  --glass-tint:#c8d8e8;
+  --lawn:#96b878;
+  --tile:#eeeeec;
+  --border:rgba(34,34,34,.14);
+  --border-strong:rgba(34,34,34,.26);
+  --text-1:#222222;
+  --text-2:#5a5f60;           /* 辅助灰 #777777 压深：混凝土底上要过 4.5:1 */
+  --text-3:#6b7071;
+  --accent:var(--primary);    /* 主黄。⛔ 别再写一份 hex——它与 --primary 是同一个色，
+                                 抄两份就是漂移的起点（2026-11-20 压暗时差点只改一处）。
+                                 accent 填充上的字必须 #222222；亮黄对浅底拿不到 3:1，
+                                 色块一律靠深字 + 1px 深描边立住，⛔ 不裸铺大面积 */
+  --accent-2:#0090cd;
+  --accent-3:#84318e;
+  --accent-ink:#222222;       /* #222222 on 主黄 ≈ 8.0:1（压暗前 11.5:1，仍充裕） */
+  --good:#5f8a5b;
+  --warn:#b4791c;
+  --bad:#b23a4d;
+  --grad:linear-gradient(135deg,#1f4f6b,#0090cd);
+  --grad-soft:linear-gradient(135deg,#eef3f8,#f4f4f2);
+  /* 直角为主；只有胶囊按钮 / 小标签用大圆角 */
+  --radius:6px;
+  --radius-sm:4px;
+  --radius-lg:20px;           /* 磨砂玻璃浮层 */
+  --shadow:0 10px 24px rgba(34,42,48,.07),0 1px 3px rgba(34,42,48,.04);
+  --shadow-lg:0 20px 44px rgba(34,42,48,.10),0 3px 8px rgba(34,42,48,.05);
+  /* 字体统一（2026-11-19）：语义 token 定义在 assets/fonts.css，主题只映射。
+     标题 / 按钮 = 内化智造黑（--font-ui-zhizao）；正文 = 思源宋体→华文中宋→系统衬线（--font-body-song）。
+     Space Mono 只用于编号 / kicker（--font-mono），不承载中文标题与正文。
+     var() 带兜底栈：独立打开主题 CSS、未加载 fonts.css 时也不至于无字体。 */
+  --font-button:var(--font-ui-zhizao,'SC Zhizao Hei','素材集市智造黑1.02',sans-serif);
+  --font-display:var(--font-ui-zhizao,'SC Zhizao Hei','素材集市智造黑1.02',sans-serif);
+  --font-sans:var(--font-body-song,'Source Han Serif SC','华文中宋',serif);       /* 正文 */
+  --font-serif:var(--font-body-song,'Source Han Serif SC','华文中宋',serif);
+  --font-note:var(--font-body-song,'Source Han Serif SC','华文中宋',serif);       /* 图注随正文 */
+  --font-mono:'Space Mono','JetBrains Mono','IBM Plex Mono',SFMono-Regular,Menlo,monospace;
+  --letter-tight:0;              /* 中文不套英文负字距 */
+  --letter-normal:0;
+}
+
+html,body{
+  background:#e6eef6;
+  color:var(--text-1);
+  font-family:var(--font-sans);
+  font-weight:500;
+}
+
+/* 环境层：顶部漫射天光 + 底部草地带 + 左右下角瓷砖网格。
+   三层都是低透明度「暗示」，不铺厚重建筑贴图，也不压正文可读性。 */
+body{background:linear-gradient(180deg,#dce9f6 0%,#eef3f7 42%,#f4f4f2 100%)}
+.deck{
+  background:
+    radial-gradient(120% 44% at 50% -10%,rgba(255,255,255,.96) 0%,rgba(222,236,248,.58) 48%,rgba(222,236,248,0) 78%),
+    linear-gradient(0deg,rgba(150,184,120,.72) 0%,rgba(150,184,120,.72) 4.2%,rgba(168,198,145,.30) 4.2%,rgba(168,198,145,0) 6.4%),
+    repeating-linear-gradient(90deg,transparent 0 6px,rgba(74,104,54,.07) 6px 7px) 0 100%/100% 5% no-repeat,
+    linear-gradient(180deg,#dfeaf6 0%,#eef3f7 34%,#f4f4f2 100%);
+}
+/* 下角两块哑光瓷砖网格：左右各一块，细缝、低对比 */
+.deck::before,.deck::after{
+  content:"";position:absolute;bottom:0;width:180px;height:150px;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 29px,rgba(110,118,118,.14) 29px 30px),
+    repeating-linear-gradient(90deg,transparent 0 29px,rgba(110,118,118,.14) 29px 30px),
+    linear-gradient(180deg,rgba(238,238,236,0),rgba(238,238,236,.78));
+}
+.deck::before{left:0}
+.deck::after{right:0}
+.slide{padding:80px 104px}  /* 正文基准由 base.css 给，主题只覆盖 padding */   /* 引擎无正文基准，主题必须给 */
+
+/* 标题统一走智造黑：既覆盖带类的 .h1/.title，也覆盖裸 h1-h4，避免裸标签漏网落到正文宋体 */
+h1,h2,h3,h4,h1.title,h2.title,.h1,.h2,.h3,.h4{
+  font-family:var(--font-display);
+  color:var(--text-1);
+}
+h1.title,.h1{font-weight:700;line-height:1.06}
+h2.title,.h2{font-weight:700;line-height:1.1}
+h3,.h3,h4,.h4{font-weight:700}
+.lede{color:var(--text-2);font-weight:500}
+.kicker,.eyebrow{
+  font-family:var(--font-mono);
+  font-weight:700;
+  color:var(--text-3);
+  letter-spacing:.08em;
+}
+
+/* —— 材质板：直角容器，细灰分割线，柔和浅影 —— */
+.card{
+  background-color:var(--concrete);
+  background-image:
+    radial-gradient(rgba(34,34,34,.035) .7px,transparent .7px),
+    linear-gradient(180deg,rgba(255,255,255,.58),rgba(184,184,180,.12));
+  background-size:4px 4px,auto;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80),var(--shadow);
+}
+/* 大理石标题台：极淡流动纹理，低对比度 */
+.card-soft{
+  background-color:var(--marble);
+  /* 2026-11-22｜光影重做（与世纪大道黑石同一处理法）：
+     原先那两条 400/300px 的斜光是**平铺**的，一块长面板上会重复成一排平行亮带——读着就是「打光」而不是石头。
+     全删，只留一块盖满整幅、不成周期的极弱灰调斜光（.055），外加两簇放大到 120% 的柔光斑。
+     ⛔ 不再出现按 px 平铺的 linear-gradient——那是「假光线」的来源。 */
+  background-image:
+    radial-gradient(120% 92% at 26% 12%,rgba(255,255,255,.90) 0px,rgba(255,255,255,0) 58%),
+    radial-gradient(110% 84% at 82% 78%,rgba(241,245,249,.55) 0px,rgba(241,245,249,0) 64%),
+    linear-gradient(118deg,transparent 14%,rgba(148,163,184,.055) 48%,transparent 86%);
+  background-size:100% 100%,100% 100%,100% 100%;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  border-color:rgba(34,34,34,.10);
+  box-shadow:inset 0 1px 0 #ffffff,var(--shadow);
+}
+/* Line 9 蓝：描边 / 轻填充，只做导航与次要操作 */
+.card-outline{
+  background:rgba(0,144,205,.045);
+  border:1px solid rgba(0,144,205,.65);
+  border-radius:var(--radius-sm);
+  box-shadow:none;
+}
+/* Line 6 玫红：短提示条落在卡片上沿，绝不大面积铺色 */
+.card-accent{
+  border-top:3px solid var(--line-6);
+  border-left:0;
+  background-color:var(--concrete);
+  background-image:radial-gradient(rgba(34,34,34,.03) .7px,transparent .7px);
+  background-size:4px 4px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80),var(--shadow);
+}
+.card-hover:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+
+/* 磨砂玻璃浮层：雾面半透、淡天光蓝调、轻微背景模糊、边缘只有柔和高光。
+   ⛔ 不做厚倒角 / 明亮白色折射边 / 焦散——那是被否掉的「玻璃升级版」。 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+
+  border-radius:var(--radius-lg);corner-shape:squircle;
+  background:
+    linear-gradient(160deg,rgba(255,255,255,.30),rgba(255,255,255,0) 58%),
+    linear-gradient(135deg,rgba(232,240,248,.64),rgba(200,216,232,.44));
+  -webkit-backdrop-filter:blur(14px) saturate(112%);
+  backdrop-filter:blur(14px) saturate(112%);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:
+    0 18px 40px rgba(34,48,60,.10),
+    inset 0 1px 0 rgba(255,255,255,.82);
+}
+
+/* 胶囊三态：主黄实心 / Line 9 蓝描边 / Line 4 紫标签。
+   上下内距 10 / 14 沿用同源的 CJK 行盒补偿（1.7 行高下字墨偏低约 2px）。 */
+.pill{
+  padding:12px 20px;
+  border-radius:999px;
+  font-family:var(--font-button);
+  font-weight:700;
+  font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:linear-gradient(180deg,var(--primary-hi) 0%,var(--primary) 46%,var(--primary-lo) 100%);
+  border:1px solid rgba(120,96,0,.26);
+  box-shadow:0 2px 6px rgba(90,75,10,.12),inset 0 1px 0 rgba(255,255,255,.55);
+}
+/* 主色压底补偿（配色体检 ⚠️ 级，2026-11-20）
+   --primary 对 --bg #eef3f7 只有 1.79:1（压暗前 #f6cb07 是 1.40:1），仍低于 3:1。
+   纯饱和黄无论怎么压都到不了 3:1——压到 L*=71 也只有 1.96:1，再往下就成橄榄黄、
+   丢掉交通黄的身份。所以边界靠 1px 深描边 + 深色投影立住，⛔ 不靠提饱和度。
+   实心主色块一律走 .on-primary 这个类。 */
+.on-primary{
+  border:1px solid rgba(90,75,10,.34);
+  box-shadow:0 2px 6px rgba(90,75,10,.16),inset 0 1px 0 rgba(255,255,255,.55);
+}
+.pill-accent{
+  padding:12px 20px;
+  border-radius:999px;
+  font-family:var(--font-button);
+  font-weight:700;
+  font-size:var(--t-cap);
+  color:#006a98;
+  background:rgba(0,144,205,.07);
+  border:1px solid rgba(0,144,205,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80);
+}
+.pill-good{
+  padding:12px 20px;
+  border-radius:999px;
+  font-family:var(--font-button);
+  font-weight:700;
+  font-size:var(--t-cap);
+  color:#ffffff;
+  background:linear-gradient(180deg,#95519e,#84318e);
+  border:1px solid rgba(60,20,66,.34);
+  box-shadow:0 2px 6px rgba(70,30,80,.14),inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+.divider{background:var(--border)}
+/* 高亮标线：平涂主黄细条，不是玻璃棒 */
+.divider-accent{height:4px;width:72px;border-radius:2px;background:var(--accent);box-shadow:none}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);
+  letter-spacing:.06em;
+  color:var(--text-3);
+}
+.progress-bar > span{background:var(--accent);box-shadow:none}
+
+/* 选项：静息态是哑光瓷砖托盘；判对 / 选错才用线路色点一下 */
+.quiz-opt{
+  border:1px solid rgba(34,34,34,.16);
+  border-radius:var(--radius-sm);
+  background:
+    repeating-linear-gradient(0deg,transparent 0 27px,rgba(110,118,118,.07) 27px 28px),
+    linear-gradient(180deg,#ffffff,#f2f2f0);
+  box-shadow:inset 0 1px 0 #ffffff,0 6px 16px rgba(34,42,48,.06);
+  font-family:var(--font-button);
+  font-weight:600;
+}
+.quiz-opt:hover{
+  border-color:rgba(0,144,205,.60);
+  box-shadow:0 0 0 1px rgba(0,144,205,.18),0 8px 20px rgba(34,42,48,.08);
+}
+.quiz-opt.correct{
+  border:1px solid rgba(0,144,205,.70);
+  color:#0b4f6e;
+  background:rgba(0,144,205,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+.quiz-opt.chosen-wrong{
+  border:1px solid rgba(214,39,104,.62);
+  color:#7a1c3c;
+  background:rgba(214,39,104,.07);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.quiz-reveal{border-top:3px solid var(--accent);background:var(--marble);box-shadow:inset 0 1px 0 rgba(255,255,255,.95)}
+
+/* 相框：拉丝不锈钢细边 + 白瓷内衬，不加玻璃反光（钢边取用共享 token） */
+.img-frame{
+  border-radius:var(--radius);
+  padding:6px;
+  background:linear-gradient(180deg,var(--steel-hi),var(--steel-lo));
+  border:1px solid rgba(96,108,118,.42);
+  box-shadow:inset 0 1px 0 var(--steel-rim),var(--shadow);
+}
+.img-tag{
+  background:rgba(249,211,40,.95);
+  color:var(--accent-ink);
+  border:1px solid rgba(120,96,0,.24);
+  text-transform:none;
+  letter-spacing:.04em;
+  font-family:var(--font-note);
+}
+.mono{font-family:var(--font-mono)}
+.img-cap,.deck-header,.deck-footer{font-family:var(--font-note)}
+
+/* —— 世纪广场材质 / 标记工具类（本主题新增，供风格板与导览面板直接使用） —— */
+.cp-marble{
+  background-color:var(--marble);
+  /* 2026-11-22｜光影重做（与世纪大道黑石同一处理法）：
+     原先那两条 400/300px 的斜光是**平铺**的，一块长面板上会重复成一排平行亮带——读着就是「打光」而不是石头。
+     全删，只留一块盖满整幅、不成周期的极弱灰调斜光（.055），外加两簇放大到 120% 的柔光斑。
+     ⛔ 不再出现按 px 平铺的 linear-gradient——那是「假光线」的来源。 */
+  background-image:
+    radial-gradient(120% 92% at 26% 12%,rgba(255,255,255,.90) 0px,rgba(255,255,255,0) 58%),
+    radial-gradient(110% 84% at 82% 78%,rgba(241,245,249,.55) 0px,rgba(241,245,249,0) 64%),
+    linear-gradient(118deg,transparent 14%,rgba(148,163,184,.055) 48%,transparent 86%);
+  background-size:100% 100%,100% 100%,100% 100%;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  /* 位图层（2026-11-22）：CSS 画不出大理石的细层理与颗粒，用一张灰度无缝 tile 相乘补上。
+     ⚠️ 颜色不进图——色相仍由 --marble 决定，所以改主色不必重导图，暗色姐妹版也能共用同一张。
+     tile 源图与登记见 assets/textures-src/registry.json，重出用 scripts/make-material-tile.py（profile marble）。 */
+  position:relative;
+  isolation:isolate;
+}
+/* 位图两层（2026-11-22 v2）：
+   ① ::before 细层理 tile（1024 无缝、重复）——次要结构，只给颗粒与薄层；
+   ② ::after 大脉络（1024、不重复、cover）——Calacatta 式巨脉；一张图靠 background-position
+      在不同版面裁出不同段，所以多块面看似几种石料，而不是一张贴图刷满。
+   ⚠️ 颜色仍不进图：两层都是灰度相乘，色相由 --marble 决定。 */
+.cp-marble::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/marble/marble-gray-1024.png");
+  background-repeat:repeat;
+  background-size:1024px 1024px;   /* ⛔ tile 只取固有尺寸；cover/100% 会把接缝与颗粒一起拉坏 */
+  mix-blend-mode:multiply;
+  opacity:.85;
+}
+.cp-marble::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  /* 2026-11-22 v3｜脉的组合（避免「一张贴图刷满」）：
+     主脉络不换图、不重复，只把整层转 180° 再放大 1.08，走势就整块翻过来（tile 本身不对称）；
+     再叠 contrast 1.14，黑脉被压得更黑、夹在其间的灰白细脉同时浮出来——白底石料就此有「黑中带灰白」。
+     ⚠️ 转 90° 不行：cover 是按旋转前的框算的，转 90 后图像盖不满，会露出底下的白块（实测）。 */
+  background-image:url("../textures/marble/marble-vein-1024.png");
+  background-repeat:no-repeat;             /* ⛔ 巨脉不重复：周期比版面还大，重复就成了壁纸 */
+  background-size:cover;
+  background-position:0% 0%;               /* 每块版面换一处裁切，靠这个制造「另一种石料」 */
+  transform:rotate(180deg) scale(1.08);
+  filter:contrast(1.14);
+  mix-blend-mode:multiply;
+  opacity:.90;
+}
+/* 换排列（.cp-marble--alt）：换到 100% 100% 的角、放大 1.45（远观、脉更粗），对比只轻提 1.06。
+   与本体（0% 0% / 1.08 / 1.14 的近观）配在同一页，两块石面不撞。 */
+.cp-marble--alt::after{background-position:100% 100%;transform:rotate(180deg) scale(1.45);filter:contrast(1.06)}
+/* 回退 / 调档：--flat 两层全退（纸面感、或存档对比用）；--soft 只把脉络压到 0.72。 */
+.cp-marble--flat::before,.cp-marble--flat::after{content:none}
+.cp-marble--soft::after{opacity:.72}
+/* 拉丝不锈钢（增强）：细密竖向拉丝 + 斜向镜面扫光 + 上下明暗色阶 + 顶亮底暗倒角。
+   只换钢面渲染，不改几何 / 内容 / 交互；token 见 :root，与材质圆保持一致。 */
+.cp-steel{
+  background-color:var(--steel-mid);
+  background-image:
+    /* 镜面扫光：两道斜向宽高光，制造金属反光而非塑料平涂 */
+    linear-gradient(108deg,transparent 0 14%,rgba(255,255,255,.62) 26%,rgba(255,255,255,.14) 33%,transparent 40% 60%,rgba(255,255,255,.34) 72%,transparent 82%),
+    /* 拉丝细纹：亮丝 / 暗沟交替，对比度比旧版加倍 */
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,.70) 0 .6px,
+      rgba(96,108,118,.26) .6px 1.2px,
+      rgba(255,255,255,.16) 1.2px 1.8px,
+      transparent 1.8px 3px),
+    /* 金属色阶：顶亮 → 中间调 → 底暗 → 底部回光 */
+    linear-gradient(180deg,var(--steel-hi) 0%,#eef2f4 20%,var(--steel-mid) 50%,var(--steel-lo) 82%,#cfd7dc 100%);
+  border-top:1px solid var(--steel-rim);
+  border-bottom:1px solid rgba(96,108,118,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -2px 4px rgba(96,108,118,.16),0 3px 9px rgba(30,44,56,.14);
+}
+.cp-tile{
+  background:
+    repeating-linear-gradient(0deg,transparent 0 27px,rgba(110,118,118,.16) 27px 28px),
+    repeating-linear-gradient(90deg,transparent 0 27px,rgba(110,118,118,.16) 27px 28px),
+    var(--tile);
+}
+.cp-lawn{background:
+  repeating-linear-gradient(90deg,rgba(74,104,54,.10) 0 1px,rgba(255,255,255,.05) 1px 3px,transparent 3px 7px),
+  linear-gradient(180deg,#a8c58c,#8fb271)}
+.cp-alert{height:12px;width:260px;max-width:82%;border-radius:2px;background:var(--line-6)}
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:8px 16px;border-radius:999px;
+  background:var(--primary);color:var(--accent-ink);
+  font-family:var(--font-button);font-weight:700;border:1px solid rgba(120,96,0,.26);
+}
+.cp-anchor::before{content:"";width:8px;height:8px;border-radius:50%;background:#222222}
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 26px;border-radius:12px;corner-shape:squircle;
+  font-family:var(--font-button);font-weight:700;color:#ffffff;
+  background:linear-gradient(180deg,#42b0e6,#0077b0);
+  border:1px solid rgba(0,90,135,.55);
+  box-shadow:0 3px 8px rgba(0,90,135,.18),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.cp-progress{height:8px;border-radius:2px;background:var(--concrete-deep);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(90,75,10,.18)}
+.cp-progress > span{display:block;height:100%;width:28%;background:var(--primary)}
+
+/* —— 字号与间距：六档收口（承 guanglan-rd.css，2026-11-18）——
+   相邻级差全部 ≥25%，正文基准在 .slide 里给 —— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h2);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h4);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body-sm);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill{font-size:var(--t-cap);padding:12px 18px}
+.img-cap{font-size:var(--t-cap)}
+.img-tag{font-size:var(--t-cap);padding:8px 16px}
+.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}
+
+/* 正文语境不拿亮黄当文字色（对浅底只有 1.6:1），改主文字色 + 主黄下划线 */
+a{color:var(--text-1);text-decoration-color:var(--accent)}

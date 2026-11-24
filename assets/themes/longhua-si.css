@@ -1,0 +1,571 @@
+/* theme: longhua-si - 龙华寺 Longhua Si ｜ 香灰 · 塔檐 · 白墙
+   命名：上海徐汇区龙华路，龙华寺与龙华塔。公共地名与公共建筑，可长期作主题代号；
+         与万航渡（纸与水的手工 · 纸绘动画）成对：一个供着的真寺，一个画着的手。
+   史实锚点（2026-11-20 核对，仅取可核的四条）：
+     ① 龙华塔为北宋太平兴国二年（977）所建的楼阁式砖木塔，八角七级；
+     ② 寺内殿宇现存多为清同治、光绪间重建，故屋身为木构、灰瓦、朱柱，不是唐宋原构；
+     ③ 相传寺始建于三国吴赤乌年间（公元三世纪），此说见诸寺志与地方记载，属传说层，文案写「相传」；
+     ④ 龙华寺为弥勒道场，除夕撞钟、农历三月三庙会为沪上旧俗；寺西侧即龙华烈士陵园（原淞沪警备司令部旧址）。
+   立意：不做「古风滤镜」。龙华寺的视觉身份是「被香火熏了几百年、又被鎏金提亮的木构」——
+   香灰是底、塔檐是节奏、白墙是留白。与万航渡并置时，一个是殿前的灰，一个是画稿上的纸——两者都在沪上，都只剩名字或旧物。
+   与相邻主题的分工：万航渡＝画稿纸 + 水墨晕 + 河岸（纸与水的手工、铅笔线）；
+                       龙华寺＝香灰 + 檐线级差 + 白墙 + 鎏金（层叠、克制、真寺）；
+                       福州路＝印刷机理（错版、网点、报头）。
+   纪律：
+     ① 线是木构的线：1.4–1.6px，色取塔影青 #4a5a5e 与墨 #2a2521，⛔ 不用纯黑 3px 描边。
+     ② 影是香烛的影：高斯柔化、零方向、α ≤ .12；⛔ 不做实心硬投影（那是番禺路的语汇）。
+     ③ 金只做提亮：鎏金只做细线、匾额、小牌，⛔ 不做大面积金面、⛔ 金底压纸白字（2.1:1）。
+     ④ 灰是环境：香灰只在大半径低 α 的底与四角，⛔ 压正文、⛔ 贴图式颗粒。
+     ⑤ 桃只做落点：落瓣数少、不对称、不铺满；⛔ 桃粉做正文底、⛔ 花瓣当图标。
+     ⑥ 隐写层（见下）只做质地不做图案：⛔ 不指认任何具体史事，⛔ 不做纪念徽记、⛔ 不用红做纪念色块。
+   隐写层四件（元素在场、文案不提）：棂格（等距竖棂，间距 14px，α ≤ .03）、白墙（近白高亮面、无影）、
+     碑石（细花岗颗粒，α ≤ .06）、灰（香炉落灰的中间调）。它们只出现在环境与材质层，
+     不进入标题、不进入正文行内，也不参与任何配色命名。
+   母题四件（公开）：塔檐（.lh-eave，八角逐级收分的水平线组）、香（.lh-incense，极低 α 的静曲线）、
+     铜炉（.lh-censer，圆口三足只做构件边）、落瓣（.lh-petal，稀疏不对称）。
+   字体：标题与匾额走奶盖宋（浓宋，碑刻的顿笔），正文走宋骨黑体，报头小字走等宽。
+   骨架承 fuzhou-rd.css / wanhang-fy.css：token 名、组件选择器、六档字号与 CJK 行盒补偿沿用，只换视觉。 */
+
+/* 标题：爨八体（张济海独创书法新书体，作者声明授权免费商用）——**内化，随包**。
+   assets/fonts/cuanba/CuanBaTi-Subset.woff2，141 个汉字，144 KB。
+   授权：作者声明授权，企业与个人均可免费商用，无需授权文件。
+   ⛔ 硬限制：**不允许修改字体或制作衍生版本**（猫啃网页面原文）。
+      所以这里只能原样用——不许加墨点、不许调字重、不许改笔画。
+      要做旧/派生就换 OFL 字体（思源宋、霞鹜文楷都可派生）。
+   ⚠️ 爨八体只有汉字：ASCII 95 个字符、全角标点 27 个，全部不在 cmap 里。
+      标题里出现「·」「，」「2026」时会逐字回落到后面的字体，视觉上是混排。
+      回退链里必须紧跟一个带完整标点的字体（霞鹜文楷 / 思源宋），否则标点会掉到系统默认。
+   授权依据存档：assets/fonts/cuanba/授权依据.md
+   name 表：原字体 nameID 0/13/14 全空，子集已补写版权与许可声明（见存档）。 */
+@font-face{
+  font-family:'CuanBaTi';
+  src:local('爨八体'),local('CanBaTi2.0'),
+      url('../fonts/cuanba/CuanBaTi-Subset.woff2') format('woff2');
+  /* ⚠️ 只声明 400 单值：标题规则写 font-weight:700，若这里声明 `400 700` 区间，
+     浏览器会拿 400 的字形**合成伪粗**（synthetic bold）——书法字体一合成，
+     飞白和三角点就糊成一团。单值声明让 700 请求回落到 400 原字形，不加粗。 */
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* 法华文楷（复刻敦煌经卷气韵的楷书，© 2026 谢宏雲 / 文徵字库）——**提示项，不声明 @font-face**。
+   2026-11-21：标题改用爨八体（内化，授权明确）后，法华文楷从「标题首选」降为「可选提示」。
+   本主题不再声明它的 @font-face —— 声明了也没有选择器引用，只会让预览页白加载。
+
+   想用它的用户：自己装法华文楷标准版，然后把 --ff-title 的第一个改成
+   '法华文楷标准版' 即可（系统字体，浏览器直接命中，不需要 @font-face）。
+
+   为什么本库不随包、也不声明 local()：
+   zfont.cn（font_777）把许可标为**嵌入禁止、衍生禁止**，商标也禁止；
+   许可协议栏为「无标准协议（作者文字声明）」，原文在小红书笔记（需 App 扫码，抓不到）。
+   本库的用法正是把 woff2 当网页字体嵌入——落在被禁止的那一项里。
+   字体 name 表 nameID 13/14 空。页面另有「系统检测该字体疑似由 AI 生成」警告。
+   ⛔ 子集文件已从仓库删除（2026-11-21），`assets/fonts/fahwa/` 已整个移除。
+   ⛔ 别再把子集放回仓库——那正是这次要消除的再分发风险。
+
+   ⚠️ 若将来恢复 local() 声明，实测可命中的名字是：中文族名「法华文楷标准版」、
+   PostScript 名「FahwaWenkai-Standard」（2026-11-21 浏览器实测）。
+   metrics 841/-209/0（upem 2048 原生值）：楷体 descent 天然深。 */
+
+/* 标题兜底：霞鹜文楷（SIL OFL 1.1，© 2021-2026 LXGW，github.com/lxgw/LxgwWenKai）。
+   法华文楷没装时标题落这里。**这是内化字体，随包**（assets/fonts/lxgw/，848 KB）。
+   选它而不是思源宋：同为楷体，经卷气韵的骨架接近，比掉到宋体更接近原设计意图。
+   ⚠️ 子集含全角标点（27 个），这是刻意的——见上方说明。
+   ⚠️ usWeightClass 400，声明 400–700 区间：标题写 400 取原字重，写 700 也不会伪粗。 */
+@font-face{
+  font-family:'LXGWWenKai';
+  src:local('LXGW WenKai'),local('霞鹜文楷'),local('LXGWWenKai-Regular'),
+      url('../fonts/lxgw/LXGWWenKai-Subset.woff2') format('woff2');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:swap;
+}
+/* ⚠️ 2026-11-21：本主题不再声明奶盖宋。--ff-title 换成法华文楷后，
+   CheeseFoamSong 在 longhua-si.css 里已无任何选择器引用，留着 @font-face
+   只会让预览页白加载 2.65 MB（字体文件本身保留，qiu-r.css 仍在用）。 */
+@font-face{
+  font-family:'SongguHei';
+  src:local('宋骨黑体'),local('宋骨黑体 Medium'),local('SGH-Medium'),url('../fonts/songgu/SongguHei-Subset.woff2') format('woff2');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  /* —— 香灰与白墙 —— */
+  --bg:#efe9de;                /* 香灰底：偏冷的中间调，与桑皮纸、新闻纸都拉开 */
+  --bg-soft:#e8e1d4;
+  --surface:#f7f2e7;           /* 白墙：殿前的石灰墙，近白而不刺 */
+  --surface-2:#efe9db;
+  --paper-deep:#ded5c3;
+  /* —— 檀赭 / 塔影青 / 鎏金 / 春桃 —— */
+  --sandal:#5f2e1c;            /* 檀赭：主色，纸白字 8.6:1 */
+  --tower:#4a5a5e;             /* 塔影青：结构与线，纸白 6.5:1 */
+  --gold:#c8a45c;              /* 鎏金：只做细线 / 匾 / 小牌，⛔ 不压纸白字 */
+  --peach:#c6847d;             /* 春桃：只做落瓣与标记，⛔ 不做正文底 */
+  --ink:#2a2521;
+  --ink-2:#3a332c;
+  /* —— 文字与线 —— */
+  --text-1:#2a2521;            /* 对香灰底 12.5:1 */
+  --text-2:#4b433a;
+  --text-3:#6c6255;
+  --line:#7f776a;
+  --border:rgba(42,37,33,.18);
+  --border-strong:rgba(42,37,33,.34);
+  --primary:#68321f;
+  --accent:var(--peach);
+  --accent-2:#4a5a5e;
+  --accent-3:var(--gold);
+  --accent-ink:#f7f2e7;
+  /* 模板沿用的旧名，一律别名到本主题实色 */
+  --primary-hi:#8a452c;
+  --primary-lo:#4a2213;
+  --line-2:#2a2521;
+  --line-4:#4a5a5e;
+  --line-6:#c8a45c;
+  --good:#42605a;
+  --warn:#8a6a24;
+  --bad:#8a3a2a;
+  --grad:linear-gradient(135deg,#4a2213,#68321f 62%,#8a452c);
+  --grad-soft:linear-gradient(135deg,#f7f2e7,#efe9db);
+  --radius:6px;
+  --radius-sm:3px;
+  --radius-lg:10px;
+  --shadow:0 12px 28px rgba(42,37,33,.09);
+  --shadow-lg:0 26px 56px rgba(42,37,33,.14);
+  --soft:rgba(42,37,33,.16);
+  /* 标题：爨八体（内化，作者声明授权）→ 霞鹜文楷（内化 OFL，接住标点数字）
+     → 思源宋 / 华文中宋 / 宋体。
+     ⚠️ 爨八体**只有汉字**：ASCII 95 个字符、全角标点 27 个，全部不在 cmap 内。
+        所以它后面必须紧跟霞鹜文楷——标题里的「·」「，」「2026」靠它接住，
+        呈现的是楷书笔意（本地内化，不依赖系统装没装）。
+        这不是可选项：去掉霞鹜文楷，标点会一路掉到系统默认宋体，笔意断裂。
+     ⛔ 回退链里不许出现裸族名「法华文楷」：@font-face 已用 local() 处理
+        「用户装了系统字体就直接用」。若这里再挂一个裸族名，会绕过 @font-face
+        的 local() 判定，在没装该字体的机器上直接掉到系统默认，且无法被
+        check-fonts.py 追踪。法华文楷现在是提示项，不进标题链。 */
+  --ff-title:'CuanBaTi','LXGWWenKai','霞鹜文楷','Source Han Serif SC','思源宋体','Noto Serif CJK SC','STZhongsong','华文中宋','Songti SC','STSong','SimSun','宋体',serif;
+  --ff-body:'SongguHei','宋骨黑体','Source Han Sans SC','思源黑体','Noto Sans CJK SC','PingFang SC','Heiti SC','SimHei',sans-serif;
+  --ff-mono:'SF Mono','Menlo','Consolas','Roboto Mono',monospace;
+  --font-display:var(--ff-title);
+  --font-serif:var(--ff-title);
+  --font-sans:var(--ff-body);
+  --font-button:var(--ff-body);
+  /* ⚠️ 2026-11-21：--font-note 原指 --ff-title（现为法华文楷）。图注 .img-cap 与
+     图版号 .img-tag 都走它，而图注几乎必带标点（「，」「。」「·」），12px 楷书
+     笔画细、可读性差，且标点要回落宋体、汉字是楷书，一行里两种字。
+     改走正文黑体：图注是说明性文字，不是标题。 */
+  --font-note:var(--ff-body);
+  --font-mono:var(--ff-mono);
+  --letter-tight:0;
+  --letter-normal:0;
+}
+
+html,body{background:var(--bg);color:var(--text-1);font-family:var(--font-sans);font-weight:400}
+body{background-color:var(--bg)}
+
+/* 环境层：香灰的中间调 + 棂格（等距竖棂 14px，α .026，只在空白处读得出来）+ 顶部一缕香光。
+   ⛔ 棂格不做成图案框、不加横棂——竖线只是节奏，不是窗。 */
+.deck{
+  background:
+    repeating-linear-gradient(90deg,rgba(42,37,33,.026) 0 1px,transparent 1px 14px),
+    radial-gradient(120% 90% at 50% -14%,rgba(255,255,255,.58),rgba(255,255,255,0) 68%),
+    radial-gradient(80% 64% at 0% 100%,rgba(104,50,31,.07),rgba(104,50,31,0) 64%),
+    radial-gradient(74% 58% at 100% 96%,rgba(74,90,94,.09),rgba(74,90,94,0) 62%),
+    linear-gradient(180deg,#f2ece1 0%,#efe9de 48%,#eae3d6 100%);
+}
+/* 台脚：一道塔影青细线 + 其下一道鎏金细线，间距 4px（檐口的双层线） */
+.deck::before{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:40px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(247,242,231,0) 0%,rgba(247,242,231,.52) 44%,rgba(247,242,231,.90) 100%);
+  border-bottom:1.4px solid rgba(74,90,94,.44);
+  box-shadow:0 4px 0 -2.4px rgba(200,164,92,.52);
+}
+.slide{padding:80px 104px}
+.progress-bar{height:2px;bottom:0;background:transparent}
+.progress-bar > span{background:var(--tower);box-shadow:none}
+/* ⛔ 进度条不铺满整宽、不用檀赭：它只交代页序，不参与殿前的色 */
+
+/* 标题：奶盖宋，匾额气；中文行高按 1.2–1.35，⛔ 不描边、⛔ 不用手写体 */
+h1,h2,h3,h4,h1.title,h2.title,.h1,.h2,.h3,.h4{
+  font-family:var(--font-display);font-weight:700;color:var(--text-1);letter-spacing:0;
+}
+h1.title,.h1{line-height:1.16}
+h2.title,.h2{line-height:1.22}
+h3,.h3,h4,.h4{line-height:1.34}
+.lede{color:var(--text-2);font-weight:400}
+.kicker,.eyebrow{
+  font-family:var(--font-mono);font-weight:400;color:var(--text-3);
+  letter-spacing:.12em;text-transform:uppercase;
+}
+
+/* —— 四档「殿前物」：白墙卡 / 香灰卡 / 未刻碑 / 匾额卡 —— */
+/* 白墙卡：单线 + 2px 内白（石灰墙的厚度），影是香烛的柔影 */
+.card{
+  background:var(--surface);
+  border:1.6px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow),inset 0 0 0 2px rgba(247,242,231,.92);
+}
+/* 香灰卡：极细颗粒压面 + 左缘一道塔影青线（檐下的背光面） */
+.card-soft{
+  background:
+    radial-gradient(circle 1.1px at 50% 50%,rgba(42,37,33,.13) 0 100%,transparent 0),
+    var(--surface-2);
+  background-size:9px 9px,auto;
+  border:1.4px solid var(--border-strong);
+  border-left:3px solid rgba(74,90,94,.56);
+  border-radius:var(--radius);
+  box-shadow:0 10px 22px rgba(42,37,33,.07),inset 0 0 0 2px rgba(247,242,231,.86);
+}
+/* 未刻碑：直角、无影、只有一条 1.4px 线——「石还没刻字」 */
+.card-outline{
+  background:transparent;
+  border:1.4px solid rgba(42,37,33,.34);
+  border-radius:0;
+  box-shadow:none;
+}
+/* 匾额卡：顶上一道塔檐带（三道逐级收分的水平线，最上一道鎏金） */
+.card-accent{
+  position:relative;
+  padding-top:46px;
+  background:var(--surface);
+  border:1.6px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow),inset 0 0 0 2px rgba(247,242,231,.92);
+  overflow:hidden;
+}
+.card-accent::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:21px;
+  background:linear-gradient(180deg,
+    rgba(200,164,92,.92) 0 2.4px,rgba(200,164,92,0) 2.4px 7px,
+    rgba(74,90,94,.88) 7px 9px,rgba(74,90,94,0) 9px 14px,
+    rgba(42,37,33,.80) 14px 15.8px,rgba(42,37,33,0) 15.8px);
+}
+.card-hover:hover{box-shadow:var(--shadow-lg),inset 0 0 0 2px rgba(247,242,231,.92);transform:translateY(-2px)}
+
+/* 浮层：一张抬起的白墙片——柔影 + 塔影青细线，⛔ 不给玻璃 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+
+  border-radius:var(--radius-lg);corner-shape:squircle;
+  background:rgba(247,242,231,.97);
+  border:1.6px solid var(--border-strong);
+  box-shadow:0 22px 50px rgba(42,37,33,.14);
+}
+
+/* 胶囊：檀赭实心 / 塔影青判对 / 白墙幽灵。
+   内距对称 12/12（字体 metrics 已修正，见 fuzhou-rd.css 同款注释）。 */
+.pill{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--sandal);
+  border:1.6px solid var(--primary-lo);
+  box-shadow:none;
+}
+/* 主按钮＝檀赭实心（纸白字 8.6:1）。⛔ 鎏金不做底：对纸白只有 2.1:1。 */
+.pill-accent{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--sandal);
+  border:1.6px solid var(--primary-lo);
+  box-shadow:none;
+}
+/* 次按钮＝白墙 + 塔影青线；与主按钮靠「面 / 线」分开，不靠换色 */
+.pill-ghost{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:rgba(247,242,231,.94);
+  border:1.6px solid rgba(74,90,94,.52);
+  box-shadow:none;
+}
+/* 判对/通过：塔影青实心（纸白字 6.5:1）。本主题不用绿——灰瓦青即正色 */
+.pill-good{
+  padding:12px 22px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--accent-ink);
+  background:var(--tower);
+  border:1.6px solid #35464a;
+  box-shadow:none;
+}
+
+.divider{background:rgba(42,37,33,.28);height:1.4px;border-radius:0}
+/* 小号檐线：青 + 金两条，中间留 3px 白 */
+.divider-accent{
+  height:7px;width:148px;border-radius:0;box-shadow:none;
+  background:linear-gradient(180deg,
+    rgba(74,90,94,.90) 0 1.8px,rgba(74,90,94,0) 1.8px 5px,
+    rgba(200,164,92,.86) 5px 6.8px);
+}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);font-weight:400;letter-spacing:.1em;color:var(--text-3);
+}
+.deck-footer{border-top:1.4px solid rgba(42,37,33,.24);padding-top:9px}
+
+/* 选项：白墙卡；判对走塔影青面，选错走檀赭面，字一律纸白 */
+.quiz-opt{
+  display:flex;align-items:center;min-height:58px;padding:12px 20px;line-height:1.35;
+  border:1.4px solid var(--border-strong);
+  border-radius:var(--radius-sm);
+  background:var(--surface);
+  box-shadow:0 8px 18px rgba(42,37,33,.06);
+  font-family:var(--font-button);font-weight:400;
+}
+.quiz-opt:hover{background:var(--surface-2);box-shadow:0 12px 24px rgba(42,37,33,.09)}
+.quiz-opt.correct{background:rgba(74,90,94,.16);color:#33474b;border-color:#4a5a5e}
+.quiz-opt.chosen-wrong{background:rgba(104,50,31,.14);color:#5c2b1b;border-color:#68321f}
+.quiz-reveal{border-top:1.6px solid var(--ink);background:var(--surface);box-shadow:0 10px 24px rgba(42,37,33,.08)}
+
+/* 图版框：1.6px 墨线 + 白墙内框 + 外圈鎏金细线（匾的外沿），⛔ 不投硬影 */
+.img-frame{
+  border-radius:var(--radius-sm);padding:8px;
+  background:var(--surface);
+  border:1.6px solid var(--ink-2);
+  box-shadow:inset 0 0 0 2px rgba(247,242,231,.95),0 0 0 2px rgba(247,242,231,.95),0 0 0 3.4px rgba(200,164,92,.46),0 14px 28px rgba(42,37,33,.08);
+}
+/* 图版号：鎏金小牌，墨字，直角 */
+.img-tag{
+  border-radius:2px;background:var(--gold);color:var(--ink);
+  border:1.4px solid var(--ink);
+  text-transform:none;letter-spacing:.04em;font-family:var(--font-note);
+}
+.img-cap{font-family:var(--font-note)}
+.mono{font-family:var(--font-mono)}
+
+/* —— 材质与母题：塔檐 / 香 / 铜炉 / 落瓣 / 白墙 / 香灰 / 碑石 / 铜绿 / 檀赭 / 墨 —— */
+/* 塔檐：八角七级逐级收分，压成一组水平线——每级檐口一道暗线、一道金线 */
+.lh-eave{
+  background-color:#6d7b7e;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(247,242,231,.26) 0 1px,transparent 1px 9px),
+    repeating-linear-gradient(0deg,rgba(42,37,33,.30) 0 2.4px,transparent 2.4px 9px),
+    linear-gradient(180deg,rgba(200,164,92,.32),rgba(200,164,92,0) 62%),
+    linear-gradient(180deg,#718084,#5a6964);
+}
+/* 香：极低 α 的静曲线，只在大面积上读得出——⛔ 不做成一缕缕的烟丝图案 */
+.lh-incense{
+  background-color:#e6e0d4;
+  background-image:
+    radial-gradient(70% 120% at 26% 110%,rgba(255,255,255,.66),rgba(255,255,255,0) 62%),
+    radial-gradient(46% 88% at 42% 116%,rgba(150,142,126,.40),rgba(150,142,126,0) 72%),
+    radial-gradient(38% 74% at 66% 120%,rgba(150,142,126,.28),rgba(150,142,126,0) 74%),
+    radial-gradient(34% 64% at 22% 122%,rgba(150,142,126,.22),rgba(150,142,126,0) 74%),
+    linear-gradient(180deg,#f1ebe0,#dfd8ca);
+}
+/* 铜炉：圆口 + 三足的暗示——一道弧、三点阴影，⛔ 不做成图形图标 */
+.lh-censer{
+  background-color:#5c5348;
+  background-image:
+    radial-gradient(60% 44% at 50% 16%,rgba(200,164,92,.34),rgba(200,164,92,0) 68%),
+    radial-gradient(circle 2px at 22% 82%,rgba(0,0,0,.32) 0 100%,transparent 0),
+    radial-gradient(circle 2px at 50% 86%,rgba(0,0,0,.32) 0 100%,transparent 0),
+    radial-gradient(circle 2px at 78% 82%,rgba(0,0,0,.32) 0 100%,transparent 0),
+    linear-gradient(180deg,#655b4e,#4c443a);
+}
+/* 落瓣：稀疏、不对称——七瓣，绝不铺满（铺满就成了壁纸） */
+.lh-petal{
+  background-color:#c6847d;
+  background-image:
+    radial-gradient(ellipse 15% 7% at 24% 22%,rgba(247,242,231,.74) 0 58%,rgba(247,242,231,0) 74%),
+    radial-gradient(ellipse 13% 6% at 70% 34%,rgba(247,242,231,.66) 0 56%,rgba(247,242,231,0) 72%),
+    radial-gradient(ellipse 16% 7% at 36% 60%,rgba(247,242,231,.60) 0 56%,rgba(247,242,231,0) 72%),
+    radial-gradient(ellipse 11% 5% at 80% 70%,rgba(247,242,231,.54) 0 54%,rgba(247,242,231,0) 70%),
+    radial-gradient(ellipse 9% 4% at 12% 82%,rgba(247,242,231,.46) 0 52%,rgba(247,242,231,0) 68%),
+    linear-gradient(160deg,#c67c75,#b06f68);
+}
+/* 白墙：近白的石灰墙，只有极淡的批灰走向与边缘收暗（无影） */
+.lh-wall{
+  background-color:#f7f2e7;
+  background-image:
+    radial-gradient(120% 100% at 50% 50%,rgba(255,255,255,.42) 0 52%,rgba(140,130,112,.07) 78%,rgba(120,110,94,.14) 100%),
+    repeating-linear-gradient(88deg,rgba(140,130,112,.028) 0 1px,transparent 1px 5px);
+}
+.lh-wall{
+  /* 位图层（2026-11-22）：白墙的批灰纤维；颗粒放得比纸面大（background-size 768px）才读成「抹上去的」，不是「印上去的」。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.lh-wall::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/fiber/fiber-gray-512.png");
+  background-repeat:repeat;
+  background-size:768px 768px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.48;
+}
+/* 回退：.lh-wall--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.lh-wall--flat::after{content:none}
+/* 香灰：中间调的灰，极细颗粒（落灰不是噪点） */
+.lh-ash{
+  background-color:#d3cdc1;
+  background-image:
+    radial-gradient(circle 1.1px at 50% 50%,rgba(42,37,33,.15) 0 100%,transparent 0),
+    radial-gradient(circle 0.8px at 20% 30%,rgba(42,37,33,.10) 0 100%,transparent 0),
+    linear-gradient(180deg,#e4ded3,#d1cabe);
+  background-size:7px 7px,9px 9px,auto;
+}
+.lh-ash{
+  /* 位图层（2026-11-22）：香灰的极细颗粒；同一张 grain 压到 256px，粒径比碑石细一档，读成「落灰」而不是「砂纸」。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.lh-ash::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/grain/grain-gray-512.png");
+  background-repeat:repeat;
+  background-size:256px 256px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.45;
+}
+/* 回退：.lh-ash--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.lh-ash--flat::after{content:none}
+/* 碑石：花岗细粒 + 一枚略深的云斑（石还没刻字） */
+.lh-granite{
+  background-color:#b6afa3;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%,rgba(42,37,33,.20) 0 100%,transparent 0),
+    radial-gradient(circle 0.8px at 50% 50%,rgba(247,242,231,.30) 0 100%,transparent 0),
+    radial-gradient(46% 34% at 68% 62%,rgba(80,74,64,.12),rgba(80,74,64,0) 74%),
+    linear-gradient(180deg,#c2bbaf,#b6afa3);
+  background-size:4px 4px,5px 5px,auto,auto;
+}
+.lh-granite{
+  /* 位图层（2026-11-22）：碑石的花岗细粒；同一张 grain 放在 384px，比香灰粗一档，与 4px/5px 的 CSS 细点叠加成石材而非噪点。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.lh-granite::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/grain/grain-gray-512.png");
+  background-repeat:repeat;
+  background-size:384px 384px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.55;
+}
+/* 回退：.lh-granite--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.lh-granite--flat::after{content:none}
+/* 铜绿：檐下铜件的氧化——青绿偏灰，不是孔雀蓝 */
+.lh-patina{
+  background-color:#3f5952;
+  background-image:
+    radial-gradient(70% 60% at 26% 24%,rgba(200,220,210,.16),rgba(200,220,210,0) 68%),
+    radial-gradient(64% 54% at 80% 84%,rgba(0,20,16,.30),rgba(0,20,16,0) 72%),
+    linear-gradient(180deg,#47645c,#35504a);
+}
+/* 檀赭：柱身与匾底 */
+.lh-sandal{
+  background-color:#5f2e1c;
+  background-image:
+    repeating-linear-gradient(92deg,rgba(255,255,255,.035) 0 1px,transparent 1px 6px),
+    linear-gradient(180deg,#6b3522,#542718);
+}
+/* 墨：碑上的字——近黑，带一点石面反光 */
+.lh-ink{
+  background-color:#252019;
+  background-image:
+    radial-gradient(70% 50% at 30% 20%,rgba(255,255,255,.10),rgba(255,255,255,0) 66%),
+    radial-gradient(60% 44% at 78% 86%,rgba(0,0,0,.40),rgba(0,0,0,0) 70%),
+    radial-gradient(circle 1px at 50% 50%,rgba(255,255,255,.028) 0 100%,transparent 0);
+  background-size:auto,auto,7px 7px;
+}
+/* 纯色片：檀赭 / 塔影青 / 鎏金 / 春桃 / 白墙 */
+.lh-sandal-solid{background:var(--sandal)}
+.lh-tower{background:var(--tower)}
+.lh-gold{background:var(--gold)}
+.lh-peach{background:var(--peach)}
+.lh-surface{background:var(--surface)}
+
+/* —— 组件层：cp-*（预览页模板依赖，与 fuzhou-rd 同几何、只换视觉）—— */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 24px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--text-1);
+  background:var(--surface);
+  border:1.4px solid rgba(74,90,94,.46);
+  box-shadow:none;
+}
+/* 轻提示：鎏金细条（本主题鎏金＝小牌 / 轻标记；⛔ 檀赭留给主按钮与分类）
+   ⚠️ 2026-11-21：原为 262×8px 直角实心金条，占格宽 52%、上下留白对称，
+   读作「一块金面悬在格中」，与文件头纪律③「金只做提亮、不做大面积金面」冲突。
+   改为左实右渐隐的收分细条（6px，右端 78% 处收尽），金只做「一笔提亮」。 */
+.cp-alert{
+  height:6px;width:262px;max-width:82%;border-radius:0;
+  background:linear-gradient(90deg,var(--gold) 0%,var(--gold) 54%,rgba(200,164,92,.42) 78%,rgba(200,164,92,0) 100%);
+  opacity:.92;
+}
+/* 已选锚点：白墙胶囊 + 前置一枚塔影青圆点（选中态＝青，与判对同色系） */
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:9px 18px;line-height:1.5;border-radius:999px;
+  background:var(--surface);color:var(--text-1);
+  font-family:var(--font-button);font-weight:400;
+  border:1.4px solid var(--border-strong);
+  box-shadow:none;
+}
+.cp-anchor::before{
+  content:"";flex:0 0 auto;width:12px;height:12px;
+  border-radius:50%;
+  background:var(--tower);
+}
+/* 进度：香灰槽 + 檀赭条 */
+.cp-progress{height:8px;border-radius:0;background:var(--paper-deep);border:1.2px solid rgba(42,37,33,.22);overflow:hidden}
+.cp-progress > span{display:block;height:100%;width:28%;background:var(--sandal)}
+/* 材质底：塔影青砖 / 香灰格 / 白墙 */
+.cp-steel{
+  background-color:#5b6a6c;
+  background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.12) 0 1px,transparent 1px 5px);
+}
+.cp-tile{
+  background-color:#e2dbcd;
+  background-image:
+    radial-gradient(circle 1.4px at 50% 50%,rgba(42,37,33,.16) 0 100%,transparent 0);
+  background-size:9px 9px;
+}
+.cp-marble{
+  background-color:var(--bg);
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 2px,rgba(42,37,33,.05) 2px 3px),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(42,37,33,.04) 3px 4px);
+}
+
+/* —— 字号与间距：六档收口（沿用 wanhang-fy / fuzhou 的档位）—— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h2);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h4);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body-sm);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill,.pill-accent,.pill-good,.pill-ghost,.img-tag,.img-cap,.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}
+
+/* 链接：正文语境不拿专色当文字色，改主文字色 + 檀赭下划 */
+a{color:var(--text-1);text-decoration-color:var(--sandal)}

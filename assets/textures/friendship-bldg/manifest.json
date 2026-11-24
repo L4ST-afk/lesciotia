@@ -1,0 +1,98 @@
+{
+  "theme": "friendship-bldg",
+  "source": "../themes/friendship-bldg.css",
+  "source_sha256": "88f91f7f4be245b894fe97312088ca4e0298a22b4bcc3b8afd69eb3aa0c304b1",
+  "generated": "2026-11-23T12:43:17",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#1E1709",
+    "#26221B",
+    "#3E6E58",
+    "#574C3C",
+    "#6A5D48",
+    "#881E21",
+    "#8A5A12",
+    "#8A6A18",
+    "#9F7C27",
+    "#B9C6B4",
+    "#CFE7D6",
+    "#D6BE93",
+    "#D9E1D2",
+    "#DDBE5B",
+    "#ECE0C8",
+    "#EFE3C6",
+    "#EFE4CB",
+    "#F2E8D2",
+    "#FBF6EC"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-lawn.png",
+      "kind": "material-class",
+      "class": "cp-lawn",
+      "w": 320,
+      "h": 320,
+      "sha256": "c1934897c8bf7499487177bd076bccf26f7259051d1d0e00934b4537b50c62f7"
+    },
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "1802a07891ff742ff5d76c055f5f33d17cb8086edf2920d5561124f427efefa0"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "2989162dc3db1bacea8535124cc04617456f9d674b5d226e5e5eca1a4c7e8798"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "8561aff09821dc4b9567a8b3f0779063b3e813592d3f2685c1a311ac02ded2f6"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "ce9ad343b586680989f31008ec8b8b601a4a7a815d6227714afb4224db7634c8"
+    },
+    {
+      "file": "tex-fb-grain.png",
+      "kind": "svg-token",
+      "token": "fb-grain",
+      "tile_w": 200,
+      "tile_h": 200,
+      "w": 400,
+      "h": 400,
+      "sha256": "ef0096c4a19f99de6c2db241a9a93cead558d89b7423d33ea80e2deeb45d444f"
+    },
+    {
+      "file": "tex-fb-terrazzo-tile.png",
+      "kind": "svg-token",
+      "token": "fb-terrazzo-tile",
+      "tile_w": 128,
+      "tile_h": 128,
+      "w": 256,
+      "h": 256,
+      "sha256": "102bf517c5acbc64c41166afeed29507868eceb65a67140e8c329c03c6a5310c"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 1332,
+      "sha256": "dbfab11f242576626e744ad4f02ab33309750b2b4fdb21b13cebf175e7351f8e"
+    }
+  ],
+  "unknown_material_like": []
+}

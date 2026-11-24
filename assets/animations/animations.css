@@ -1,0 +1,149 @@
+/* 来雪亭 :: 动效层（2026-11-23 自写；类名与 runtime 的 ANIMS 表是契约，⛔ 不改名）
+   用法：元素挂 class="anim-<名>"，或 data-anim="<名>" 由 runtime 在第几页激活时补上类。
+   三条纪律：
+     ① 时长统一读 --anim-dur（默认 .65s），要慢的元素自己覆写，⛔ 不在类里写死秒数以外的东西；
+     ② 只动 opacity / transform / filter / clip-path，不动布局属性（动了就会连带重排，投影会抖）；
+     ③ 动画是「入场一次」不是「循环表演」——只有 neon / shimmer / gradflow / marquee / kenburns
+        这五个是无限循环，其余一律 both 停住；减少动效偏好下全部关掉。 */
+:root{--anim-dur:.65s;--anim-ease:cubic-bezier(.4,0,.2,1)}
+
+/* —— 一、位移淡入（四个方向）：幅度按画布算，32–40px 在 1920 画布上是一口气的距离 —— */
+@keyframes lx-fade-up{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+@keyframes lx-fade-down{from{opacity:0;transform:translateY(-32px)}to{opacity:1;transform:none}}
+@keyframes lx-fade-left{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes lx-fade-right{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+.anim-fade-up{animation:lx-fade-up var(--anim-dur) var(--anim-ease) both}
+.anim-fade-down{animation:lx-fade-down var(--anim-dur) var(--anim-ease) both}
+.anim-fade-left{animation:lx-fade-left var(--anim-dur) var(--anim-ease) both}
+.anim-fade-right{animation:lx-fade-right var(--anim-dur) var(--anim-ease) both}
+
+/* —— 二、五种「进场方式」——
+   rise  ：抬起来＋轻微放大＋去虚焦（用于整块卡片）
+   drop  ：自上落下（用于页首横条）
+   zoom  ：过冲再回（弹性，只给单个数字/徽标，别给整页）
+   blur  ：只化虚焦，不动位置（用于图片，动了会跟图框错位）
+   glitch：横向抖动＋条带裁切（只给标题一次，循环会晕） */
+@keyframes lx-rise{from{opacity:0;transform:translateY(60px) scale(.97);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes lx-drop{from{opacity:0;transform:translateY(-60px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes lx-zoom{0%{opacity:0;transform:scale(.6)}60%{transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
+@keyframes lx-blur{from{opacity:0;filter:blur(18px)}to{opacity:1;filter:none}}
+@keyframes lx-glitch{0%{opacity:0;transform:translateX(0);clip-path:inset(0 0 0 0)}
+  20%{opacity:1;transform:translateX(-6px);clip-path:inset(20% 0 30% 0)}
+  40%{transform:translateX(4px);clip-path:inset(50% 0 10% 0)}
+  60%{transform:translateX(-3px);clip-path:inset(10% 0 60% 0)}
+  80%{transform:translateX(2px);clip-path:inset(0 0 0 0)}
+  100%{opacity:1;transform:none}}
+.anim-rise-in{animation:lx-rise .85s var(--anim-ease) both}
+.anim-drop-in{animation:lx-drop .75s var(--anim-ease) both}
+.anim-zoom-pop{animation:lx-zoom .65s cubic-bezier(.22,1.3,.36,1) both}
+.anim-blur-in{animation:lx-blur .75s var(--anim-ease) both}
+.anim-glitch-in{animation:lx-glitch .75s steps(5,end) both}
+
+/* —— 三、打字机：只在短句上用，宽度动画＝字数，长句会打不完 —— */
+.anim-typewriter{display:inline-block;overflow:hidden;white-space:nowrap;border-right:2px solid currentColor;
+  width:0;animation:lx-type 2.4s steps(40,end) forwards,lx-caret 1s step-end infinite}
+@keyframes lx-type{to{width:100%}}
+@keyframes lx-caret{50%{border-color:transparent}}
+
+/* —— 四、光与流动（循环类）—— */
+@keyframes lx-neon{0%,100%{text-shadow:0 0 8px var(--accent),0 0 20px var(--accent)}
+  50%{text-shadow:0 0 16px var(--accent),0 0 40px var(--accent),0 0 80px var(--accent)}}
+.anim-neon-glow{animation:lx-neon 2s ease-in-out infinite}
+
+.anim-shimmer-sweep{position:relative;overflow:hidden}
+.anim-shimmer-sweep::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);
+  transform:translateX(-100%);animation:lx-shimmer 2.4s var(--anim-ease) infinite}
+@keyframes lx-shimmer{to{transform:translateX(100%)}}
+
+/* 渐变文字流动：三色只许来自 --accent / --accent-2 / --accent-3，缺省回落主色 */
+.anim-gradient-flow{background:linear-gradient(90deg,var(--accent),var(--accent-2,var(--accent)),var(--accent-3,var(--accent)),var(--accent));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:lx-gradflow 4s linear infinite}
+@keyframes lx-gradflow{to{background-position:300% 0}}
+
+/* —— 五、逐条入场：延迟按「读的节奏」排，前八条等差 .1s，第九条起不再加 —— */
+.anim-stagger-list > *{opacity:0;animation:lx-rise .6s var(--anim-ease) both}
+.anim-stagger-list > *:nth-child(1){animation-delay:.05s}
+.anim-stagger-list > *:nth-child(2){animation-delay:.15s}
+.anim-stagger-list > *:nth-child(3){animation-delay:.25s}
+.anim-stagger-list > *:nth-child(4){animation-delay:.35s}
+.anim-stagger-list > *:nth-child(5){animation-delay:.45s}
+.anim-stagger-list > *:nth-child(6){animation-delay:.55s}
+.anim-stagger-list > *:nth-child(7){animation-delay:.65s}
+.anim-stagger-list > *:nth-child(8){animation-delay:.75s}
+.anim-stagger-list > *:nth-child(n+9){animation-delay:.85s}
+
+/* —— 六、数字滚动：只打标记，值由 runtime 的 counter-up 驱动 —— */
+.counter{font-variant-numeric:tabular-nums}
+
+/* —— 七、SVG 描线：虚线偏移拉到 0；路径长于 1000 的图形要自己改 dash 值 —— */
+.anim-path-draw path,.anim-path-draw line,.anim-path-draw polyline,.anim-path-draw circle,.anim-path-draw rect{
+  stroke-dasharray:1000;stroke-dashoffset:1000;animation:lx-draw 2s var(--anim-ease) forwards}
+@keyframes lx-draw{to{stroke-dashoffset:0}}
+
+/* —— 八、悬停视差：只给「可以碰」的元素，触屏上没有 hover 会一直停在原始角度 —— */
+.anim-parallax-tilt{transform-style:preserve-3d;transition:transform .4s var(--anim-ease)}
+.anim-parallax-tilt:hover{transform:perspective(900px) rotateX(6deg) rotateY(-8deg) translateZ(10px)}
+
+/* —— 九、四种 3D 入场：都在 1600px 透视内，超出会畸形 —— */
+@keyframes lx-flip{from{transform:perspective(1200px) rotateY(-90deg);opacity:0}
+  to{transform:perspective(1200px) rotateY(0);opacity:1}}
+.anim-card-flip-3d{animation:lx-flip .9s var(--anim-ease) both;transform-style:preserve-3d;backface-visibility:hidden}
+
+@keyframes lx-cube{from{transform:perspective(1200px) rotateX(20deg) rotateY(-90deg) translateZ(-200px);opacity:0}
+  to{transform:perspective(1200px) rotateX(0) rotateY(0) translateZ(0);opacity:1}}
+.anim-cube-rotate-3d{animation:lx-cube 1s var(--anim-ease) both}
+
+@keyframes lx-pageturn{from{transform:perspective(1600px) rotateY(-85deg);transform-origin:left center;opacity:0}
+  to{transform:perspective(1600px) rotateY(0);opacity:1}}
+.anim-page-turn-3d{animation:lx-pageturn 1s var(--anim-ease) both;transform-origin:left center}
+
+@keyframes lx-pzoom{from{opacity:0;transform:perspective(1400px) translateZ(-400px) rotateX(12deg)}
+  to{opacity:1;transform:none}}
+.anim-perspective-zoom{animation:lx-pzoom 1s var(--anim-ease) both}
+
+/* —— 十、跑马灯：内容要写两份（原件＋复制件），-50% 才是无缝 —— */
+.anim-marquee-scroll{display:flex;gap:48px;white-space:nowrap;animation:lx-marquee 20s linear infinite}
+@keyframes lx-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* —— 十一、肯·伯恩斯：慢推 14s 往返，只给满幅照片 —— */
+@keyframes lx-kenburns{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.15) translate(-2%,-1%)}}
+.anim-kenburns{animation:lx-kenburns 14s ease-in-out infinite alternate}
+
+/* —— 十二、彩纸：纯伪元素八点，色只取功能色；⛔ 别在正式汇报尾页用 —— */
+.anim-confetti-burst{position:relative}
+.anim-confetti-burst::before,.anim-confetti-burst::after{
+  content:"";position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;
+  background:var(--accent);box-shadow:
+    20px -30px 0 var(--accent-2,var(--accent)),-25px -20px 0 var(--accent-3,var(--accent)),
+    30px 20px 0 var(--good,#1aaf6c),-30px 25px 0 var(--warn,#f5a524),
+    40px -10px 0 var(--bad,#e0445a),-45px 0 0 var(--accent),
+    10px 40px 0 var(--accent-2,var(--accent)),-15px -40px 0 var(--accent-3,var(--accent));
+  opacity:0;animation:lx-confetti 1.2s var(--anim-ease) forwards}
+.anim-confetti-burst::after{animation-delay:.15s;transform:rotate(45deg)}
+@keyframes lx-confetti{0%{opacity:0;transform:scale(.2)}30%{opacity:1}100%{opacity:0;transform:scale(2.2)}}
+
+/* —— 十三、聚光：圆形裁切张开，落点在正中 —— */
+@keyframes lx-spot{0%{clip-path:circle(0% at 50% 50%)}100%{clip-path:circle(140% at 50% 50%)}}
+.anim-spotlight{animation:lx-spot 1.1s var(--anim-ease) both}
+
+/* —— 十四、形变：只对 SVG 的 d 生效，Safari 对 d 动画支持不稳，作装饰不作承载 —— */
+.anim-morph-shape path{animation:lx-morph 6s ease-in-out infinite alternate}
+@keyframes lx-morph{0%{d:path("M60,120 Q120,20 180,120 T300,120")}
+  100%{d:path("M60,120 Q120,220 180,120 T300,120")}}
+
+/* —— 十五、涟漪揭示：从左下起波，用于整块图文区 —— */
+@keyframes lx-ripple{0%{clip-path:circle(0% at 20% 80%);opacity:.4}
+  100%{clip-path:circle(160% at 20% 80%);opacity:1}}
+.anim-ripple-reveal{animation:lx-ripple 1.2s var(--anim-ease) both}
+
+/* —— 减少动效：系统开了「降低动态」就全关，不留半截状态 —— */
+@media (prefers-reduced-motion:reduce){
+  [class*="anim-"]{animation:none!important;transition:none!important}
+}
+
+/* —— 元素级分步（1.2.47）：段上 data-build，子元素 .step；HTML 里空格逐步显形，出图态一律全显 —— */
+[data-build] .step{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+[data-build] .step.is-on{opacity:1;transform:none}
+html[data-render] [data-build] .step{opacity:1;transform:none;transition:none}

@@ -1,0 +1,110 @@
+{
+  "theme": "wanhang-fy",
+  "source": "../themes/wanhang-fy.css",
+  "source_sha256": "e22adb2a3c9ee536479b3906c27e872db47abf479343cbe944f34422b639db14",
+  "generated": "2026-11-23T12:49:31",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#22475E",
+    "#241C15",
+    "#2F4C38",
+    "#33291F",
+    "#3B322A",
+    "#3F6449",
+    "#3F6B4A",
+    "#4E7757",
+    "#584A3C",
+    "#66351F",
+    "#6D8556",
+    "#6F5F4D",
+    "#6F95A4",
+    "#7F9FB0",
+    "#8A6A24",
+    "#8A7660",
+    "#8B3B2C",
+    "#8BA370",
+    "#9FBCC6",
+    "#A67F5C",
+    "#AD6A45",
+    "#E6DDC9",
+    "#EFE8D8",
+    "#F5EFDF",
+    "#F6F1E4",
+    "#FAF6EA",
+    "#FDFAF1"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "d546ba824436f85fb488dcb8a64501a0fa6aebdfaa35917cf3bd835181598872"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "1dd566897988df66d70c04c50d173bd9f239998edec2066248a2d930fc70dcac"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "6e33160970763cd3f257a977e1119e960200f083883bae57f9f3cb6e024e3101"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "139c9c2fcbe59f094f3777c3c9178810cf0ac199db7bbe936345cd311732b38a"
+    },
+    {
+      "file": "mat-wf-brick.png",
+      "kind": "material-class",
+      "class": "wf-brick",
+      "w": 320,
+      "h": 320,
+      "sha256": "7cddd3e126db667ef7f0062cf355d6460a580e6b3b87eb9f5199e8c04b6fc3c6"
+    },
+    {
+      "file": "mat-wf-ink.png",
+      "kind": "material-class",
+      "class": "wf-ink",
+      "w": 320,
+      "h": 320,
+      "sha256": "12101d2bce8a6584f7ad73e1e352a40c3064f56c638b15bed9ccf857b84bf0e3"
+    },
+    {
+      "file": "mat-wf-lawn.png",
+      "kind": "material-class",
+      "class": "wf-lawn",
+      "w": 320,
+      "h": 320,
+      "sha256": "a1deb758868b4c2069456007ffbe77c1179fd427ecd6c52d9b381e635f01faba"
+    },
+    {
+      "file": "mat-wf-paper.png",
+      "kind": "material-class",
+      "class": "wf-paper",
+      "w": 320,
+      "h": 320,
+      "sha256": "136b361853c547d744a30bee0360f27f8a7d09a0c4f61389076cfec4e9ad7b5f"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 1332,
+      "sha256": "80245b1173d58f8240eb36700e1d6e5d6d73c6026cdd4dcad8367150d1b286aa"
+    }
+  ],
+  "unknown_material_like": []
+}

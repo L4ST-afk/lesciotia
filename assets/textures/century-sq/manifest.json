@@ -1,0 +1,84 @@
+{
+  "theme": "century-sq",
+  "source": "../themes/century-sq.css",
+  "source_sha256": "046eec72b338cfd3e1df528a758831e99784705fd69b9c2f129eb19ee5b02bd1",
+  "generated": "2026-11-23T23:51:55",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#0090CD",
+    "#222222",
+    "#5A5F60",
+    "#5F8A5B",
+    "#6B7071",
+    "#721538",
+    "#84318E",
+    "#96B878",
+    "#B23A4D",
+    "#B4791C",
+    "#B7C0C7",
+    "#B8B8B4",
+    "#C2A005",
+    "#C8D8E8",
+    "#DAB406",
+    "#DCDFE2",
+    "#DFE4E8",
+    "#E8E8E4",
+    "#ECCB3D",
+    "#ECEEEC",
+    "#EEEEEC",
+    "#EEF3F7",
+    "#F4F4F2",
+    "#F7F7F5",
+    "#FBFCFD"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-lawn.png",
+      "kind": "material-class",
+      "class": "cp-lawn",
+      "w": 320,
+      "h": 320,
+      "sha256": "d2ae4b39a6073c448e8b155f96097ca6119eff8b36f3b4b48be672d4e0f4bc8b"
+    },
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "62c8a8c4c9a921b11b2c0a3fe21864e4263a188e6a8cccff18e5eca7b5f174df"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "d122a37a9cb098bb58c7452b2060be41637403308477956f8fbb1636ebbd7672"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "01e1e608d9bc7f1256dfbe1b68b9f8d1906c5c17fea6e6c6fd8c17d35e9ce1de"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "2e25a49d2192556181de29090c0ee867715a99d7e14c76232e68da76f4301327"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 928,
+      "sha256": "67fb34693f0acf2e66c31a3f901bebb9e7b291466bef21256192511c3214ec4b"
+    }
+  ],
+  "unknown_material_like": []
+}

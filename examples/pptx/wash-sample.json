@@ -1,0 +1,224 @@
+{
+  "slides": [
+    {
+      "type": "wash",
+      "kicker": "C 出口 · 染层样张",
+      "title": [
+        "渐变与布尔",
+        "在导出时求值"
+      ],
+      "lede": "同一份瓦作声明，浏览器与 python-pptx 各解释一次。",
+      "kicker_color": "#FFFFFF",
+      "footer": "",
+      "shapes": [
+        {
+          "shape": "rect",
+          "box": [
+            0,
+            0,
+            1600,
+            900
+          ],
+          "name": "field",
+          "fill": {
+            "gradient": "linear-gradient(135deg, #0E1622 0%, var(--line-2) 45%, rgba(214,166,58,.75) 100%)"
+          }
+        },
+        {
+          "shape": "circle",
+          "center": [
+            1360,
+            760
+          ],
+          "r": 420,
+          "name": "glow",
+          "fill": {
+            "gradient": "radial-gradient(circle at 30% 30%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 70%)"
+          }
+        }
+      ],
+      "color": "#FFFFFF"
+    },
+    {
+      "type": "wash",
+      "kicker": "墨线 · 布尔",
+      "title": [
+        "两圆相减"
+      ],
+      "lede": "PPTX 没有布尔指令：差集在导出时算成一条 custGeom。",
+      "shapes": [
+        {
+          "shape": "rect",
+          "box": [
+            0,
+            0,
+            1600,
+            900
+          ],
+          "fill": {
+            "solid": "--bg"
+          }
+        },
+        {
+          "boolean": {
+            "op": "subtract",
+            "a": {
+              "center": [
+                300,
+                300
+              ],
+              "r": 300
+            },
+            "b": {
+              "center": [
+                420,
+                300
+              ],
+              "r": 300
+            }
+          },
+          "at": [
+            88,
+            320
+          ],
+          "h": 320,
+          "name": "moon",
+          "fill": {
+            "solid": "--primary"
+          }
+        },
+        {
+          "boolean": {
+            "op": "intersect",
+            "a": {
+              "center": [
+                760,
+                300
+              ],
+              "r": 220
+            },
+            "b": {
+              "center": [
+                910,
+                300
+              ],
+              "r": 220
+            }
+          },
+          "at": [
+            700,
+            320
+          ],
+          "h": 320,
+          "name": "lens",
+          "fill": {
+            "solid": "--line-2"
+          }
+        }
+      ],
+      "title_y": 130,
+      "lede_y": 690
+    },
+    {
+      "type": "wash",
+      "kicker": "墨线 · path 直译",
+      "title": [
+        "四弧圆"
+      ],
+      "lede": "瓦作里的 path() 原样翻译：A 段换算成三次贝塞尔，不再采样折线。",
+      "shapes": [
+        {
+          "shape": "rect",
+          "box": [
+            0,
+            0,
+            1600,
+            900
+          ],
+          "fill": {
+            "solid": "#0E1622"
+          }
+        },
+        {
+          "path": "M 300 0 A 300 300 0 0 1 300 600 A 300 300 0 0 1 300 0",
+          "at": [
+            560,
+            150
+          ],
+          "h": 600,
+          "name": "arc-circle",
+          "fill": {
+            "gradient": "linear-gradient(180deg, var(--line-2) 0%, var(--line-4) 100%)"
+          }
+        }
+      ],
+      "color": "#FFFFFF"
+    },
+    {
+      "type": "wash",
+      "kicker": "墨线 · 曲线布尔",
+      "title": [
+        "任意两形"
+      ],
+      "lede": "六边形的直边与圆的弧同走一条求值路径：装了 pathops 就沿曲线裁。",
+      "shapes": [
+        {
+          "shape": "rect",
+          "box": [
+            0,
+            0,
+            1600,
+            900
+          ],
+          "fill": {
+            "solid": "--bg"
+          }
+        },
+        {
+          "boolean": {
+            "op": "subtract",
+            "a": {
+              "path": "M 600 120 L 1000 120 L 1100 300 L 1000 480 L 600 480 L 500 300 Z"
+            },
+            "b": {
+              "path": "M 950 80 A 220 220 0 0 1 950 520 A 220 220 0 0 1 950 80 Z"
+            },
+            "n": 32
+          },
+          "at": [
+            88,
+            330
+          ],
+          "h": 300,
+          "name": "hex-moon",
+          "fill": {
+            "solid": "--primary"
+          }
+        },
+        {
+          "boolean": {
+            "op": "intersect",
+            "a": {
+              "path": "M 600 120 L 1000 120 L 1100 300 L 1000 480 L 600 480 L 500 300 Z"
+            },
+            "b": {
+              "path": "M 950 80 A 220 220 0 0 1 950 520 A 220 220 0 0 1 950 80 Z"
+            },
+            "n": 32
+          },
+          "at": [
+            820,
+            330
+          ],
+          "h": 300,
+          "name": "hex-lens",
+          "fill": {
+            "solid": "--line-2"
+          }
+        }
+      ],
+      "title_y": 130,
+      "lede_y": 700
+    }
+  ]
+}

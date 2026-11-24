@@ -1,0 +1,252 @@
+{
+ "note": "梁架归并表（v1.2.47：17 族 / 35 式）：key 是 assets/layouts/<key>.html；styles 是族页里的段（与 data-style 一一对应）；of 是全部旧 stem；keep 是仍可作为「参数／旧 stem 对照」出现在文档里的名字（其余 of 名字只用于「别复活」的针）",
+ "families": {
+  "cover": {
+   "name": "封面",
+   "styles": [
+    "cover"
+   ],
+   "of": [
+    "cover"
+   ],
+   "when": "开场一页：标题、副标题、三个 pill"
+  },
+  "section": {
+   "name": "章节页",
+   "styles": [
+    "section"
+   ],
+   "of": [
+    "section-divider"
+   ],
+   "when": "分章：一句章名 + 一句提要"
+  },
+  "end": {
+   "name": "收尾",
+   "styles": [
+    "end"
+   ],
+   "of": [
+    "thanks",
+    "cta"
+   ],
+   "when": "最后一页：谢谢 / 要一个动作",
+   "params": "加按钮＝cta，不加＝thanks（原 thanks / cta 两式）",
+   "keep": [
+    "cta"
+   ]
+  },
+  "text": {
+   "name": "文字块",
+   "styles": [
+    "text"
+   ],
+   "of": [
+    "bullets",
+    "two-column",
+    "three-column"
+   ],
+   "when": "要点清单或分栏：栏数当参数（g1/g2/g3），不另开版式",
+   "params": "同段换栏数：默认单栏，`g2` 两栏、`g3` 三栏（原 bullets / two-column / three-column 三式）"
+  },
+  "quote": {
+   "name": "引语",
+   "styles": [
+    "quote"
+   ],
+   "of": [
+    "big-quote"
+   ],
+   "when": "一句可引用的话 + 出处"
+  },
+  "code": {
+   "name": "代码",
+   "styles": [
+    "code"
+   ],
+   "of": [
+    "code",
+    "terminal"
+   ],
+   "when": "代码块与终端输出",
+   "params": "加窗框＝terminal，不加＝code（原 code / terminal 两式）"
+  },
+  "compare": {
+   "name": "对比",
+   "styles": [
+    "compare",
+    "compare-image"
+   ],
+   "of": [
+    "comparison",
+    "pros-cons",
+    "diff",
+    "image-compare"
+   ],
+   "when": "两栏并列：A/B、利弊、改动前后、两图比对",
+   "params": "同段换标记：无标记＝对照、`mark=pc` ✓✗ 利弊、`mark=diff` 旧→新删加（原 comparison / pros-cons / diff 三式）",
+   "keep": [
+    "diff"
+   ]
+  },
+  "charts": {
+   "name": "图表",
+   "styles": [
+    "chart-axis",
+    "chart-pie",
+    "chart-radar",
+    "chart-unit",
+    "chart-waterfall",
+    "chart-dumbbell"
+   ],
+   "of": [
+    "chart-bar",
+    "chart-line",
+    "chart-pie",
+    "chart-radar"
+   ],
+   "when": "数字与关系：轴图（柱/线）、饼、雷达、可数单位点阵、瀑布、哑铃",
+   "params": "同段换画法：`line` 折线（柱线同一骨架，原 chart-bar / chart-line 两式）",
+   "keep": [
+    "chart-bar",
+    "chart-line",
+    "chart-pie",
+    "chart-radar"
+   ]
+  },
+  "image": {
+   "name": "整图",
+   "styles": [
+    "image-bleed",
+    "image-single",
+    "image-split"
+   ],
+   "of": [
+    "image-hero",
+    "image-full-bleed",
+    "image-single",
+    "image-text-split"
+   ],
+   "when": "一图占主位：压标题、满幅、单图、图文对半",
+   "params": "满幅图加/不加压字与 scrim：加＝hero，不加＝full-bleed（原 image-hero / image-full-bleed 两式）"
+  },
+  "image-set": {
+   "name": "图集",
+   "styles": [
+    "image-set",
+    "image-band",
+    "image-round",
+    "image-card"
+   ],
+   "of": [
+    "image-grid",
+    "image-gallery"
+   ],
+   "when": "图多且要平权：bento 拼板 / 图注压底 / 圆切连排 / 左文右图卡",
+   "params": "同段换摆法：`bento` 等分／`gallery` 错落（c6/c7 用 `span 2` 占位，原 image-grid / image-gallery）"
+  },
+  "process": {
+   "name": "过程",
+   "styles": [
+    "process-steps",
+    "process-timeline",
+    "process-roadmap",
+    "process-gantt"
+   ],
+   "of": [
+    "process-steps",
+    "timeline",
+    "roadmap",
+    "gantt"
+   ],
+   "when": "按顺序走：步骤、时间轴、路线图、甘特"
+  },
+  "diagram": {
+   "name": "关系图",
+   "styles": [
+    "flow",
+    "arch"
+   ],
+   "of": [
+    "flow-diagram",
+    "arch-diagram",
+    "mindmap"
+   ],
+   "when": "结构关系：流程、分层架构、中心辐射"
+  },
+  "data": {
+   "name": "数据",
+   "styles": [
+    "data-stat",
+    "data-table",
+    "data-todo"
+   ],
+   "of": [
+    "kpi-grid",
+    "stat-highlight",
+    "table",
+    "todo-checklist"
+   ],
+   "when": "数字与表：四格 KPI、单个大字、明细表、勾选清单",
+   "params": "数字格数 `n`：n=1 即单数字 Highlight（原 kpi-grid / stat-highlight 两式）",
+   "keep": [
+    "table"
+   ]
+  },
+  "toc": {
+   "name": "目录",
+   "styles": [
+    "toc"
+   ],
+   "of": [
+    "toc"
+   ],
+   "when": "整册的目录页"
+  },
+  "ring": {
+   "name": "环",
+   "styles": [
+    "ring-hub",
+    "ring-cycle",
+    "ring-map"
+   ],
+   "of": [
+    "ring-hub",
+    "ring-cycle"
+   ],
+   "when": "一个中心几个方向：枢纽图 / 环形四步",
+   "params": "辐条数即分支：5 向＝hub，任意 n＝原 mindmap（`mindmap` 不再单列，见 diagram 族说明）"
+  },
+  "split": {
+   "name": "分栏",
+   "styles": [
+    "split"
+   ],
+   "of": [
+    "split-table",
+    "split-flip"
+   ],
+   "when": "不等宽两栏：一边证据（表/图），一边结论；1.45:1 主次分工，≠compare 的等宽对照",
+   "params": "右栏换载体：`media=table` 表＋结论、`media=image` 判断＋图（原 split-table / split-flip）"
+  },
+  "quiz": {
+   "name": "提问",
+   "styles": [
+    "quiz-ask",
+    "quiz-reveal",
+    "quiz-explain"
+   ],
+   "of": [
+    "quiz",
+    "mcq",
+    "quiz-reveal"
+   ],
+   "when": "一道题的三态：问（选项不带答案）→ 揭（正确项高亮、错项划线 + 一句为什么）→ 讲（对/错各一条理由 + 一句能背的话）",
+   "params": "三态同题、题面逐字一致；差异只在正确项怎么标（`.ok` / `.no`）与解释放哪（`.why` / `.hook`）",
+   "keep": [
+    "quiz",
+    "quiz-reveal"
+   ]
+  }
+ }
+}

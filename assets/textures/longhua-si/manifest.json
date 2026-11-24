@@ -1,0 +1,119 @@
+{
+  "theme": "longhua-si",
+  "source": "../themes/longhua-si.css",
+  "source_sha256": "b20f40371efa93abeaddf2113139fd84bbb25cb742ec586c437dd6977fcb00d9",
+  "generated": "2026-11-23T12:45:58",
+  "renderer": "chrome-headless",
+  "palette": [
+    "#2A2521",
+    "#3A332C",
+    "#42605A",
+    "#4A2213",
+    "#4A5A5E",
+    "#4B433A",
+    "#5F2E1C",
+    "#68321F",
+    "#6C6255",
+    "#7F776A",
+    "#8A3A2A",
+    "#8A452C",
+    "#8A6A24",
+    "#C6847D",
+    "#C8A45C",
+    "#DED5C3",
+    "#E8E1D4",
+    "#EFE9DB",
+    "#EFE9DE",
+    "#F7F2E7"
+  ],
+  "files": [
+    {
+      "file": "mat-cp-marble.png",
+      "kind": "material-class",
+      "class": "cp-marble",
+      "w": 320,
+      "h": 320,
+      "sha256": "76687e05617c53388e500679c20daa87ca3565e6a312866c1fe8997d892bb8ae"
+    },
+    {
+      "file": "mat-cp-steel.png",
+      "kind": "material-class",
+      "class": "cp-steel",
+      "w": 320,
+      "h": 320,
+      "sha256": "3aba35793fbc90a3b7b65ec4da8fec668bdccd82f429b3e887e27a1051734e11"
+    },
+    {
+      "file": "mat-cp-tile.png",
+      "kind": "material-class",
+      "class": "cp-tile",
+      "w": 320,
+      "h": 320,
+      "sha256": "cf83e87dcea3fb4c76ec8c9ce415128e18b3fd73d58bce6093c6dea0473bdaee"
+    },
+    {
+      "file": "mat-glass.png",
+      "kind": "material-class",
+      "class": "glass",
+      "w": 320,
+      "h": 320,
+      "sha256": "bae6da21c03296cbf9dbfc62a434513814320365ac6b1f7f3ae7ae17462934ce"
+    },
+    {
+      "file": "mat-lh-ash.png",
+      "kind": "material-class",
+      "class": "lh-ash",
+      "w": 320,
+      "h": 320,
+      "sha256": "d860de4d7b5ee4e58272f6e3f7b63eebda4d5f0b4143fa07fdd354890889b57f"
+    },
+    {
+      "file": "mat-lh-censer.png",
+      "kind": "material-class",
+      "class": "lh-censer",
+      "w": 320,
+      "h": 320,
+      "sha256": "526beb6ccd5e3c1437e116c35f80e7aa8afe5c1a0a3d9e94cd392b6589846003"
+    },
+    {
+      "file": "mat-lh-eave.png",
+      "kind": "material-class",
+      "class": "lh-eave",
+      "w": 320,
+      "h": 320,
+      "sha256": "8ff4758f291c02075a75b5a1c30c0c894a7f2d0324b4a66a569e322195289026"
+    },
+    {
+      "file": "mat-lh-gold.png",
+      "kind": "material-class",
+      "class": "lh-gold",
+      "w": 320,
+      "h": 320,
+      "sha256": "daf50c7085be2907487ee5b983cc30f6dbdc598e759e7b1abd7d743d4a9a3237"
+    },
+    {
+      "file": "mat-lh-granite.png",
+      "kind": "material-class",
+      "class": "lh-granite",
+      "w": 320,
+      "h": 320,
+      "sha256": "15eee83e5a1ee065267bd0d3e5da14a5c9ac63741f630ddda33bc375d3a2883d"
+    },
+    {
+      "file": "mat-lh-ink.png",
+      "kind": "material-class",
+      "class": "lh-ink",
+      "w": 320,
+      "h": 320,
+      "sha256": "9e8d03e1bf8ac6b3c04dee5b8065a91d10c5109ee9b0dadb5a638b5a154a7ff5"
+    },
+    {
+      "file": "board.png",
+      "kind": "board",
+      "w": 1128,
+      "h": 1736,
+      "sha256": "baaae6be6470e6be446c9c8c5525551b972545e8e79565ba24407074e8775eae"
+    }
+  ],
+  "unknown_material_like": []
+}

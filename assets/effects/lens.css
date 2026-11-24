@@ -1,0 +1,22 @@
+/* ============================================================================
+   lens.css —— 玻璃透镜卡（可选加载，不进 base.css）
+   ---------------------------------------------------------------------------
+   与 `lens.js` 同用：JS 能把 canvas 透镜位移场挂上时，卡里出现的是 <canvas>；
+   挂不上（file:// 读像素被拦 / 无 canvas / 图加载失败）时，JS 给卡加
+   `data-lens-state="turb"`，由 `.lens[data-lens-state="turb"]` 接管湍流兜底。
+   ⛔ 别把这里的规则搬进 base.css：透镜是可选特性，不是每份 deck 都吃。
+   ========================================================================== */
+
+.lens{position:relative;overflow:hidden;border-radius:var(--radius);isolation:isolate;
+  background:var(--surface-2)}
+.lens>canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.lens>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+/* 兜底：整面均匀波纹。真折射是「棱带强、中心零」，两者质感不同，
+   所以兜底态留一个 badge，别让观众以为这就是成品。 */
+.lens[data-lens-state="turb"]{will-change:filter}
+.lens .lens-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;
+  font-size:var(--t-cap);color:var(--text-2);
+  background:linear-gradient(transparent,var(--surface-2));z-index:2}
+.lens .lens-badge{position:absolute;right:14px;top:14px;z-index:2;padding:6px 12px;border-radius:999px;
+  background:var(--surface);color:var(--text-3);font-size:var(--t-cap);font-family:var(--font-mono)}

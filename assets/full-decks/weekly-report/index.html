@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>周报 · 来雪亭第 47 周</title>
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/base.css">
+<link rel="stylesheet" href="../../../assets/animations/animations.css">
+<link rel="stylesheet" href="../../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../../assets/themes/century-sq.css">
+<script src="../../../assets/vendor/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="deck">
+
+  <section class="slide" data-title="封面">
+    <div class="deck-header"><span>Lesciotia · 迭代周报</span><span>W47</span></div>
+    <p class="kicker">第 47 周 · 2026-11-16 → 11-22</p>
+    <h1 class="h1 mt-s">这一周，把上游<br>拆到 <span style="color:var(--accent)">零件</span>。</h1>
+    <p class="lede mt-m">五件基座件逐件自写，九件瓦作过一遍色板体检，整册模板正在改写。剩下的是整册，不是框架。</p>
+    <div class="deck-footer"><span>来雪亭 · 每周一更</span><span class="slide-number" data-current="1" data-total="9"></span></div>
+  </section>
+
+  <section class="slide" data-title="三个数">
+    <p class="kicker">Metrics · 第 47 周</p>
+    <h2 class="h2">先看结论</h2>
+    <div class="grid g4 mt-l anim-stagger-list" data-anim-target>
+      <div class="card"><p class="eyebrow">上游资产</p><div style="font-size:var(--t-h2);font-weight:800">0</div><p class="dim">基座件全部自写</p></div>
+      <div class="card"><p class="eyebrow">色板体检</p><div style="font-size:var(--t-h2);font-weight:800">9</div><p class="dim" style="color:var(--good)">九件瓦作，零硬伤</p></div>
+      <div class="card"><p class="eyebrow">对账项</p><div style="font-size:var(--t-h2);font-weight:800">450</div><p class="dim" style="color:var(--good)">全过，零漂移</p></div>
+      <div class="card"><p class="eyebrow">梁架</p><div style="font-size:var(--t-h2);font-weight:800">17</div><p class="dim">族 / 34 式，含 quiz</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="本周做的">
+    <p class="kicker">本周做的 · 六件</p>
+    <h2 class="h2">从基座到整册</h2>
+    <div class="grid g3 mt-m">
+      <div class="card"><h4>基座重排</h4><p class="dim">判据在前，token 居中。</p></div>
+      <div class="card"><h4>动效收口</h4><p class="dim">26 类，接口冻结。</p></div>
+      <div class="card"><h4>运行自写</h4><p class="dim">键位、深链、双屏照旧。</p></div>
+      <div class="card"><h4>出图改判据</h4><p class="dim">只认文件非空。</p></div>
+      <div class="card"><h4>主色补描边</h4><p class="dim">浅黄压底靠边界立住。</p></div>
+      <div class="card"><h4>口径对齐</h4><p class="dim">族 16、式 31、瓦作 9。</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="趋势">
+    <p class="kicker">趋势 · 近八周</p>
+    <h2 class="h2">闸门通过数</h2>
+    <div class="card mt-l" style="height:520px;padding:28px 32px"><canvas id="wr-bars"></canvas></div>
+    <p class="dim2 mt-m" style="font-size:var(--t-cap)">口径：新增或重写的闸门数，不累计复用项。</p>
+    <script>
+      addEventListener('DOMContentLoaded',()=>{
+        const css=getComputedStyle(document.documentElement);
+        const accent=css.getPropertyValue('--accent').trim();
+        const text2=css.getPropertyValue('--text-2').trim();
+        const border=css.getPropertyValue('--border').trim();
+        new Chart(document.getElementById('wr-bars'),{type:'bar',
+          data:{labels:['W40','W41','W42','W43','W44','W45','W46','W47'],
+            datasets:[{label:'闸门数',data:[3,4,5,5,6,7,8,9],
+              backgroundColor:accent,borderRadius:8,barThickness:56}]},
+          options:{maintainAspectRatio:false,plugins:{legend:{display:false}},
+            scales:{x:{ticks:{color:text2,font:{size:18}},grid:{display:false}},
+                    y:{ticks:{color:text2,font:{size:18}},grid:{color:border},suggestedMax:10}}}});
+      });
+    </script>
+  </section>
+
+  <section class="slide" data-title="时间去向">
+    <p class="kicker">时间去向 · 四十小时</p>
+    <h2 class="h2">这一周花在哪</h2>
+    <div class="grid g2 mt-l" style="align-items:center">
+      <div class="card" style="height:440px;padding:24px"><canvas id="wr-pie"></canvas></div>
+      <div class="card">
+        <h4>结论</h4>
+        <p class="dim">写代码与改整册占了近七成，出图核验不到六分之一——时间大头仍在结构，不在装饰。</p>
+        <ul class="mt-m dim">
+          <li>重写代码件 &nbsp; 44%</li><li>改写整册 &nbsp; 22%</li><li>出图与核验 &nbsp; 14%</li>
+          <li>文档对账 &nbsp; 12%</li><li>素材与主题 &nbsp; 8%</li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      addEventListener('DOMContentLoaded',()=>{
+        const css=getComputedStyle(document.documentElement);
+        // 色板三律①：一页只许一个色相。环图不用五色，改用 accent 与底的明度阶梯
+        const toRgb=h=>{const s=h.trim().replace('#','');return [0,2,4].map(i=>parseInt(s.slice(i,i+2),16))};
+        const mix=(a,b,p)=>'rgb('+a.map((v,i)=>Math.round(v*p+b[i]*(1-p))).join(',')+')';
+        const A=toRgb(css.getPropertyValue('--accent')), B=toRgb(css.getPropertyValue('--bg'));
+        const colors=[1,.7,.52,.38,.26].map(p=>mix(A,B,p));
+        const text2=css.getPropertyValue('--text-2').trim();
+        new Chart(document.getElementById('wr-pie'),{type:'doughnut',
+          data:{labels:['重写代码件','改写整册','出图与核验','文档对账','素材与主题'],
+            datasets:[{data:[44,22,14,12,8],backgroundColor:colors,borderWidth:0}]},
+          options:{maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{color:text2,font:{size:16}}}}}});
+      });
+    </script>
+  </section>
+
+  <section class="slide" data-title="阻塞">
+    <p class="kicker">Checklist · 还差什么</p>
+    <h2 class="h2">四件未完成</h2>
+    <ul class="todo anim-stagger-list" data-anim-target>
+      <li><span class="b"></span><span class="t">五册内容按新口径逐页对齐</span><span class="tag">#decks</span></li>
+      <li><span class="b"></span><span class="t">两件已交付 deck 需按主题指纹重打包</span><span class="tag">#rebuild</span></li>
+      <li><span class="b"></span><span class="t">data / ring / split / image-set 四族仍空着</span><span class="tag">#families</span></li>
+      <li><span class="b"></span><span class="t">可选件（网格 / 透镜）只进了示例页</span><span class="tag">#optional</span></li>
+    </ul>
+    <p class="dim2 mt-m" style="font-size:var(--t-cap)">勾选态留给下一版：做完再把 <code>done</code> 补上，别预勾。</p>
+  </section>
+
+  <section class="slide" data-title="下周">
+    <p class="kicker">下周 · W48</p>
+    <h2 class="h2">三件兑现</h2>
+    <div class="grid g3 mt-l">
+      <div class="card card-soft"><h4>整册改完</h4><p class="dim">五册内容自写，页数与登记值一致。</p></div>
+      <div class="card card-soft"><h4>声明收缩</h4><p class="dim">没有可归因资产，就不再声明上游。</p></div>
+      <div class="card card-soft"><h4>闸门补一档</h4><p class="dim">让描边能被量到，不再靠人工复核。</p></div>
+    </div>
+  </section>
+
+
+  <section class="slide" data-title="本周取材">
+    <p class="kicker">取材 · 五张纹理</p>
+    <h2 class="h2">这一周的五张底图，都是自己出的</h2>
+    <div class="gg band mt-l anim-stagger-list" data-anim-target>
+      <figure class="cell c1"><img src="../../../assets/textures/marble/marble-vein-1024.png" alt="主视觉·大脉络"><span>主视觉·大脉络</span></figure>
+      <figure class="cell"><img src="../../../assets/textures/marble/marble-gray-1024.png" alt="汉白玉·台面"><span>汉白玉·台面</span></figure>
+      <figure class="cell"><img src="../../../assets/textures/grain/grain-gray-512.png" alt="石面·颗粒"><span>石面·颗粒</span></figure>
+      <figure class="cell"><img src="../../../assets/textures/fiber/fiber-gray-512.png" alt="拷贝纸·纤维"><span>拷贝纸·纤维</span></figure>
+      <figure class="cell"><img src="../../../assets/textures/travertine/travertine-gray-512.png" alt="石灰华·层理"><span>石灰华·层理</span></figure>
+    </div>
+  </section>
+  <section class="slide center tc" data-title="收束">
+    <div>
+      <p class="kicker">FIN · 第 47 周</p>
+      <h1 class="h1">框架是自己的了。</h1>
+      <p class="lede" style="margin:18px auto">剩下的活儿都是内容活儿，不是依赖活儿。</p>
+      <div class="row mt-l" style="justify-content:center;gap:16px">
+        <span class="pill">下次：周一 W48</span>
+        <span class="pill pill-accent">问题进库里提</span>
+      </div>
+    </div>
+    <div class="deck-footer"><span>Lesciotia</span><span class="slide-number" data-current="9" data-total="9"></span></div>
+  </section>
+
+</div>
+<script src="../../../assets/runtime.js"></script>
+</body></html>

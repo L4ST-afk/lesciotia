@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>图表 · 梁架一族</title>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/layouts.css">
+<link rel="stylesheet" id="theme-link" href="../../assets/themes/guanglan-rd.css">
+<script src="../../assets/vendor/chart.umd.min.js"></script>
+<link rel="stylesheet" href="../../assets/animations/animations.css">
+</head><body class="single">
+<!-- 梁架「charts」（图表）：6 式，一段一式。择式先看这一页，别背旧名。 -->
+<div class="deck">
+
+    <section data-style="chart-axis" class="slide is-active" data-title="Bar chart">
+  <p class="kicker">Chart · 柱状图</p>
+  <h2 class="h2">季度 MRR 趋势</h2>
+  <div class="card mt-l" style="height:520px;padding:28px"><canvas id="c-axis"></canvas></div>
+  <script>
+    addEventListener('DOMContentLoaded',()=>{
+      const css=getComputedStyle(document.documentElement);
+      const accent=css.getPropertyValue('--accent').trim();
+      const text2=css.getPropertyValue('--text-2').trim();
+      const border=css.getPropertyValue('--border').trim();
+      new Chart(document.getElementById('c-axis'),{type:'bar',
+        data:{labels:['Q1','Q2','Q3','Q4','Q1 +1','Q2 +1','Q3 +1','Q4 +1'],
+          datasets:[{label:'MRR (K)',data:[42,58,73,96,124,158,204,261],
+            backgroundColor:accent,borderRadius:8,barThickness:36}]},
+        options:{plugins:{legend:{labels:{color:text2}}},
+          scales:{x:{ticks:{color:text2},grid:{color:border}},
+                  y:{ticks:{color:text2},grid:{color:border}}}}});
+    });
+  </script>
+<p class="params">同段换画法：<code>line</code> 折线（柱线同一骨架）</p></section>
+
+<section data-style="chart-pie" class="slide is-active" data-title="Pie chart">
+  <p class="kicker">Chart · 环形图</p>
+  <h2 class="h2">时间都花在了哪里</h2>
+  <div class="grid g2 mt-l" style="align-items:center">
+    <div class="card" style="height:460px;padding:28px"><canvas id="c-pie"></canvas></div>
+    <div class="card">
+      <h4>Takeaways</h4>
+      <p class="dim">超过一半的时间都在写内容，动效只占 5%。说明值得把动效做成可复用模板。</p>
+      <ul class="mt-m dim">
+        <li>✍️ 写内容 &nbsp; 55%</li><li>🧩 挑版式 &nbsp; 18%</li><li>🎨 调样式 &nbsp; 14%</li>
+        <li>📸 出图 &nbsp; 8%</li><li>✨ 动效 &nbsp; 5%</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    addEventListener('DOMContentLoaded',()=>{
+      const css=getComputedStyle(document.documentElement);
+      const colors=['--accent','--accent-2','--accent-3','--good','--warn'].map(k=>css.getPropertyValue(k).trim());
+      const text2=css.getPropertyValue('--text-2').trim();
+      new Chart(document.getElementById('c-pie'),{type:'doughnut',
+        data:{labels:['写内容','挑版式','调样式','出图','动效'],
+          datasets:[{data:[55,18,14,8,5],backgroundColor:colors,borderWidth:0}]},
+        options:{cutout:'62%',plugins:{legend:{position:'right',labels:{color:text2}}}}});
+    });
+  </script>
+<p class="params">同段换画法：<code>line</code> 折线（柱线同一骨架）</p></section>
+
+<section data-style="chart-radar" class="slide is-active" data-title="Radar chart">
+  <p class="kicker">Chart · 雷达图</p>
+  <h2 class="h2">把方案和竞品放一张图</h2>
+  <div class="card mt-l" style="height:520px;padding:28px"><canvas id="c-radar"></canvas></div>
+  <script>
+    addEventListener('DOMContentLoaded',()=>{
+      const css=getComputedStyle(document.documentElement);
+      const a1=css.getPropertyValue('--accent').trim();
+      const a2=css.getPropertyValue('--accent-2').trim();
+      const text2=css.getPropertyValue('--text-2').trim();
+      new Chart(document.getElementById('c-radar'),{type:'radar',
+        data:{labels:['上手','美观','自定义','性能','导出','生态'],
+          datasets:[
+            {label:'本方案',data:[9,9,10,10,9,6],borderColor:a1,backgroundColor:a1+'33',borderWidth:3,pointRadius:5},
+            {label:'reveal.js',data:[8,7,9,8,8,10],borderColor:a2,backgroundColor:a2+'22',borderWidth:3,pointRadius:5}]},
+        options:{plugins:{legend:{labels:{color:text2}}},
+          scales:{r:{suggestedMin:0,suggestedMax:10,ticks:{color:text2,backdropColor:'transparent'},
+                     pointLabels:{color:text2,font:{size:14}},grid:{color:'rgba(0,0,0,.08)'},angleLines:{color:'rgba(0,0,0,.08)'}}}}});
+    });
+  </script>
+<p class="params">同段换画法：<code>line</code> 折线（柱线同一骨架）</p></section>
+
+    <section data-style="chart-unit" class="slide is-active" data-title="Unit dots">
+  <p class="kicker">Chart · 可数单位</p>
+  <h2 class="h2">一百个人里，三十七个还在用老版</h2>
+  <div class="grid g2 mt-l" style="align-items:center">
+    <div class="unit-grid" aria-label="100 个点，其中 37 个点亮">
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class="on"></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+      <i class=""></i>
+    </div>
+    <div class="card">
+      <h4>为什么不用饼图</h4>
+      <p class="mt-s">占比只有两段、样本只有一百人时，饼图的扇形谁大谁小要靠估；<b>一点＝一人</b>，
+      读者能数，也能核对。</p>
+      <p class="dim mt-s">副标题必须写清单位：<span class="mono">one dot = one person</span>。</p>
+    </div>
+  </div>
+  <p class="params">适用：占比 + 小样本（≤100 可数）；超过 100 改用百分比条，别把点缩成尘</p></section>
+
+    <section data-style="chart-waterfall" class="slide is-active" data-title="Waterfall">
+  <p class="kicker">Chart · 瀑布</p>
+  <h2 class="h2">从毛利到净利，钱在哪一步没的</h2>
+  <div class="wf mt-l">
+    <div class="row"><span class="lab">期初毛利</span><div class="track"><i style="left:0;width:64%"></i></div><b>128</b></div>
+    <div class="row"><span class="lab">新签增量</span><div class="track"><i class="pos" style="left:64%;width:9%"></i></div><b>+18</b></div>
+    <div class="row"><span class="lab">渠道费用</span><div class="track"><i class="neg" style="left:57%;width:16%"></i></div><b>−32</b></div>
+    <div class="row"><span class="lab">人力</span><div class="track"><i class="neg" style="left:41%;width:12%"></i></div><b>−24</b></div>
+    <div class="row"><span class="lab">净利</span><div class="track"><i class="tot" style="left:0;width:43%"></i></div><b>90</b></div>
+  </div>
+  <p class="params">适用：增减分解 ≤6 级；正负同轴、期初与期末用实心块，中间用细块——<b>柱不断轴</b></p></section>
+
+    <section data-style="chart-dumbbell" class="slide is-active" data-title="Dumbbell">
+  <p class="kicker">Chart · 哑铃</p>
+  <h2 class="h2">上线前后，六个团队各走了多远</h2>
+  <div class="db mt-l">
+    <div class="hd"><span>团队</span><span>上线前 → 上线后</span><span>变化</span></div>
+    <div class="row"><span class="lab">A 组</span><div class="track"><i class="line" style="left:18%;width:52%"></i><i class="dot from" style="left:18%"></i><i class="dot to" style="left:70%"></i></div><b>+2.1×</b></div>
+    <div class="row"><span class="lab">B 组</span><div class="track"><i class="line" style="left:24%;width:41%"></i><i class="dot from" style="left:24%"></i><i class="dot to" style="left:65%"></i></div><b>+1.6×</b></div>
+    <div class="row"><span class="lab">C 组</span><div class="track"><i class="line" style="left:30%;width:12%"></i><i class="dot from" style="left:30%"></i><i class="dot to" style="left:42%"></i></div><b>+0.4×</b></div>
+    <div class="row"><span class="lab">D 组</span><div class="track"><i class="line" style="left:36%;width:6%"></i><i class="dot from" style="left:36%"></i><i class="dot to" style="left:42%"></i></div><b>+0.2×</b></div>
+    <div class="row"><span class="lab">E 组</span><div class="track"><i class="line neg" style="left:52%;width:0%"></i><i class="dot from" style="left:52%"></i><i class="dot to neg" style="left:52%"></i></div><b>持平</b></div>
+    <div class="row"><span class="lab">F 组</span><div class="track"><i class="line neg" style="left:58%;width:14%"></i><i class="dot from" style="left:58%"></i><i class="dot to" style="left:44%"></i></div><b>−0.5×</b></div>
+  </div>
+  <p class="params">适用：两时点对比（前后/今昔）≤6 类；两点串珠＝真单位，别用两根柱并排假装对比</p></section>
+
+
+
+  </div></body></html>

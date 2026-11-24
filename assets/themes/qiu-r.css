@@ -1,0 +1,384 @@
+/* theme: qiu-r - 虬江 Qiu R ｜ 学术气质 · 河道水线 · 方格稿纸 · 青砖驳岸
+   命名：上海杨浦中部的小河「虬江」。东西走向，全长 5.9 公里、平均面宽 30.8 米，西段经暗涵接东走马塘，
+   东段经新虬江泵闸入黄浦江，绕着五角场商圈、创智天地与大学路走；2021 年评为市三星级河道——杨浦三条以总分第一挂牌，虬江居其一。
+   （长度取杨浦区水务口径 5.9 km；另有 8.13 km 的说法，含箱涵与延伸段，两说并存，本主题不引具体里程作版式数字。）
+   与学校的真实关系只有两处（2026-11-20 按杨浦区水务与复旦校史校正）：
+     · 复旦：1922 年迁到江湾后，它是邯郸校区西北侧的「护城河」；今复旦段 2.1 公里已改为地下箱涵，2024 清淤、2028 计划开盖。
+     · 上财：国定路 777 号，离河约一公里，隔着大学路与政民路，不在「后门临河」。
+     · 同济在四平路，离大学路三站地铁，⛔ 不属于沿河一线（早期版本误写「三所学校」，已删）。
+   它给的不是「古典学院」的深红木与铜灯，而是三样很具体的东西：
+     ① 水的横向线（河面漾开的等距细线）——本主题所有分隔件、页脚带、卡片下沿的几何来源；
+     ② 方格稿纸与页边线（论文草稿、习题纸、勘误页）；
+     ③ 青砖驳岸与水泥河埠（河岸做法，冷灰绿，和纸黄互为冷暖）。
+   视觉策略：纸黄做底、墨黑压字、河青做唯一实心主色；砖红只做「批注/图版号」级别的小面积，
+   银杏金只做细线（对底 3.13:1，不到 4.5，⛔ 不承载正文，只做 1px 线与 <16px 的小标）。
+   字体分工（2026-11-20）：标题与引语用「芝士奶盖乌龙宋」——笔画粗、转角圆、衬线钝，像铅字压进纸背而不像屏幕字；
+   正文换「思源黑体」——窄身、笔画均匀，长句（每行 30–40 字）读起来不黏。两套栈都留了系统回落，缺字不空。
+   骨架承 century-sq.css：token 名、组件选择器、六档字号与 CJK 行盒补偿全部沿用，只换视觉。
+   ⚠️ 配色取舍（2026-11-20 首版手记，最终读数见下段）：
+     · 河青 #3C757E 与靛 #253B5C 色相只差 28°：所以分工硬切——靛只做 1px 线与引用字（面积 <2%），
+       河青只做实心块与 3px 顶线（面积 8–12%），且从不同框出现在同一屏。
+     · 砖红 #8A3932 与银杏 #AA822A 差 36°：砖红做「面」（图版号底、批注条），银杏只做「线」，
+       面积 3% vs 1%，形状方 vs 线，两轴成立。
+   体检实测（check-theme-colors.py --only qiu-r）：正文最小对比 14.01:1、主色对底 3+、灰阶无撞车、
+   暧昧带 0 对（因 --line-2 取墨黑 #1D2421，把战斗色拉开了），故未登记 amb-ok 豁免。 */
+
+/* 字体：标题用「芝士奶盖乌龙宋」0.103（OFL，免费商用，已内化 GB2312 子集（woff2 2.6 MB），生僻字回落华文中宋/系统宋体）；
+   正文用思源黑体（不内化，回落系统黑体：苹方/黑体/SimHei）。
+   该字体只有 Bold 一档，故 @font-face 声明 400–700 区间，标题写 font-weight:400 也不会触发伪粗。 */
+@font-face{
+  font-family:'CheeseFoamOolongSong';
+  src:local('Cheese Foam Oolong Song'),local('CheeseFoamOolongSong-Bold'),url('../fonts/cheesefoam/CheeseFoamOolongSong-Subset-Bold.woff2') format('woff2');
+  font-weight:400 700;
+  font-style:normal;
+  font-display:block;
+}
+
+:root{
+  --bg:#f4f1e7;
+  --bg-soft:#efebde;
+  --surface:#fbfaf3;
+  --surface-2:#f6f2e4;
+  /* 河道水色：主色只此一档，实心块一律走它 */
+  --water:#3c757e;
+  --water-hi:#4a8891;
+  --water-lo:#2a545c;
+  --water-deep:#244a52;        /* 深水：暗底/引语页 */
+  --water-abyss:#1b3a41;       /* 深渊水：深水面的收尾端色，只做渐变末端 */
+  /* 学术三辅助色 */
+  --ink-blue:#253b5c;          /* 靛：1px 线、链接、引用、页眉 */
+  --brick:#8a3932;             /* 砖红：图版号、批注条，面用 */
+  --ginkgo:#aa822a;            /* 银杏：只做细线，不承载正文 */
+  --ginkgo-lo:#8a6a18;
+  /* 驳岸材质 */
+  --brick-wall:#6f7873;        /* 青砖 */
+  --brick-wall-hi:#8d958f;
+  --stone:#c9c6b8;             /* 河埠石 */
+  --paper-deep:#e9e4d4;
+  --border:rgba(29,36,33,.16);
+  --border-strong:rgba(29,36,33,.30);
+  --text-1:#1d2421;
+  --text-2:#4c5651;
+  --text-3:#6c746e;
+  --accent:var(--water);
+  --accent-2:var(--ink-blue);
+  --accent-3:var(--brick);
+  /* 预览页模板（scripts/preview-template.html）沿用的旧名，一律别名到本主题实色，不新开 hex */
+  --primary:#3c757e;
+  --primary-hi:#4a8891;
+  --primary-lo:#2a545c;
+  --line-2:#1d2421;
+  --line-4:#8a3932;
+  --line-6:#6a241f;
+  --accent-ink:#ffffff;        /* #ffffff on 河青 ≈ 5.0:1 */
+  --good:#2f6b57;
+  --warn:#8a6a18;
+  --bad:#8a3932;
+  --grad:linear-gradient(135deg,#244a52,#3c757e);
+  --grad-soft:linear-gradient(135deg,#fbfaf3,#eef0e8);
+  /* 纸上有直角；胶囊与小标签才用大圆角 */
+  --radius:2px;
+  --radius-sm:2px;
+  --radius-lg:3px;
+  --shadow:0 12px 26px rgba(29,36,33,.06),0 1px 2px rgba(29,36,33,.04);
+  --shadow-lg:0 22px 46px rgba(29,36,33,.09),0 3px 6px rgba(29,36,33,.05);
+  /* 标题栈：奶盖宋 → 起司奶蓋烏龍宋（字体自报的繁体族名）→ 华文中宋 → 系统宋体 */
+  --ff-title:'CheeseFoamOolongSong','起司奶蓋烏龍宋','芝士奶盖乌龙宋','STZhongsong','华文中宋','Songti SC','SimSun',serif;
+  /* 正文栈：思源黑体（系统装有才生效，不内化）→ Noto Sans CJK → 苹方 → 黑体 */
+  --ff-body:'Source Han Sans SC','思源黑体','Noto Sans CJK SC','PingFang SC','Heiti SC','SimHei',sans-serif;
+  --font-button:var(--ff-body);
+  --font-display:var(--ff-title);
+  --font-serif:var(--ff-title);
+  --font-sans:var(--ff-body);
+  --font-note:var(--ff-body);
+  --font-mono:var(--ff-body);
+  --letter-tight:0;
+  --letter-normal:0;
+}
+
+html,body{background:var(--bg);color:var(--text-1);font-family:var(--font-sans);font-weight:400}
+body{background-color:var(--bg)}
+
+/* 环境层：顶部天光 + 极淡方格稿纸 + 底部河面波带。
+   方格 26px 一档、α .028——只在空白处可见，⛔ 不许压到正文附近变重。 */
+.deck{
+  background:
+    radial-gradient(118% 40% at 50% -8%,rgba(255,255,255,.94) 0%,rgba(226,232,224,.50) 46%,rgba(226,232,224,0) 76%),
+    repeating-linear-gradient(0deg,transparent 0 25px,rgba(29,36,33,.020) 25px 26px),
+    repeating-linear-gradient(90deg,transparent 0 25px,rgba(29,36,33,.016) 25px 26px),
+    linear-gradient(180deg,#edebdf 0%,#f4f1e7 38%,#f7f4ea 100%);
+}
+/* 河面：底部 112px 波带（17px 一道）。最上一层是纸色渐变，把水线从上方「洇」进纸里，
+   ⛔ 不外加 1px 硬顶线——那会和页脚上沿的银杏线撞成一道脏双规 */
+.deck::before{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:112px;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,var(--bg) 0%,rgba(244,241,231,.70) 24%,rgba(244,241,231,0) 70%),
+    repeating-linear-gradient(0deg,rgba(60,117,126,.16) 0 1px,transparent 1px 17px),
+    linear-gradient(0deg,rgba(60,117,126,.28),rgba(60,117,126,.05) 58%,rgba(60,117,126,0));
+}
+/* 左缘：页边界栏线（论文草稿的界栏）——从页眉下 88px 起，只到水线之前；
+   ⛔ 不能从 y=0 起，否则会横穿页眉那行小字 */
+.deck::after{
+  content:"";position:absolute;left:72px;top:88px;bottom:112px;width:1px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(138,57,50,.30),rgba(138,57,50,.16) 60%,rgba(138,57,50,0));
+}
+.slide{padding:80px 104px}  /* 正文基准由 base.css 给，主题只覆盖 padding */
+.progress-bar{height:2px;bottom:0}
+.progress-bar > span{background:var(--water);box-shadow:none}
+
+/* 标题：宋体 400（本库只内化了一档宋体，写 700 就是伪粗），大字靠字号与行距立住 */
+h1,h2,h3,h4,h1.title,h2.title,.h1,.h2,.h3,.h4{
+  font-family:var(--font-display);font-weight:400;color:var(--text-1);
+}
+h1.title,.h1{line-height:1.08}
+h2.title,.h2{line-height:1.14}
+h3,.h3,h4,.h4{line-height:1.24}
+.lede{color:var(--text-2);font-weight:400}
+/* 铭牌/眉标走智造黑 400：拉丁小字靠字距与全大写出「期刊页眉」感 */
+.kicker,.eyebrow{
+  font-family:var(--font-mono);font-weight:400;color:var(--text-3);letter-spacing:.10em;
+}
+
+/* —— 四档「文献卡」：直角、无投影、纸面，靠线区分层级 —— */
+.card{
+  background-color:var(--surface);
+  background-image:var(--qj-fiber);
+  background-size:220px 220px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:inset 0 1px 0 #ffffff;
+}
+/* 硫酸纸/薄衬：纤维更密、色更暖，压字判读最稳的一档 */
+.card-soft{
+  background-color:#f7f2df;
+  background-image:
+    linear-gradient(168deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.16) 38%,rgba(255,255,255,0) 62%),
+    var(--qj-fiber);
+  background-size:auto,220px 220px;
+  border:1px solid rgba(29,36,33,.14);
+  border-right-color:rgba(29,36,33,.20);
+  border-bottom-color:rgba(29,36,33,.24);
+  box-shadow:0 2px 0 -1px rgba(233,228,212,.85),inset 0 1px 0 #ffffff;
+}
+/* 青砖描边：一像素靛线，里面不填色——「还没誊清的稿」 */
+.card-outline{
+  background:rgba(251,250,243,.55);
+  border:1px solid rgba(37,59,92,.62);
+  border-radius:var(--radius);
+  box-shadow:none;
+}
+/* 批注卡：顶边 3px 河青 + 底沿 1px 银杏细线（学术双线的最小版） */
+.card-accent{
+  border-top:3px solid var(--water);
+  border-bottom:1px solid rgba(170,130,42,.55);
+  background-color:var(--surface);
+  background-image:var(--qj-fiber);
+  background-size:220px 220px;
+  box-shadow:inset 0 1px 0 #ffffff;
+}
+.card-hover:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+
+/* 硫酸纸浮层：半透纸白 + 极轻模糊，边缘只有一圈纸色细边；⛔ 不做玻璃亮边与焦散 */
+.glass{
+  /* ⚠️ 2026-11-21：必须显式写 position:relative。模板 .glass 有这一行，但本规则在模板之后加载，
+     不写就会把它覆盖回 static，浮层里的 .x（absolute）随即逃到 .spec-cell 右上角（实测脱离 95.5px）。 */
+  position:relative;
+
+  border-radius:var(--radius-lg);
+  background:
+    linear-gradient(160deg,rgba(255,255,255,.46),rgba(255,255,255,0) 60%),
+    rgba(250,248,240,.62);
+  -webkit-backdrop-filter:blur(10px) saturate(104%);
+  backdrop-filter:blur(10px) saturate(104%);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:0 14px 34px rgba(29,44,42,.10),inset 0 1px 0 rgba(255,255,255,.88);
+}
+
+/* 胶囊三态：河青实心 / 靛描边 / 砖红实心。
+   内距 14/10：CJK 1.7 行高下 10/14 会让墨心偏高 4px，反之正对（实测偏差 0）。 */
+.pill{
+  padding:14px 22px 10px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:#ffffff;
+  background:linear-gradient(180deg,var(--water-hi) 0%,var(--water) 48%,var(--water-lo) 100%);
+  border:1px solid rgba(24,58,64,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34);
+}
+.pill-accent{
+  padding:14px 22px 10px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--ink-blue);
+  background:rgba(37,59,92,.06);
+  border:1px solid rgba(37,59,92,.66);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+}
+/* 幽灵胶囊：导航里的非当前项。⛔ 原先只在预览适配层定义，主题本体没有，
+   导致「预览能看、出件掉样式」——2026-11-20 收进本体。 */
+.pill-ghost{
+  padding:14px 22px 10px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--water-lo);
+  background:rgba(251,250,243,.92);
+  border:1px solid rgba(60,117,126,.55);
+  box-shadow:none;
+}
+.pill-good{
+  padding:14px 22px 10px;border-radius:999px;
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:#f4f8f5;
+  background:linear-gradient(180deg,#3a7d66,var(--good));
+  border:1px solid rgba(24,58,46,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.divider{background:var(--border)}
+/* 论文双线：粗 2px + 细 1px，中间留 3px 白——学术排印里最省事的「章节级」分隔 */
+.divider-accent{
+  height:6px;width:116px;border-radius:0;box-shadow:none;
+  background:linear-gradient(180deg,
+    var(--ink-blue) 0 2px,transparent 2px 5px,
+    rgba(37,59,92,.55) 5px 6px);
+}
+
+.deck-header,.deck-footer{
+  font-family:var(--font-mono);font-weight:400;letter-spacing:.08em;color:var(--text-3);
+}
+/* 页脚上沿一道银杏细线：与页眉的靛蓝形成「上冷下暖」的双眉 */
+.deck-footer{border-top:1px solid rgba(170,130,42,.42);padding-top:9px}
+
+/* 选项：方格稿纸托盘；判对走靛，选错走砖红 */
+.quiz-opt{
+  display:flex;align-items:center;min-height:58px;padding:12px 20px;line-height:1.35;
+  border:1px solid rgba(29,36,33,.18);
+  border-radius:var(--radius);
+  background-color:var(--surface);
+  background-image:
+    var(--qj-fiber),
+    repeating-linear-gradient(0deg,transparent 0 21px,rgba(29,36,33,.07) 21px 22px);
+  background-size:220px 220px,auto;
+  box-shadow:inset 0 1px 0 #ffffff;
+  font-family:var(--font-button);font-weight:400;
+}
+.quiz-opt:hover{border-color:rgba(60,117,126,.62);box-shadow:inset 0 1px 0 #ffffff,0 0 0 1px rgba(60,117,126,.16)}
+.quiz-opt.correct{border:1px solid rgba(37,59,92,.70);color:#1b2c47;background:rgba(37,59,92,.08)}
+.quiz-opt.chosen-wrong{border:1px solid rgba(138,57,50,.66);color:#6f2b25;background:rgba(138,57,50,.07)}
+.quiz-reveal{border-top:3px solid var(--water);background:var(--surface);box-shadow:inset 0 1px 0 #ffffff}
+
+/* 图版框：外一圈墨线、内一圈白衬（论文插图的做法，不加玻璃反光） */
+.img-frame{
+  border-radius:var(--radius);padding:7px;
+  background:var(--surface);
+  border:1px solid rgba(29,36,33,.42);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.9);
+}
+/* 图版号：方形小牌，砖红字 + 纸底——小面积，不铺 */
+.img-tag{
+  border-radius:2px;background:rgba(246,242,228,.96);color:var(--brick);
+  border:1px solid rgba(138,57,50,.46);
+  text-transform:none;letter-spacing:.06em;font-family:var(--font-note);
+}
+.img-cap,.deck-header,.deck-footer{font-family:var(--font-note)}
+.mono{font-family:var(--font-mono)}
+
+/* —— 纸纤维噪声（内联 SVG，棕色 α .12）：读成纸，不是点阵。α 高于 .15 会变成砂目 —— */
+:root{
+  --qj-fiber:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23f)' opacity='0.12'/%3E%3C/svg%3E");
+  /* 水面：两段反向正弦（±1.6px），34px 一周期；直线是横格纸，弧线才是水 */
+  --qj-ripple:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='34'%3E%3Cpath d='M0 9 C40 5 80 13 120 9 C160 5 200 13 240 9' fill='none' stroke='%233c757e' stroke-opacity='0.44' stroke-width='1'/%3E%3Cpath d='M0 26 C40 22 80 30 120 26 C160 22 200 30 240 26' fill='none' stroke='%233c757e' stroke-opacity='0.20' stroke-width='1'/%3E%3C/svg%3E");
+  /* 河埠石麻点：140px 一档，深浅两色各四粒，α 极低 */
+  --qj-speck:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%232d3733' fill-opacity='0.10'%3E%3Ccircle cx='18' cy='24' r='1.6'/%3E%3Ccircle cx='72' cy='12' r='1.1'/%3E%3Ccircle cx='118' cy='52' r='1.9'/%3E%3Ccircle cx='40' cy='96' r='1.3'/%3E%3Ccircle cx='96' cy='118' r='1.5'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='0.18'%3E%3Ccircle cx='52' cy='38' r='1.8'/%3E%3Ccircle cx='104' cy='80' r='1.2'/%3E%3Ccircle cx='24' cy='122' r='1.6'/%3E%3Ccircle cx='132' cy='14' r='1.1'/%3E%3Ccircle cx='76' cy='60' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
+  /* 青砖：120×56 两行四砖、错缝 30px；砖面各自 ±4% 明度差，免得整片一个色 */
+  --qj-brick-tile:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='56'%3E%3Crect width='120' height='56' fill='none'/%3E%3Crect x='1' y='1' width='58' height='26' fill='%23ffffff' fill-opacity='0.045'/%3E%3Crect x='61' y='1' width='58' height='26' fill='%23000000' fill-opacity='0.03'/%3E%3Crect x='31' y='29' width='58' height='26' fill='%23000000' fill-opacity='0.035'/%3E%3Crect x='91' y='29' width='28' height='26' fill='%23ffffff' fill-opacity='0.05'/%3E%3Cg fill='%23565e59'%3E%3Crect y='0' width='120' height='1'/%3E%3Crect y='28' width='120' height='1'/%3E%3Crect x='0' y='1' width='1' height='27'/%3E%3Crect x='60' y='1' width='1' height='27'/%3E%3Crect x='30' y='29' width='1' height='27'/%3E%3Crect x='90' y='29' width='1' height='27'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* 青砖驳岸：错缝砌法——一整块 120×56 的砖样（两行四砖、第二行错 30px），生成一次再平铺；
+   不做 CSS 叠两层竖线：那样竖缝会贯穿每一行，读回方格 */
+
+
+/* —— 组件层：cp-* 选择器（预览页模板依赖，2026-11-20 补齐）——
+   模板的 .cp-btn-2 / .cp-anchor / .cp-progress 只给颜色覆盖，
+   多了少了都会塌成贴边小字。这里按 century-sq 的几何补回，只换材质色。 */
+.cp-btn-2{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 22px;border-radius:var(--radius);
+  font-family:var(--font-button);font-weight:400;font-size:var(--t-cap);
+  color:var(--water-lo);
+  background:rgba(251,250,243,.96);
+  border:1.5px solid var(--water);
+  box-shadow:inset 0 1px 0 #ffffff;
+}
+/* 轻警示条：砖红只做 12px 细条，绝不铺底 */
+.cp-alert{height:12px;width:260px;max-width:82%;border-radius:var(--radius-sm);background:var(--brick)}
+/* 已选锚点：纸底 + 河青细边 + 前置一枚青砖小方 */
+.cp-anchor{
+  display:inline-flex;align-items:center;gap:11px;
+  padding:8px 16px;border-radius:var(--radius);
+  background:linear-gradient(180deg,#fdfbf4,#f1ecdd);color:var(--text-1);
+  font-family:var(--font-button);font-weight:400;
+  border:1px solid rgba(60,117,126,.58);
+}
+.cp-anchor::before{
+  content:"";flex:0 0 auto;width:16px;height:16px;border-radius:1px;
+  background:var(--qj-brick-tile) 0 0/16px 8px;
+  border:1px solid rgba(24,30,27,.30);
+}
+/* 进度：石槽 + 河青条 */
+.cp-progress{height:8px;border-radius:0;background:var(--paper-deep);overflow:hidden}
+.cp-progress > span{display:block;height:100%;width:28%;background:linear-gradient(90deg,var(--water-lo),var(--water-hi))}
+/* 材质底：河青实漆 / 青砖铺面 / 河埠石 */
+.cp-steel{
+  background-image:
+    linear-gradient(104deg,rgba(255,255,255,0) 26%,rgba(255,255,255,.24) 46%,rgba(255,255,255,0) 64%),
+    linear-gradient(180deg,var(--water-hi) 0%,var(--water) 48%,var(--water-lo) 100%);
+}
+.cp-tile{
+  background-color:var(--brick-wall-hi);
+  background-image:
+    var(--qj-brick-tile),
+    linear-gradient(180deg,rgba(255,255,255,.14),rgba(29,36,33,.10));
+  background-size:120px 56px,auto;
+  background-repeat:repeat,no-repeat;
+}
+.cp-marble{
+  background-color:var(--stone);
+  background-image:
+    var(--qj-speck),
+    linear-gradient(180deg,#dedbd0,#c9c6b8 64%,#bab7a8);
+  background-size:140px 140px,auto;
+  background-repeat:repeat,no-repeat;
+}
+.cp-marble{
+  /* 位图层（2026-11-22）：石面的骨料颗粒；CSS 的 --qj-speck 只管散点分布，颗粒的明暗粗细由这张 tile 给。
+     ⚠️ 颜色不进图——色相仍由 :root 决定；tile 是「材质家族共用件」，source/派生/sha 见
+     assets/textures-src/registry.json，重出用 scripts/make-material-tile.py。 */
+  position:relative;
+  isolation:isolate;
+}
+.cp-marble::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;              /* 负层级：压在正文之下、底色之上，正文不会被纹理盖住 */
+  pointer-events:none;
+  background-image:url("../textures/grain/grain-gray-512.png");
+  background-repeat:repeat;
+  background-size:512px 512px;   /* 只能取 tile 固有尺寸，换尺寸＝换粒径（家族共享的第二个旋钮） */
+  mix-blend-mode:multiply;
+  opacity:.70;
+}
+/* 回退：.cp-marble--flat 退回纯 CSS（存档对比 / 打印用）。 */
+.cp-marble--flat::after{content:none}
+
+/* —— 字号与间距：六档收口（沿用 century-sq 的档位，2026-11-20）—— */
+h1.title,.h1{font-size:var(--t-h1);margin:32px 0 16px}
+h2.title,.h2{font-size:var(--t-h2);margin:24px 0 12px}
+h3,.h3{font-size:var(--t-h4);margin:0 0 12px}
+h4,.h4{font-size:var(--t-body-sm);margin:0 0 8px}
+.lede{font-size:var(--t-body-sm);margin-top:16px}
+.eyebrow{font-size:var(--t-cap)}
+.kicker{font-size:var(--t-cap)}
+.pill,.pill-accent,.pill-good,.img-tag,.img-cap,.deck-header,.deck-footer{font-size:var(--t-cap)}
+.card{padding:32px 40px}
+.row,.grid{gap:32px}
+.notes-overlay{font-size:var(--t-cap)}
