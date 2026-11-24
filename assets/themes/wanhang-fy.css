@@ -72,6 +72,15 @@
   --accent-2:#22475e;          /* 深河青：链接与线（8.1:1），与梧桐绿拉开灰阶 */
   --accent-3:var(--brick-dk);
   --accent-ink:#faf6ea;        /* 梧桐绿上的字（6.0:1） */
+
+  /* 比例条：拷贝纸槽 + 梧桐绿条（铅笔斜纹底，条身只留一层薄纸光） */
+  --bar-track:repeating-linear-gradient(135deg,rgba(63,100,73,.08) 0 1px,transparent 1px 8px),linear-gradient(180deg,#fdf9ee 0%,#efe6d2 100%);
+  --bar-rim:rgba(255,255,255,.70);
+  --bar-rim-bottom:rgba(60,80,60,.10);
+  --bar-well:rgba(60,80,60,.10);
+  --bar-fill:linear-gradient(180deg,#5f8769 0%,#3f6449 60%,#2c4a34 100%);
+  --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.16) 0,rgba(255,255,255,0) 32%);
+  --bar-fill-ring:inset 0 0 0 1px rgba(63,100,73,.35);
   /* 预览页模板沿用的旧名，一律别名到本主题实色，不新开 hex */
   --primary-hi:var(--plane-hi);
   --primary-lo:var(--plane-lo);

@@ -52,6 +52,15 @@
   --accent-2:#446685;
   --accent-3:#c68899;
   --accent-ink:#241c17;        /* 深棕字 on 钠灯黄 #F5B942 ≈ 9.5:1 */
+
+  /* 比例条：钠灯灯箱片 */
+  --bar-track:linear-gradient(180deg,rgba(245,185,66,.20) 0%,rgba(245,185,66,.10) 100%);
+  --bar-rim:rgba(255,224,150,.32);
+  --bar-rim-bottom:rgba(0,0,0,.35);
+  --bar-well:rgba(0,0,0,.38);
+  --bar-fill:linear-gradient(180deg,#ffe29a 0%,#f5b942 55%,#c98f1c 100%);
+  --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.50) 0,rgba(255,255,255,.10) 30%,rgba(255,255,255,0) 62%,rgba(255,255,255,.10) 100%);
+  --bar-fill-ring:inset 0 1px 0 rgba(255,246,214,.55), 0 2px 8px rgba(0,0,0,.38);
   --good:#7a9b63;
   --warn:#d69a3f;
   --bad:#c56b78;

@@ -1,8 +1,8 @@
 {
   "theme": "longhua-si",
   "source": "../themes/longhua-si.css",
-  "source_sha256": "b20f40371efa93abeaddf2113139fd84bbb25cb742ec586c437dd6977fcb00d9",
-  "generated": "2026-11-23T12:45:58",
+  "source_sha256": "30b4b5587cb78988e7523464e0cc1997b6d54e9f6b4e6a5380d1ba59a0216464",
+  "generated": "2026-11-25T01:33:00",
   "renderer": "chrome-headless",
   "palette": [
     "#2A2521",
@@ -112,7 +112,7 @@
       "kind": "board",
       "w": 1128,
       "h": 1736,
-      "sha256": "baaae6be6470e6be446c9c8c5525551b972545e8e79565ba24407074e8775eae"
+      "sha256": "ea0e759f6bc0755f46b3b1bf81018e9401432a9b7c4d8398619bf52a11ef6419"
     }
   ],
   "unknown_material_like": []

@@ -387,6 +387,16 @@ def audit(path):
                                    g.get('cfgs', 0), (g.get('drops') or 0) * 100,
                                    '、按 oklch 插值' if g.get('interp') == 'ok' else '')))
 
+    # 比例条七件：每个瓦作都必须显式声明（base 有兜底，但兜底不算交付）
+    bar_tokens = ('bar-track', 'bar-rim', 'bar-rim-bottom', 'bar-well',
+                  'bar-fill', 'bar-fill-gloss', 'bar-fill-ring')
+    raw = open(path, encoding='utf-8').read()
+    miss = [t for t in bar_tokens if not re.search(r'--%s\s*:' % re.escape(t), raw)]
+    if miss:
+        issues.append(dict(code='BAR', sev='F',
+                           msg='比例条 token 未声明：%s（九瓦作须各自声明，⛔ 不留空继承）'
+                               % '、'.join('--' + t for t in miss)))
+
     t1 = None
     if 'text-1' in v and grounds:
         t1 = round(min(contrast(v['text-1'][1], g[2]) for g in grounds), 2)
@@ -410,6 +420,7 @@ CODE_TITLE = {
     'LST': '灰阶分不开（ΔL*<10）',
     'DL': '主色与底同明度（ΔL*<12）',
     'CNT': '品牌/编码色超过 4 个',
+    'BAR': '比例条 token 未声明',
 }
 
 def render_md(rows, agg):

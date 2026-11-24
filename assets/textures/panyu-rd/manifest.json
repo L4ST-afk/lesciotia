@@ -1,8 +1,8 @@
 {
   "theme": "panyu-rd",
   "source": "../themes/panyu-rd.css",
-  "source_sha256": "ec8e010a73dbb0d125bb05afc1243f948ccddb6ad1c8131008f227f1204503f5",
-  "generated": "2026-11-23T12:47:26",
+  "source_sha256": "454cfc6748e1448c579049072c7604790306785ad7c34b7bfebe536d48828df8",
+  "generated": "2026-11-25T01:34:17",
   "renderer": "chrome-headless",
   "palette": [
     "#141414",
@@ -19,6 +19,7 @@
     "#BA4A33",
     "#C95D45",
     "#E0A32E",
+    "#E5DCCB",
     "#E6DBCA",
     "#ECE2D3",
     "#EEB443",
@@ -133,7 +134,7 @@
       "kind": "board",
       "w": 1128,
       "h": 1736,
-      "sha256": "051335bc7daf05ba7ddde312e4ec236b17f76d4fdda0da759ec679e70ab57f82"
+      "sha256": "d3f606eb8610af1347d7e06df4e2a4b8786cbc31c76921e6a11100b7b205dcc0"
     }
   ],
   "unknown_material_like": []

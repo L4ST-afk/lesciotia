@@ -118,6 +118,15 @@
   --accent-2:#4a5a5e;
   --accent-3:var(--gold);
   --accent-ink:#f7f2e7;
+
+  /* 比例条：香灰槽 + 朱柱条（哑光，不做水光） */
+  --bar-track:linear-gradient(180deg,#fbf7ee 0%,#e4dccd 100%);
+  --bar-rim:rgba(255,255,255,.82);
+  --bar-rim-bottom:rgba(70,40,25,.10);
+  --bar-well:rgba(70,40,25,.12);
+  --bar-fill:linear-gradient(180deg,#8d4c36 0%,#68321f 55%,#4b2315 100%);
+  --bar-fill-gloss:linear-gradient(180deg,rgba(255,240,222,.28) 0,rgba(255,240,222,.04) 30%,rgba(255,255,255,0) 58%);
+  --bar-fill-ring:inset 0 1px 0 rgba(255,240,222,.35), 0 2px 6px rgba(70,40,25,.18);
   /* 模板沿用的旧名，一律别名到本主题实色 */
   --primary-hi:#8a452c;
   --primary-lo:#4a2213;

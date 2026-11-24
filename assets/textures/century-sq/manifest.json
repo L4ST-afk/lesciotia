@@ -1,8 +1,8 @@
 {
   "theme": "century-sq",
   "source": "../themes/century-sq.css",
-  "source_sha256": "046eec72b338cfd3e1df528a758831e99784705fd69b9c2f129eb19ee5b02bd1",
-  "generated": "2026-11-23T23:51:55",
+  "source_sha256": "95bbf7a29598eb2e2a7cca731b2e078e4916c434082992a197dfe79d119f9114",
+  "generated": "2026-11-25T01:30:18",
   "renderer": "chrome-headless",
   "palette": [
     "#0090CD",
@@ -77,7 +77,7 @@
       "kind": "board",
       "w": 1128,
       "h": 928,
-      "sha256": "67fb34693f0acf2e66c31a3f901bebb9e7b291466bef21256192511c3214ec4b"
+      "sha256": "1fdd924befd1e16845609017db63c12dcc543e6f1c5722a69fb69c5d94b8c3fe"
     }
   ],
   "unknown_material_like": []

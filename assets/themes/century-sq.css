@@ -66,6 +66,15 @@
   --accent-2:#0090cd;
   --accent-3:#84318e;
   --accent-ink:#222222;       /* #222222 on 主黄 ≈ 8.0:1（压暗前 11.5:1，仍充裕） */
+
+  /* 比例条：磨砂玻璃槽 + 标线黄条 */
+  --bar-track:linear-gradient(180deg,#ffffff 0%,#e6edf2 100%);
+  --bar-rim:rgba(255,255,255,.90);
+  --bar-rim-bottom:rgba(30,50,70,.10);
+  --bar-well:rgba(30,50,70,.10);
+  --bar-fill:linear-gradient(180deg,#f2de66 0%,#dab406 58%,#b28f04 100%);
+  --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.45) 0,rgba(255,255,255,.10) 32%,rgba(255,255,255,0) 64%);
+  --bar-fill-ring:inset 0 0 0 1px var(--accent-edge), inset 0 1px 0 rgba(255,255,255,.55), 0 2px 6px rgba(40,60,80,.12);
   --good:#5f8a5b;
   --warn:#b4791c;
   --bad:#b23a4d;

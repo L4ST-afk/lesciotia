@@ -1,8 +1,8 @@
 {
   "theme": "wanhang-fy",
   "source": "../themes/wanhang-fy.css",
-  "source_sha256": "e22adb2a3c9ee536479b3906c27e872db47abf479343cbe944f34422b639db14",
-  "generated": "2026-11-23T12:49:31",
+  "source_sha256": "be96a11a39582b03ddd63c83aef5689dc37fa07a2360068c1a09605875edb6c7",
+  "generated": "2026-11-25T01:36:09",
   "renderer": "chrome-headless",
   "palette": [
     "#22475E",
@@ -103,7 +103,7 @@
       "kind": "board",
       "w": 1128,
       "h": 1332,
-      "sha256": "80245b1173d58f8240eb36700e1d6e5d6d73c6026cdd4dcad8367150d1b286aa"
+      "sha256": "eec43baeb3b9aed966040dbd1fa4cde902c1e19a164291fbfc3b1e4a264cfeba"
     }
   ],
   "unknown_material_like": []

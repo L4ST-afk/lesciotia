@@ -22,6 +22,14 @@
   --text-3:#8a8f9e;
   /* 强调与功能色：默认只有一套蓝；主题各自覆盖 */
   --accent:#3b6cff;
+  /* 比例条七件：默认就声明，九瓦作各自覆盖；⛔ 不在组件里写死亮边/高光 */
+  --bar-track:color-mix(in oklab, var(--accent) 12%, var(--surface));
+  --bar-rim:transparent;
+  --bar-rim-bottom:transparent;
+  --bar-well:transparent;
+  --bar-fill:var(--accent);
+  --bar-fill-gloss:none;
+  --bar-fill-ring:none;
   --accent-ink:#000000;   /* 默认取墨字：#3b6cff 上白 4.40:1、墨 4.77:1，只有墨过 AA */
   --accent-edge:color-mix(in srgb,var(--text-1) 30%,transparent); /* 主色块描边：压底<3:1 时靠它立边界 */
   --accent-2:#7a5cff;

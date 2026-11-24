@@ -1,8 +1,8 @@
 {
   "theme": "fuzhou-rd",
   "source": "../themes/fuzhou-rd.css",
-  "source_sha256": "28772217c1d9710a9d43bf88f42e099020fc811933b4448c34cdf35de40ca4fe",
-  "generated": "2026-11-23T12:44:11",
+  "source_sha256": "20062c3be159e497607c0be15750c287fb83ca84d91b95301528d8f16ce7eabd",
+  "generated": "2026-11-25T01:31:55",
   "renderer": "chrome-headless",
   "palette": [
     "#14110E",
@@ -88,7 +88,7 @@
       "kind": "board",
       "w": 1128,
       "h": 1332,
-      "sha256": "fe18abbffe6de43de62d382d44ea5b50f4269bfdc6d9faa1b5fecd09781414da"
+      "sha256": "402654950adf01a2bbf19e10c0c0a765d82ad879654d1c2adca80bd3088cd9a1"
     }
   ],
   "unknown_material_like": []
