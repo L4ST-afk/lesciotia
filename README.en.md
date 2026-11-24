@@ -2,12 +2,11 @@
 
 # 来雪亭 Lesciotia
 
-A theme library for Shanghai Metro exit B: the feeling of stepping out of the station and straight into the city, made into reusable decks and layouts.
-17 layout families (38 styles), 9 themes, 5 complete decks — all offline, all emitting a single HTML file or PNG.
+One script, two artefacts: a **single-file HTML** deck you page through in any browser, offline; and a **native PPTX** whose text and shapes stay editable. When the output must look exactly right and will not be touched again, there is a third road: per-page images.
 
-One source, two targets: **Target B** is a self-contained HTML deck you can page through in any browser; **Target C** is an editable native PPTX. **Target A** is per-page imagery, used only when the output must look exactly right and will not be edited again.
+17 layout families (38 styles), 9 themes, 5 complete decks — all offline. Each theme carries the name of a Shanghai Metro station: one station's first step out of the gates, one palette and one surface. The HTML target needs only Python 3's standard library; the PPTX target adds `python-pptx`.
 
-The Chinese name comes from **Laixue Pavilion** (来雪亭) on Jiangxin Island, Wenzhou: the pavilion sits at the north-east corner of the islet, facing Mount Luofu across the river. In 1964 Guo Moruo took Wen Tianxiang's line — *"Has snow come yet beneath Mount Luofu; on whom does the moon shine at the heart of the Yangtze?"* — and wrote the name board. "Luofu snow shadow" is the first of the island's ten views, and this pavilion is its best vantage point. Mapped onto this library: the **frame** (梁架) is the layout family — how things sit on a page; the **tilework** (瓦作) is the theme and material — palette, type, surface; the **snow** (落雪) is the raw material you bring in. Snow comes from outside and only becomes a scene once it has landed inside the pavilion. Swap the tilework and the frame stays untouched — snow lands on the tiles, never on the beams. Latin name *Lesciotia*, pronounced /leʃˈʃɔtja/; directory name stays `来雪亭Lesciotia`, never shortened.
+The name comes from Laixue Pavilion on Jiangxin Island, Wenzhou — north-east corner of the islet, facing Mount Luofu. The allusion, the pronunciation and what was given up for it: [`references/naming.md`](references/naming.md).
 
 Provenance, pronunciation and the costs accepted are recorded in [`references/naming.md`](references/naming.md).
 
@@ -25,7 +24,7 @@ Snow falls on the tiles, not on the beams — so "snow" belongs to the tilework 
 
 Comparable HTML-to-PPTX tools walk the same road — render the page in a headless browser, then scrape the DOM and computed styles into native shapes (`slidesmith`, `GX-Alex/html2pptx`, `dom-to-pptx`, `html-native-pptx`, `mmoollee101-lab/HTMLtoPPTX`). That road gets true numbers, at the price of **making the render the sole source of truth**: a theme change forces a full re-layout, two exports of the same HTML need not agree, and whatever the scrape cannot see (complex gradients, boolean shapes, motion) falls back to a page screenshot.
 
-Lesciotia inverts it: tilework is **a priori**. `--hex` tokens and a 1600×900 grid live in files; Targets B and C read the same `:root` and emit separately, measuring with the same bundled fonts and writing line breaks ahead of time. The goal is not "looks like a browser screenshot" — it is "swap the tilework once and both targets move together".
+Lesciotia inverts it: tilework is **a priori**. `--hex` tokens and a 1600×900 grid live in files; Targets B and C read the same `:root` and emit separately, measuring with the same bundled fonts and writing line breaks ahead of time. The goal: swap the tilework once and both targets move together. Screenshot-level similarity is not the aim.
 
 Three things anyone can re-check:
 
@@ -117,7 +116,7 @@ The reverse direction (HTML → PPTX) remains "write a spec first, then emit", *
 
 ## Round trip: change words only, leave the layout alone
 
-Given someone else's finished pptx, the common request is not "re-layout" but "change a few sentences". Re-layout means reinterpreting the layout, which necessarily drifts; so this road **replaces text nodes in the original file and nothing else**.
+Given someone else's finished pptx, the common request is "change a few sentences"; re-layout is rare. Re-layout means reinterpreting the layout, which necessarily drifts; so this road **replaces text nodes in the original file and nothing else**.
 
 ```bash
 python3 scripts/retext-pptx.py deck.pptx --dump texts.json          # inventory: every non-empty text box, per page
@@ -243,7 +242,7 @@ The officecli binary is 32 MB and 90% of its time is the renderer itself — bun
 
 `view issues` runs first, meaning "what looks wrong" before "is the structure right" — the former answers in 0.2 seconds, the latter waits for the renderer; the other order just waits twice. This is the same reasoning as `ppt-builder`'s `visual.geom_check`.
 
-Not done: no bulk PDF export (this path reports "No exporter plugin" on this machine), and its headless browser is not internalized (multi-page `-o` directories report "No headless browser available").
+Not done: no bulk PDF export (the path returns "No exporter plugin"), and its headless browser is not internalized (multi-page `-o` directories report "No headless browser available").
 
 ## Install
 
@@ -257,7 +256,7 @@ Not done: no bulk PDF export (this path reports "No exporter plugin" on this mac
 
 ## Self-check
 
-After installing, run the self-test to confirm the package is complete on this machine:
+After installing, run the self-test to confirm the package is complete on your machine:
 
 ```bash
 cd 来雪亭Lesciotia
@@ -266,7 +265,7 @@ python3 scripts/selftest.py; echo "EXIT=$?"
 
 `EXIT=0` means pass. Per-item detail and how to run each gate separately: `SELFTEST.md`.
 
-**Each target has a real renderer**: on the C side officecli (`validate` plus page screenshots), on the B side this machine's Chrome/Chromium `--headless --screenshot` (which is what `scripts/render-png.sh` uses). Both actually draw pixels, so "is the same declaration the same direction under two renderers" can be cross-checked — the arc `sweep` direction was verified this way (a `M 100 100 A 150 150 0 0 1 250 250` with a dashed `sweep=0` arc over it bulges up-right in Chrome's screenshot and in our own point order, and both go down-left for `sweep=0`). **Only geometric direction and pixel visibility can be cross-checked**; motion playback remains blind.
+**Each target has a real renderer**: on the C side officecli (`validate` plus page screenshots), on the B side Chrome/Chromium `--headless --screenshot` (which is what `scripts/render-png.sh` uses). Both actually draw pixels, so "is the same declaration the same direction under two renderers" can be cross-checked — the arc `sweep` direction was verified this way (a `M 100 100 A 150 150 0 0 1 250 250` with a dashed `sweep=0` arc over it bulges up-right in Chrome's screenshot and in our own point order, and both go down-left for `sweep=0`). **Only geometric direction and pixel visibility can be cross-checked**; motion playback remains blind.
 
 ## Layout
 
@@ -313,4 +312,4 @@ Two preconditions, stated plainly: ① only **same-family** adjacent pages can p
 
 `scripts/check-morph.py` verifies three things: `p159:morph` sits inside `mc:AlternateContent/p159:Choice` with `p159` in `Ignorable` (omitting it makes it silently dropped), `p14:dur` is within the schema range, and **whether anything pairs** (zero same-named shapes on the next page → this page's morph equals fade, red; a morph declared on the last page is only idle, noted but not red).
 
-**Playback cannot be verified, and that is written into the gate's output.** No tool on this machine can play it back and report: officecli's screenshots are stills and `validate` only proves the schema. The deepest comparable, `jsamuel1/PptxGenJS`'s fork, also only ticked "schema passes" in its own acceptance list — the line `Verified to animate in PowerPoint` is empty.
+**Playback cannot be verified, and that is written into the gate's output.** No tool currently available plays it back and reports: officecli's screenshots are stills and `validate` only proves the schema. The deepest comparable, `jsamuel1/PptxGenJS`'s fork, also only ticked "schema passes" in its own acceptance list — the line `Verified to animate in PowerPoint` is empty.
