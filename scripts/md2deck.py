@@ -601,7 +601,7 @@ def claim_band(text):
 
 
 def render_bars(head, bl, kick='', shape=None):
-    """横条比例：每行「标签｜数值」，实色段按比例拉长，数值钉右端；shape=square/pill 可逐页改形状。"""
+    """横条比例：每行「标签｜数值」，实色段按比例拉长，数值钉右端；shape=square/rounded/pill 可逐页改形状。"""
     rows = [x for b in bl if b[0] == 'list' for x in b[1]]
     if not rows:
         return render_text(head, bl, False, kick)
@@ -614,7 +614,7 @@ def render_bars(head, bl, kick='', shape=None):
         vals.append((label, float(num.group()) if num else 0.0, raw))
     peak = max(v for _, v, _ in vals) or 1.0
     out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
-    cls = 'bars' + (' sq' if shape == 'square' else ' pill' if shape == 'pill' else '')
+    cls = 'bars' + {'square': ' sq', 'rounded': ' rd', 'pill': ' pill'}.get(shape, '')
     out.append('  <div class="%s">' % cls)
     for label, v, raw in vals:
         w = v / peak * 100 if peak > 100 else v
