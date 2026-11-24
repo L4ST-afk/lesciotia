@@ -90,6 +90,11 @@ def parse_pages(body):
             if cur is not None:
                 cur['sec'] = m_sec.group(1).strip()
             continue
+        m_band = re.match(r'\s*<!--\s*band:\s*(.*?)\s*-->\s*$', s)
+        if m_band:
+            if cur is not None:
+                cur['band'] = m_band.group(1).strip()
+            continue
         m_dir = re.match(r'\s*<!--\s*(layout|chips):\s*(.*?)\s*-->\s*$', s)
         if m_dir:
             if cur is not None:
@@ -102,17 +107,17 @@ def parse_pages(body):
             if title is None and cur is None:
                 title = s[2:].strip()
             else:
-                cur = {'head': s[2:].strip(), 'body': [], 'layout': None, 'chips': None}
+                cur = {'head': s[2:].strip(), 'body': [], 'layout': None, 'chips': None, 'band': None}
                 pages.append(cur)
         elif s.startswith('## '):
-            cur = {'head': s[3:].strip(), 'body': [], 'parent': None, 'layout': None, 'chips': None}
+            cur = {'head': s[3:].strip(), 'body': [], 'parent': None, 'layout': None, 'chips': None, 'band': None}
             pages.append(cur)
         elif s.startswith('### '):
             parent = cur['parent'] or cur['head'] if cur else None
             if cur is not None and not cur['parent'] and not any(x.strip() for x in cur['body']):
                 # `##` 后紧跟 `###`：`##` 只当章名，不单独占一页
                 pages.pop()
-            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent, 'layout': None, 'chips': None}
+            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent, 'layout': None, 'chips': None, 'band': None}
             pages.append(cur)
         elif re.match(r'^\s*---\s*$', s):
             continue   # 页间分隔线只是写作习惯，不是正文
@@ -527,6 +532,72 @@ def render_modules(head, bl, fix=None, kick='', chips=None):
     return '\n'.join(x for x in out if x)
 
 
+def render_arc(head, bl, fix=None, kick='', uid=1):
+    """弧形分割：一条 S 弧当分界，图在右（推到页边）、文在左。
+    弧线走 objectBoundingBox 的 clipPath，坐标 0–1，跟画布尺寸解耦。"""
+    imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
+    paras = [b[1] for b in bl if b[0] == 'para']
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <svg width="0" height="0" style="position:absolute" aria-hidden="true">'
+               '<defs><clipPath id="arcClip%d" clipPathUnits="objectBoundingBox">'
+               '<path d="M .34,0 C .20,.22 .16,.38 .20,.54 C .24,.70 .16,.86 .10,1 L 1,1 L 1,0 Z"/>'
+               '</clipPath></defs></svg>' % uid)
+    out.append('  <div class="arc">')
+    out.append('    <figure class="arc-img is-clipped" style="--arc-clip:url(#arcClip%d)">'
+               '<img src="%s" alt="%s"></figure>' % (uid, imgs[0][1], esc(imgs[0][0])))
+    out.append('    <div class="arc-body">')
+    for i, p_ in enumerate(paras[:3]):
+        out.append('      <p class="%s">%s</p>' % ('lead' if i == 0 else '', inline(p_)))
+    out.append('    </div>')
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def _bezier(p0, p1, p2, p3, t):
+    u = 1 - t
+    return (u ** 3) * p0 + 3 * (u ** 2) * t * p1 + 3 * u * (t ** 2) * p2 + (t ** 3) * p3
+
+
+def render_timeline(head, bl, kick=''):
+    """弧线时间轴：曲线与圆点算在 SVG 里，卡片按圆点的 x/y 定位，竖杆交替上下。"""
+    items = [x for b in bl if b[0] == 'list' for x in b[1]]
+    if not items:
+        return render_text(head, bl, False, kick)
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    W, H = 1376, 590
+    P = [(0, 285), (330, 245), (1046, 335), (W, 285)]
+    d = 'M%d,%d C%d,%d %d,%d %d,%d' % (P[0][0], P[0][1], P[1][0], P[1][1], P[2][0], P[2][1], P[3][0], P[3][1])
+    n = len(items[:6])
+    out.append('  <div class="tline"><svg class="tl-svg" viewBox="0 0 %d %d" preserveAspectRatio="none">' % (W, H))
+    out.append('    <path d="%s"/>' % d)
+    dots, cards = [], []
+    for i, it in enumerate(items[:6]):
+        parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+        date = parts[0] if parts else ''; title = parts[1] if len(parts) > 1 else ''
+        note = parts[2] if len(parts) > 2 else ''
+        t = (i + 0.5) / n
+        x = _bezier(P[0][0], P[1][0], P[2][0], P[3][0], t)
+        y = _bezier(P[0][1], P[1][1], P[2][1], P[3][1], t)
+        above = (i % 2 == 0)
+        card_h = 200
+        top = max(6, y - 46 - card_h) if above else min(H - card_h - 6, y + 46)
+        stem_y1, stem_y2 = (y - 18, top + card_h) if above else (y + 18, top)
+        dots.append('<circle cx="%.1f" cy="%.1f" r="7"/>' % (x, y))
+        dots.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/>' % (x, stem_y1, x, stem_y2))
+        cards.append('    <div class="tl-card" style="left:%.2f%%;top:%dpx"><p class="d">%s</p>'
+                     '<p class="t">%s</p><p class="n">%s</p></div>'
+                     % (x / W * 100, top, inline(date), inline(title), inline(note)))
+    out.append('    %s' % ''.join(dots))
+    out.append('  </svg>')
+    out.extend(cards)
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def claim_band(text):
+    return '  <div class="claim-band"><span>%s</span></div>' % inline(text)
+
+
 def split_item(s: str, limit: int = 19):
     """C 出口的 bullets 正文 32px、单条只有 19 字的位置；长句要拆成「主句 + 小注」。
 
@@ -629,7 +700,27 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
         elif layout == 'modules':
             notes.append((idx, head, '模块格缺卡片，按普通页处理'))
             layout = None
-        if layout in ('ride', 'cols3', 'bleed', 'gantt', 'modules'):
+        elif layout == 'arc' and imgs:
+            src = imgs[0][2]
+            if not re.match(r'(https?:|data:|/)', src):
+                src = str((a_src_dir / src).resolve()) if a_src_dir else src
+            out.append({'type': 'figure', 'title': head, 'image': src,
+                        'caption': re.sub(r'<[^>]+>', '', paras[0]) if paras else imgs[0][1],
+                        'source': meta.get('source', brand), 'footer': foot})
+            notes.append((idx, head, '弧形分割：C 侧出单图页，S 弧与左侧正文折进图注'))
+        elif layout == 'timeline-arc' and cards:
+            items, caps = [], []
+            for it in cards[:6]:
+                parts = [x.strip() for x in re.split(r'｜', it) if x.strip()]
+                items.append(' '.join(parts[:2]))
+                caps.append(parts[2] if len(parts) > 2 else '')
+            out.append({'type': 'bullets', 'title': head, 'items': items,
+                        'captions': caps, 'source': meta.get('source', brand), 'footer': foot})
+            notes.append((idx, head, '弧线时间轴：C 侧降级为列表页，曲线与上下交替不保留'))
+        elif layout == 'timeline-arc':
+            notes.append((idx, head, '弧线时间轴缺里程碑，按普通页处理'))
+            layout = None
+        if layout in ('ride', 'cols3', 'bleed', 'gantt', 'modules', 'arc', 'timeline-arc'):
             pass
         elif fam == 'quote':
             q = [b for b in bl if b[0] == 'quote'][0][1]
@@ -805,6 +896,12 @@ def build(src_path, out, theme, title_override, build_steps):
         elif layout == 'modules':
             inner = render_modules(pg['head'], bl, fix_image, kick, pg.get('chips'))
             fam = 'modules'
+        elif layout == 'arc' and has_img:
+            inner = render_arc(pg['head'], bl, fix_image, kick, len(sec))
+            fam = 'arc'
+        elif layout == 'timeline-arc':
+            inner = render_timeline(pg['head'], bl, kick)
+            fam = 'tline'
         elif fam == 'quote':
             inner = render_quote(pg['head'], bl, kick)
         elif fam == 'image1':
@@ -820,10 +917,15 @@ def build(src_path, out, theme, title_override, build_steps):
         else:
             inner = render_table(pg['head'], bl)
         style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split', 'ride': 'image-band', 'cols3': 'text', 'bleed': 'image-split',
-                             'gantt': 'process-gantt', 'modules': 'text'}[fam]
-        sec.append('  <section data-style="%s" class="slide" data-title="%s">' % (style, esc(pg['head'])))
+                             'gantt': 'process-gantt', 'modules': 'text',
+                             'arc': 'image-split', 'tline': 'process-timeline'}[fam]
+        has_band = bool(pg.get('band'))
+        sec.append('  <section data-style="%s" class="slide%s" data-title="%s">'
+                   % (style, ' has-band' if has_band else '', esc(pg['head'])))
         sec.append(nav_markup(nav, nav_form, pg.get('sec'))) if nav and pg.get('sec') else None
         sec.append(inner)
+        if has_band:
+            sec.append(claim_band(pg['band']))
         sec.append('  </section>')
 
     sec.append('  <section data-style="end" class="slide center tc" data-title="收束">')
