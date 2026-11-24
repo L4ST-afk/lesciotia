@@ -267,12 +267,12 @@ All Rights Reserved」——「保留所有权利」和「永久免费使用」�
 
   | 登记 id | 派生件 | 面 / 体积 | 消费方 |
   |---|---|---|---|
-  | `marble-light` | `assets/textures/marble/marble-gray-1024.png` | 1024 ² / 315,551 B | 世纪广场、友谊大厦（汉白玉） |
+  | `marble-light` | `assets/textures/marble/marble-gray-1024.png` | 1024 ² / 315,551 B | 世纪广场、友好大厦（汉白玉） |
   | `marble-dark` | `assets/textures/marble/marble-dark-512.png` | 512 ² / 143,347 B | 世纪大道（暗底，overlay） |
   | `grain-agg` | `assets/textures/grain/grain-gray-512.png` | 512 ² / 119,057 B | 虬江石面、番禺水磨石、龙华碑石与香灰（粒径由 background-size 分档） |
   | `fiber-paper` | `assets/textures/fiber/fiber-gray-512.png` | 512 ² / 99,088 B | 福州新闻纸、万航渡拷贝纸、龙华白墙（同上） |
   | `travertine-strata` | `assets/textures/travertine/travertine-gray-512.png` | 512 ² / 99,214 B | 番禺石灰华（方向性材质，只此一处） |
-  | `marble-vein` | `assets/textures/marble/marble-vein-1024.png` | 1024 ² / 415,347 B | 世纪广场、友谊大厦（Calacatta 式大脉络，cover 不重复，各自换裁切） |
+  | `marble-vein` | `assets/textures/marble/marble-vein-1024.png` | 1024 ² / 415,347 B | 世纪广场、友好大厦（Calacatta 式大脉络，cover 不重复，各自换裁切） |
   | `marble-vein-dark` | `assets/textures/marble/marble-vein-dark-1024.png` | 1024 ² / 413,224 B | 世纪大道（同一张脉络反相，screen 出「黑底亮脉」） |
 
   源图（灰度，可随时重出派生件）：`assets/textures-src/century-sq/marble-raw.png`（1536²，2,926,644 B）、`assets/textures-src/{grain,fiber,travertine}/*-raw.png`（各约 0.5–0.75 MB）、`assets/textures-src/marble-vein/vein-raw.png`（1536²，967,071 B）。登记与判据：`assets/textures-src/registry.json` ＋ `scripts/check-bitmap-assets.py`（B1–B10：字段 / sha 与尺寸与色彩类型 / 体积 / blend 白名单 / 源图存在 / 许可落点 / 每个 used_by 逐处接线 / 源目录无孤儿 / **同图重复登记必红** / **分档预算不许写松**）。

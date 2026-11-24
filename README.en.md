@@ -46,7 +46,7 @@ All nine names point at real places in Shanghai — a road, a plaza, a river, a 
 <td width="33%"><img src="docs/themes/guanglan-rd.png" width="290"><br><b>广兰路</b> Guanglan Rd<br>Aqua glass, cyan-blue highlights, pill corners</td>
 </tr>
 <tr>
-<td><img src="docs/themes/friendship-bldg.png" width="290"><br><b>友谊大厦</b> Friendship Bldg<br>Cream granitic plaster, gilt, white birch</td>
+<td><img src="docs/themes/friendship-bldg.png" width="290"><br><b>友好大厦</b> Friendship Bldg<br>Cream granitic plaster, gilt, white birch</td>
 <td><img src="docs/themes/qiu-r.png" width="290"><br><b>虬江</b> Qiu R<br>Xuan paper, river green, indigo hairlines, brick-red plate numbers</td>
 <td><img src="docs/themes/panyu-rd.png" width="290"><br><b>番禺路</b> Panyu Rd<br>Arches and fluted shafts; typography goes neo-brutalist</td>
 </tr>

@@ -679,7 +679,7 @@ body{margin:0;padding:30px 0 54px;background:#e9eef3;color:var(--text-1);font-fa
 .g-card .tag{display:inline-block;font-size:12px;padding:4px 12px;border-radius:999px;background:var(--line-4);color:#fff;font-weight:700;margin-bottom:8px}
 .g-card.alert-card{border-top:3px solid var(--line-6)}
 /* 浮层与光斑：原先 left386/top162 正好压在卡片行（.g-body 卡片自 186 起）上，
-   广兰路盖住「植被与休憩」、友谊大厦盖住「提示信息」，正文全被遮。
+   广兰路盖住「植被与休憩」、友好大厦盖住「提示信息」，正文全被遮。
    面板内卡片下方只剩 30px，放不下 264px 浮层，因此改挂在面板下缘之外，
    浮在天际线上方——既演示玻璃材质，又不压任何正文。
    ⚠️ 2026-11-20 补校准：上一版 top:422/430 仍压卡片 16px/8px，与上面这句「不压任何正文」
@@ -712,7 +712,7 @@ body{margin:0;padding:30px 0 54px;background:#e9eef3;color:var(--text-1);font-fa
    两个职责。迁到这里后，主题文件只留 token 与通用组件。
    作用域用 [data-theme="X"]，由 gen-theme-preview.py 写到 <html> 上。 */
 
-/* ---- friendship-bldg：友谊大厦 ---- */
+/* ---- friendship-bldg：友好大厦 ---- */
 [data-theme="friendship-bldg"] .fb-birch{
   background-color:#efe2c4;
   background-image:
@@ -1000,7 +1000,7 @@ body{
 .g-head h2{font-size:46px}
 /* ⚠️ 标题台高度必须跟着 h2 走。模板 .titlebar 是固定 height:104px，而 .rule
    用 position:absolute;bottom:12px 钉在底部——h2 从 44px 涨到 60px 后，内容
-   高度 8.5+63.6+5+18.5≈96px 顶满 104px 的盒子，.en（WANHANG FY）被挤到底边，
+   高度 8.5+63.6+5+18.5≈96px 顶满 104px 的盒子，.en（WANHANG FERRY）被挤到底边，
    正好压在横条上（实测重叠 3px，2026-11-21）。
    改成 min-height + 底部留出横条净空：横条占 bottom:12px + 高 4px = 16px，
    再给 8px 呼吸，故 padding-bottom 24px。⛔ 别再用固定 height。 */
@@ -1121,7 +1121,7 @@ body{
   <div class="lead">
     <div>
       <div class="mono">来雪亭Lesciotia ｜ 主题预览</div>
-      <h1>万航渡 <small>WANHANG FY</small></h1>
+      <h1>万航渡 <small>WANHANG FERRY</small></h1>
     </div>
     <div class="meta">
       <code>assets/themes/wanhang-fy.css</code><br>
@@ -1136,7 +1136,7 @@ body{
       <div class="titlebar cp-marble">
         <span class="mark"></span>
         <h2>万航渡</h2>
-        <div class="en">WANHANG FY</div>
+        <div class="en">WANHANG FERRY</div>
         <span class="rule"></span>
       </div>
 
@@ -1278,7 +1278,7 @@ body{
       <div class="g-head cp-marble">
         <span class="mark"></span>
         <h2>万航渡</h2>
-        <div class="en">WANHANG FY</div>
+        <div class="en">WANHANG FERRY</div>
         <span class="rule"></span>
       </div>
       <div class="g-nav wf-nav">
@@ -1292,7 +1292,7 @@ body{
       </div>
       <div class="g-body">
         <div class="card g-card">
-          <div class="k">WANHANG FY</div>
+          <div class="k">WANHANG FERRY</div>
           <h3>万航渡</h3>
           <p>导览面板示例页。标题台用画稿纸，卡片用薄彩纸；正文按标题—正文—注释三级排布，行距 1.7，一屏只留一道岸线。</p>
         </div>

@@ -185,7 +185,7 @@ def used_families(css):
     stripped = re.sub(r"@font-face\s*\{.*?\}", "", css, flags=re.S)
     used = set()
     # ⚠️ 必须同时扫 --ff-* 和 --font-*：主题里两种写法都有。
-    # 友谊大厦把族名直接写在 --font-display 里（不是 --ff-title），
+    # 友好大厦把族名直接写在 --font-display 里（不是 --ff-title），
     # 只扫 --ff-* 会把它误判成「@font-face 死声明」（2026-11-21 首版误报）。
     pats = [r"font-family\s*:\s*([^;}]+)",
             r"--ff-[a-z]+\s*:\s*([^;}]+)",

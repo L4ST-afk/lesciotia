@@ -1,4 +1,4 @@
-/* theme: friendship-bldg - 友谊大厦 Friendship Bldg ｜ 乳黄石墙 · 汉白玉 · 彩色水磨石 · 鎏金
+/* theme: friendship-bldg - 友好大厦 Friendship Bldg ｜ 乳黄石墙 · 汉白玉 · 彩色水磨石 · 鎏金
    2026-11-20 由 russian-matryoshka.css 重建并改名。
    命名：上海展览中心（延安中路 1000 号），原名「中苏友好大厦」，1954-05 开工 / 1955-03 竣工，
         俄罗斯古典主义 + 巴洛克细部，中轴对称，110.4 m 鎏金钢塔，塔顶红玻璃五角星。
@@ -115,7 +115,7 @@
      ⚠️ 系统黑体这一层必须用 **PostScript 名**点名粗字重，⛔ 不能用「族名 + 字重词」：
         `'PingFang SC Semibold'` / `'Heiti SC Medium'` 这类写法是**假族名**——
         macOS 的 PingFang 只有一个族名，字重靠 font-weight 选，不靠族名拼。
-        2026-11-21 实测（canvas 墨量，72px「友谊大厦青年」）：
+        2026-11-21 实测（canvas 墨量，72px「友好大厦青年」）：
           'PingFang SC'           @400 → 9271  （Regular，细）
           'PingFang SC Semibold'  @400 → 9271  ← 与 Regular 完全相同 = 静默回落，假名
           'Heiti SC Medium'       @400 → 9271  ← 同上，假名

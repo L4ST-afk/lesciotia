@@ -86,9 +86,9 @@ LIGHT_MARBLE_OVERRIDE = r'''
 
 
 # ============================================================================
-# 友谊大厦 Friendship Bldg —— 预览板专属覆盖
+# 友好大厦 Friendship Bldg —— 预览板专属覆盖
 # 主题本体（assets/themes/friendship-bldg.css）已把 token 与组件写全，这里只做三件事：
-#   1) 把预览板的「世纪广场硬编码」换成友谊大厦的语汇（色板 / 材质 / 几何 / 页眉）
+#   1) 把预览板的「世纪广场硬编码」换成友好大厦的语汇（色板 / 材质 / 几何 / 页眉）
 #   2) 修掉预览页专用版式里 body 背景的硬编码（它排在主题之后，会盖掉米黄底）
 #   3) 材质圆改用主题自带的 .fb-* 材质，不再借用混凝土/大理石/钢
 # ============================================================================
@@ -104,7 +104,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
 .spec-legend b,.spec-legend span{font-family:var(--font-mono)}
 .spec-legend em{color:var(--text-3)}
 
-/* ---- 材质圆：换成友谊大厦自己的六种实景材质 ---- */
+/* ---- 材质圆：换成友好大厦自己的六种实景材质 ---- */
 .mat .disc{
   border-radius:50%;
   border:1px solid rgba(90,74,48,.20);
@@ -262,7 +262,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
 /* ============ 苏联时期艺术构成层（2026-11-20） ============
    取什么、拒什么，先说清楚：
 
-   友谊大厦是斯大林式（社会主义现实主义），铁律是「严格中轴对称、直角为主」。
+   友好大厦是斯大林式（社会主义现实主义），铁律是「严格中轴对称、直角为主」。
    构成主义（Rodchenko / Lissitzky）的核心构图原则恰恰是「对角线 + 不对称 +
    红黑对立」——直接照搬会和主题铁律打架，把中轴拆掉。所以不搬构图，只搬三样：
 
@@ -279,7 +279,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
    拒 3｜构成主义的「绘画已死」式平涂：这里要的是石墙与鎏金的材质层次。
 
    历史依据：后构成主义（Postconstructivism, 1932–1938）正是这条缝——保留构成主义
-   的矩形体量与几何精确，同时叠加古典柱廊与装饰。友谊大厦是这条线的产物。 ---- */
+   的矩形体量与几何精确，同时叠加古典柱廊与装饰。友好大厦是这条线的产物。 ---- */
 
 /* 标题台的角标：模板是 16px 实心方块（世纪广场的铺装语汇）。
    换成五角星——斯大林式塔顶的符号，小面积、只做标记。 */
@@ -342,7 +342,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
 }
 
 /* ---- 第三屏天际线：模板是世纪广场的城市轮廓（28 个错落方盒），
-   友谊大厦是严格中轴对称的塔楼群。原 svg 由生成器整段替换成 .fb-skyline。 ---- */
+   友好大厦是严格中轴对称的塔楼群。原 svg 由生成器整段替换成 .fb-skyline。 ---- */
 .skyline{display:none}
 .fb-skyline{
   position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
@@ -368,10 +368,10 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
 .g-modal .x{top:6px;right:12px;font-size:14px}
 
 /* 彩虹光斑：模板 .g-glow 是玫红/蓝/黄三色径向渐变，那是世纪广场的彩色玻璃概念。
-   友谊大厦没有彩色光，删掉（保留元素但清空背景，不动 DOM 结构）。 */
+   友好大厦没有彩色光，删掉（保留元素但清空背景，不动 DOM 结构）。 */
 .g-glow{background:none}
 
-/* 分类标签：模板 .g-card .tag 用 --line-4（紫），而友谊大厦主题里没有 --line-4，
+/* 分类标签：模板 .g-card .tag 用 --line-4（紫），而友好大厦主题里没有 --line-4，
    背景会解析成透明。必须用同等或更高的选择器压回去。 */
 .tag,
 /* 卡内分类标签：模板给 999px 胶囊 + 宋体 + 700 伪粗，与主题「直角为主 / UI 走黑体」冲突。
@@ -393,7 +393,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
 .g-foot{color:var(--text-3)}
 
 /* ---- 环境层：模板 .deck 是「浅蓝天光 + 底部草绿带」，那是世纪广场的公园概念。
-   友谊大厦换成「乳黄石墙漫射 + 底部一道彩色水磨石剖带 + 金线门槛」。
+   友好大厦换成「乳黄石墙漫射 + 底部一道彩色水磨石剖带 + 金线门槛」。
    注意：模板的草地带挂在 .deck::after（不是 ::before），必须按实际选择器覆盖。 ---- */
 .deck{
   background:
@@ -404,7 +404,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
   background-size:auto,auto,110px 110px,auto;
 }
 /* 板面本体：模板 .board 是「浅蓝天光 + 底部草绿带」，那是世纪广场的公园概念。
-   友谊大厦改成「彩色水磨石主背景」——上海展览中心的门厅与回廊就是水磨石地坪，
+   友好大厦改成「彩色水磨石主背景」——上海展览中心的门厅与回廊就是水磨石地坪，
    用户点名要它当主背景。关键是压对比：石子只做低对比暗示，不压字。
    做法：乳黄半透明罩层盖在水磨石铺贴片之上，罩层 76–82% 不透明度，
    石子仍可见但退成肌理，正文对比度不受影响。 */
@@ -419,7 +419,7 @@ body{background:linear-gradient(180deg,#f7efdd 0%,#f2e8d2 46%,#efe4cb 100%)}
 }
 /* 下角两块瓷砖网格是模板的 .tile-corner.cp-tile 元素（不是 .deck 伪元素）。
    它们带 cp-tile 类，会被上面的薄荷穹顶规则染成两块绿方块，读作贴纸。
-   友谊大厦没有公园铺装语汇，换成水磨石地坪收口：只留骨料，压淡，读作地面。 */
+   友好大厦没有公园铺装语汇，换成水磨石地坪收口：只留骨料，压淡，读作地面。 */
 .tile-corner.cp-tile{
   background-color:transparent;
   background-image:
@@ -607,7 +607,7 @@ body{
 .g-head h2{font-size:46px}
 /* ⚠️ 标题台高度必须跟着 h2 走。模板 .titlebar 是固定 height:104px，而 .rule
    用 position:absolute;bottom:12px 钉在底部——h2 从 44px 涨到 60px 后，内容
-   高度 8.5+63.6+5+18.5≈96px 顶满 104px 的盒子，.en（WANHANG FY）被挤到底边，
+   高度 8.5+63.6+5+18.5≈96px 顶满 104px 的盒子，.en（WANHANG FERRY）被挤到底边，
    正好压在横条上（实测重叠 3px，2026-11-21）。
    改成 min-height + 底部留出横条净空：横条占 bottom:12px + 高 4px = 16px，
    再给 8px 呼吸，故 padding-bottom 24px。⛔ 别再用固定 height。 */
@@ -1224,7 +1224,7 @@ body{background:#120d0a}
 
 # 模度阶梯四色：各瓦作自备（2026-11-24 裁定「各主题自备」，⛔ 不用墨色阶兜底充数）。
 # 顺序＝模板第 1–4 档（100 / 62 / 38 / 24）。值一律写字面色或字面渐变：
-# 此前友谊大厦那段读的是 --gold-lo/--gold-hi/--mint/--terrazzo-deep，本主题一个都没定义，
+# 此前友好大厦那段读的是 --gold-lo/--gold-hi/--mint/--terrazzo-deep，本主题一个都没定义，
 # 同样是一条静默透明的条子（2026-11-24 复查发现）。
 MOD_SCALE = {
     'century-sq':      ('#dab406', '#222222', '#0090cd', '#96b878'),
@@ -1505,7 +1505,7 @@ def main():
     elif aero:
         s = s[:k] + AERO_OVERRIDE + '\n' + s[k:]
     elif theme == 'friendship-bldg':
-        # 友谊大厦：主题自带 .fb-* 材质与完整 token，预览板只需换语汇，不借用世纪广场的混凝土/大理石/钢
+        # 友好大厦：主题自带 .fb-* 材质与完整 token，预览板只需换语汇，不借用世纪广场的混凝土/大理石/钢
         s = s[:k] + FRIENDSHIP_OVERRIDE + '\n' + s[k:]
     elif theme == 'qiu-r':
         # 虬江：纸面学术版，材质圆全部换成 qj-* 方片
@@ -1639,7 +1639,7 @@ def main():
             ('<span class="pill pill-accent">首页</span>\n        <span class="pill pill-accent">广场</span>\n        <span class="pill pill-accent">餐饮</span>\n        <span class="pill pill-accent">服务</span>\n        <span class="pill pill-accent">公园</span>\n        <span class="pill pill-accent">植被</span>\n        <span class="pill pill-accent">休憩</span>\n        <span class="pill">关于我们</span>',
              '<span class="pill pill-accent">首页</span>\n        <span class="pill pill-ghost">渡口</span>\n        <span class="pill pill-ghost">河岸</span>\n        <span class="pill pill-ghost">618</span>\n        <span class="pill pill-ghost">桥</span>\n        <span class="pill pill-ghost">纸</span>\n        <span class="pill">关于我们</span>'),
             ('<div class="k">PLAZA</div>\n          <h3>Century Sq</h3>\n          <p>导览面板示例页。标题台用磨光大理石，卡片用清水混凝土；正文按标题—正文—注释三级排布，行距与留白服从模度。</p>',
-             '<div class="k">WANHANG FY</div>\n          <h3>万航渡</h3>\n          <p>导览面板示例页。标题台用画稿纸，卡片用薄彩纸；正文按标题—正文—注释三级排布，行距 1.7，一屏只留一道岸线。</p>'),
+             '<div class="k">WANHANG FERRY</div>\n          <h3>万航渡</h3>\n          <p>导览面板示例页。标题台用画稿纸，卡片用薄彩纸；正文按标题—正文—注释三级排布，行距 1.7，一屏只留一道岸线。</p>'),
             ('<span class="tag">Category</span>\n          <h3>植被与休憩</h3>\n          <p>分类标记固定用 4 号线紫；草坪与瓷砖只作底部环境层，低透明度暗示材质，不盖住文字。</p>',
              '<span class="tag">Category</span>\n          <h3>渡口与桥</h3>\n          <p>分类标记固定用河青；岸线与水面只作底部环境层，低透明度暗示材质，不盖住文字。</p>'),
             ('<p>6 号线玫红仅作卡顶细条与轻提示，绝不铺底。此处为版式占位文案，非真实公告。</p>',
@@ -1910,7 +1910,7 @@ def main():
             s = s[:j] + ';font-family:var(--font-display)' + s[j:]
 
     # 模板里英文名有两种写法：长写 CENTURY PLAZA（旧版）与缩写 CENTURY SQ（现行模板）。
-    # 只替换长写会漏掉页眉与标题台的 CENTURY SQ，页眉读作「CENTURY SQ」而正文是友谊大厦。
+    # 只替换长写会漏掉页眉与标题台的 CENTURY SQ，页眉读作「CENTURY SQ」而正文是友好大厦。
     #
     # ⚠️ 大写名必须查表，⛔ 不能用 en.upper()：
     #    upper() 会把 'FriendshipBldg' 压成 'FRIENDSHIPBLDG'（丢词间空格），
@@ -1923,7 +1923,7 @@ def main():
         'century-sq':      'CENTURY SQ',
         'century-ave':     'CENTURY AVE',
         'guanglan-rd':     'GUANGLAN RD',
-        'wanhang-fy':       'WANHANG FY',
+        'wanhang-fy':       'WANHANG FERRY',
         'fuzhou-rd':       'FUZHOU RD',
         'longhua-si':      'LONGHUA SI',
     }
@@ -1935,13 +1935,13 @@ def main():
     # 世纪大道站是世纪广场所在站，反过来不成立，改回来
     if theme == 'century-ave':
         s = s.replace('世纪大道所在站', '世纪广场所在站')
-    # 友谊大厦：上面那行已把 CENTURY PLAZA 换成 FRIENDSHIP BLDG，这里只需处理标题台的中文名
+    # 友好大厦：上面那行已把 CENTURY PLAZA 换成 FRIENDSHIP BLDG，这里只需处理标题台的中文名
     if theme == 'friendship-bldg':
-        s = s.replace('<h1>友谊大厦 <small>FRIENDSHIP BLDG</small></h1>',
-                      '<h1>友谊大厦 <small>FRIENDSHIP BLDG</small></h1>')
+        s = s.replace('<h1>友好大厦 <small>FRIENDSHIP BLDG</small></h1>',
+                      '<h1>友好大厦 <small>FRIENDSHIP BLDG</small></h1>')
     if theme in ('century-sq', 'century-ave'):
         # 世纪主题：蓝色格标签更正为 Line 9，色值不变。
-        # 广兰路是 2 号线保留 Line 2；友谊大厦不用线路语义，走自己的图例替换。
+        # 广兰路是 2 号线保留 Line 2；友好大厦不用线路语义，走自己的图例替换。
         s = s.replace('>Line 2<', '>Line 9<').replace('SECONDARY / LINE 2', 'SECONDARY / LINE 9')
     if aero:
         # 色板是模板硬编码的世纪广场配色；不换就会标题台是 Aqua 蓝、色板第一格却是亮黄。
@@ -2074,10 +2074,10 @@ def main():
 
 
     if theme == 'friendship-bldg':
-        # ---- 色板：世纪广场亮黄蓝紫玫红 -> 友谊大厦 鎏金 / 红玻璃 / 墨绿 / 薄荷 ----
+        # ---- 色板：世纪广场亮黄蓝紫玫红 -> 友好大厦 鎏金 / 红玻璃 / 墨绿 / 薄荷 ----
         fb_swaps = [
             # 比例条 / 图例 hex 由 sync_palette 从 :root 统一填
-            # 中性色阶：换成友谊大厦的乳黄石 / 汉白玉 / 水磨石 / 金阶 / 文字三级
+            # 中性色阶：换成友好大厦的乳黄石 / 汉白玉 / 水磨石 / 金阶 / 文字三级
             ('<i style="background:#E8E8E4"></i><b>#E8E8E4</b>', '<i style="background:#EFE3C6"></i><b>#EFE3C6</b>'),
             ('<i style="background:#B8B8B4"></i><b>#B8B8B4</b>', '<i style="background:#D6BE93"></i><b>#D6BE93</b>'),
             ('<i style="background:#F4F4F2"></i><b>#F4F4F2</b>', '<i style="background:#FBF6EC"></i><b>#FBF6EC</b>'),
@@ -2109,7 +2109,7 @@ def main():
              '<div class="disc fb-daylight"></div><div class="n">漫射顶光</div>'),
             # 几何标题：模度 -> 中轴对称
             ('Geometry · 模度 1 : 1.618', 'Geometry · 模度 1 : 1.618 · 中轴对称'),
-            # 组件卡标注：友谊大厦不是地铁站，⛔ 不许留 Line 2 / Line 4 这套线号
+            # 组件卡标注：友好大厦不是地铁站，⛔ 不许留 Line 2 / Line 4 这套线号
             ('<span class="cap">SECONDARY / LINE 2</span>', '<span class="cap">SECONDARY / INK</span>'),
             ('<span class="cap">CATEGORY / LINE 4</span>', '<span class="cap">CATEGORY / MOSS</span>'),
             ('<span class="cap">ALERT STRIPE / LINE 6</span>', '<span class="cap">ALERT / RED GLASS</span>'),
@@ -2130,11 +2130,11 @@ def main():
             ('<i class="on"></i><i></i><i></i><i class="gl"></i><i></i><i></i>\n            <i></i><i class="on"></i><i></i><i></i><i class="gl"></i><i></i>',
              '<i></i><i class="wing"></i><i class="gl"></i><i class="on"></i><i class="on"></i><i class="gl"></i><i class="wing"></i><i></i>\n            <i></i><i class="wing"></i><i class="gl"></i><i class="on"></i><i class="on"></i><i class="gl"></i><i class="wing"></i><i></i>'),
             # ---- 第三屏导览面板：整段是世纪广场的公园导览（广场/餐饮/公园/植被/休憩），
-            #      换成友谊大厦的展览建筑语汇，否则第三屏和三屏前两屏不是同一个主题 ----
+            #      换成友好大厦的展览建筑语汇，否则第三屏和三屏前两屏不是同一个主题 ----
             ('<span class="pill pill-accent">首页</span>\n        <span class="pill pill-accent">广场</span>\n        <span class="pill pill-accent">餐饮</span>\n        <span class="pill pill-accent">服务</span>\n        <span class="pill pill-accent">公园</span>\n        <span class="pill pill-accent">植被</span>\n        <span class="pill pill-accent">休憩</span>\n        <span class="pill">关于我们</span>',
              '<span class="pill pill-accent">首页</span>\n        <span class="pill pill-ghost">序馆</span>\n        <span class="pill pill-ghost">中央大厅</span>\n        <span class="pill pill-ghost">展览</span>\n        <span class="pill pill-ghost">会议</span>\n        <span class="pill pill-ghost">鎏金塔</span>\n        <span class="pill">关于我们</span>'),
             ('<div class="k">PLAZA</div>\n          <h3>Century Sq</h3>\n          <p>导览面板示例页。标题台用磨光大理石，卡片用清水混凝土；正文按标题—正文—注释三级排布，行距与留白服从模度。</p>',
-             '<div class="k">PLAZA</div>\n          <h3>友谊大厦</h3>\n          <p>导览面板示例页。标题台用汉白玉，卡片用乳黄水刷石；正文按标题—正文—注释三级排布，行距与留白服从模度，全页中轴对称。</p>'),
+             '<div class="k">PLAZA</div>\n          <h3>友好大厦</h3>\n          <p>导览面板示例页。标题台用汉白玉，卡片用乳黄水刷石；正文按标题—正文—注释三级排布，行距与留白服从模度，全页中轴对称。</p>'),
             ('<span class="tag">Category</span>\n          <h3>植被与休憩</h3>\n          <p>分类标记固定用 4 号线紫；草坪与瓷砖只作底部环境层，低透明度暗示材质，不盖住文字。</p>',
              '<span class="tag">Category</span>\n          <h3>序馆与穹顶</h3>\n          <p>分类标记固定用墨绿；水磨石地坪只作底部环境层，低透明度暗示材质，不盖住文字。</p>'),
             ('<div class="k">MESSAGES</div>\n          <h3>提示信息</h3>\n          <p>6 号线玫红仅作卡顶细条与轻提示，绝不铺底。此处为版式占位文案，非真实公告。</p>',
