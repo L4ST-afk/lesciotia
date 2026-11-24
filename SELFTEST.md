@@ -2442,3 +2442,18 @@ C 侧 4 页，两条降级逐条打印（甘特→表格、模块格→列表）
 
 **已验证**：`check-theme-colors.py assets/themes` → `with_fail:0`、`clean:9`、`comp_fills:0`；
 番禺路/虬江/福州路/万航渡第 2 页条身与轨道均为直角，31% 短条不再出现半圆端头；广兰路仍为胶囊玻璃条。
+
+## 1.2.75 · 比例条页级形状备选
+
+**需求**：世纪广场要能用直角，但默认必须还是胶囊——直角是「这一页的选择」，不是主题的默认。
+
+**做法**：`md2deck.py` 的页级指令多认一条 `<!-- bars: square -->` / `<!-- bars: pill -->`，
+`render_bars(..., shape=)` 给容器加 `.sq` / `.pill`；组件层写 `.bars.sq{--bar-radius:0;--bar-border:1px solid var(--accent-edge)}`、
+`.bars.pill{--bar-radius:999px;--bar-border:none}`。自定义属性按「元素自身声明 > 继承」解析，
+所以页级类能压过主题 `:root` 的默认，且只动这两件，材质、条身渐变、数值色全部不动。
+
+**边界**：主题级直角（番禺路/虬江/福州路/万航渡）仍由主题声明，⛔ 不用页级类改它们的默认；
+页级 `pill` 只用于个别页面强制回胶囊，不写进主题。
+
+**已验证**：`/tmp/md71/sq.md` 同主题两页——默认胶囊、备选直角；`verify-pptx-editable.py` 4 页通过
+（C 侧仍是表格，形状不进 PPTX）。

@@ -95,11 +95,13 @@ def parse_pages(body):
             if cur is not None:
                 cur['band'] = m_band.group(1).strip()
             continue
-        m_dir = re.match(r'\s*<!--\s*(layout|chips):\s*(.*?)\s*-->\s*$', s)
+        m_dir = re.match(r'\s*<!--\s*(layout|chips|bars):\s*(.*?)\s*-->\s*$', s)
         if m_dir:
             if cur is not None:
                 if m_dir.group(1) == 'layout':
                     cur['layout'] = m_dir.group(2).strip().lower()
+                elif m_dir.group(1) == 'bars':
+                    cur['bars'] = m_dir.group(2).strip().lower()
                 else:
                     cur['chips'] = [x.strip() for x in re.split(r'\s*[｜|]\s*', m_dir.group(2)) if x.strip()]
             continue
@@ -107,17 +109,17 @@ def parse_pages(body):
             if title is None and cur is None:
                 title = s[2:].strip()
             else:
-                cur = {'head': s[2:].strip(), 'body': [], 'layout': None, 'chips': None, 'band': None}
+                cur = {'head': s[2:].strip(), 'body': [], 'layout': None, 'chips': None, 'bars': None, 'band': None}
                 pages.append(cur)
         elif s.startswith('## '):
-            cur = {'head': s[3:].strip(), 'body': [], 'parent': None, 'layout': None, 'chips': None, 'band': None}
+            cur = {'head': s[3:].strip(), 'body': [], 'parent': None, 'layout': None, 'chips': None, 'bars': None, 'band': None}
             pages.append(cur)
         elif s.startswith('### '):
             parent = cur['parent'] or cur['head'] if cur else None
             if cur is not None and not cur['parent'] and not any(x.strip() for x in cur['body']):
                 # `##` 后紧跟 `###`：`##` 只当章名，不单独占一页
                 pages.pop()
-            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent, 'layout': None, 'chips': None, 'band': None}
+            cur = {'head': s[4:].strip(), 'body': [], 'parent': parent, 'layout': None, 'chips': None, 'bars': None, 'band': None}
             pages.append(cur)
         elif re.match(r'^\s*---\s*$', s):
             continue   # 页间分隔线只是写作习惯，不是正文
@@ -598,8 +600,8 @@ def claim_band(text):
     return '  <div class="claim-band"><span>%s</span></div>' % inline(text)
 
 
-def render_bars(head, bl, kick=''):
-    """横条比例：每行「标签｜数值」，轨道内嵌标签，实色段按比例拉长，数值钉右端。"""
+def render_bars(head, bl, kick='', shape=None):
+    """横条比例：每行「标签｜数值」，实色段按比例拉长，数值钉右端；shape=square/pill 可逐页改形状。"""
     rows = [x for b in bl if b[0] == 'list' for x in b[1]]
     if not rows:
         return render_text(head, bl, False, kick)
@@ -612,7 +614,8 @@ def render_bars(head, bl, kick=''):
         vals.append((label, float(num.group()) if num else 0.0, raw))
     peak = max(v for _, v, _ in vals) or 1.0
     out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
-    out.append('  <div class="bars">')
+    cls = 'bars' + (' sq' if shape == 'square' else ' pill' if shape == 'pill' else '')
+    out.append('  <div class="%s">' % cls)
     for label, v, raw in vals:
         w = v / peak * 100 if peak > 100 else v
         w = max(2, min(100, w))
@@ -979,7 +982,7 @@ def build(src_path, out, theme, title_override, build_steps):
             inner = render_timeline(pg['head'], bl, kick)
             fam = 'tline'
         elif layout == 'bars':
-            inner = render_bars(pg['head'], bl, kick)
+            inner = render_bars(pg['head'], bl, kick, pg.get('bars'))
             fam = 'bars'
         elif layout == 'team':
             inner = render_team(pg['head'], bl, fix_image, kick)

@@ -618,6 +618,8 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
   background:var(--bar-fill);box-shadow:var(--bar-fill-ring)}
 .bars .fill::after{content:'';position:absolute;inset:0;border-radius:inherit;
   background:var(--bar-fill-gloss);pointer-events:none}
+.bars.sq{--bar-radius:0;--bar-border:1px solid var(--accent-edge)}      /* 页级备选：直角（世纪广场等） */
+.bars.pill{--bar-radius:999px;--bar-border:none}                       /* 页级备选：强制胶囊（压过番禺路等直角作） */
 .bars .k{font-size:var(--t-cap);font-weight:600;color:var(--text-1);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bars .v{font-size:var(--t-h4);font-weight:700;color:var(--text-1);text-align:right;
