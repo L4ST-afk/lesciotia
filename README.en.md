@@ -1,5 +1,7 @@
 [中文](README.md) · English
 
+<!-- cover slot: once `docs/cover.jpg` lands, insert <img src="docs/cover.jpg" alt="Lesciotia — new-year snow scene: octagonal pavilion with a gilded finial, vermilion columns under grey tiled snow, frosted trees and a stone bridge beyond" width="720">. Spec and inscription: docs/封面.md. ⛔ No placeholder link while the image is missing. -->
+
 # 来雪亭 Lesciotia
 
 One script, two artefacts: a **single-file HTML** deck you page through in any browser, offline; and a **native PPTX** whose text and shapes stay editable. When the output must look exactly right and will not be touched again, there is a third road: per-page images.
@@ -20,7 +22,7 @@ Provenance, pronunciation and the costs accepted are recorded in [`references/na
 
 Snow falls on the tiles, not on the beams — so "snow" belongs to the tilework layer, while what you bring is called **falling snow**. These three words are names only; directory names do not change. See [`SKILL.md`](SKILL.md) §three layers.
 
-## The approach: tilework decided a priori, not scraped from one render
+## The approach: tilework decided a priori
 
 Comparable HTML-to-PPTX tools walk the same road — render the page in a headless browser, then scrape the DOM and computed styles into native shapes (`slidesmith`, `GX-Alex/html2pptx`, `dom-to-pptx`, `html-native-pptx`, `mmoollee101-lab/HTMLtoPPTX`). That road gets true numbers, at the price of **making the render the sole source of truth**: a theme change forces a full re-layout, two exports of the same HTML need not agree, and whatever the scrape cannot see (complex gradients, boolean shapes, motion) falls back to a page screenshot.
 
@@ -55,7 +57,7 @@ Gradients and booleans are not in PPT's shape library — they are **evaluated a
 - `path`: the `d` string inside `clip-path: path()` goes in as-is and **is emitted as curves by default** — every `A` is split at ≤90° and converted to cubic Béziers (`k = 4/3·tan(θ/4)`), `Q` is degree-elevated, `C` written straight as `a:cubicBezTo`; only `"curve":"polyline"` falls back to sampling. Boolean results stay polylines: a **true** curve-vs-curve cut needs `skia-pathops`, which conflicts with this library's zero-heavy-dependency line. It is not pulled in.
 - Any page may carry a `wash` layer: it lands first inside `slide()`, content sits on top.
 
-Three pits hit along the way are recorded in code comments: `p:style` hangs a theme shadow on shapes (in the tilework they are flat, so it must be stripped); `#RRGGBB` must be written as a colour (otherwise white type on a dark ground silently becomes black); `:root` token substitution must report "undefined" rather than pasting the whole string back.
+Three pits hit along the way are recorded in code comments: `p:style` hangs a theme shadow on shapes (in the tilework they are flat, so it must be stripped); `#RRGGBB` must be written as a colour (otherwise white type on a dark ground silently becomes black); `:root` token substitution must report "undefined"; pasting the whole string back is a failure.
 
 ## Dual-target drift: `--html`
 
@@ -134,7 +136,7 @@ Each inventory row carries `slide / id / name / text / paras / runs / geom`, whe
 ]}
 ```
 
-Writing back keeps the first paragraph's `pPr` and the first run's `rPr` (size, colour, weight, family untouched), and copies line breaks from the original paragraph style. After the edit every shape's `spPr/style/bodyPr` sha is compared: **if the geometry changed, something went wrong** — it is named, never silently "successful"; shapes that cannot be addressed land in `skipped` rather than being hit by mistake.
+Writing back keeps the first paragraph's `pPr` and the first run's `rPr` (size, colour, weight, family untouched), and copies line breaks from the original paragraph style. After the edit every shape's `spPr/style/bodyPr` sha is compared: **if the geometry changed, something went wrong** — it is named, never silently "successful"; shapes that cannot be addressed land in `skipped`; nothing else is hit by mistake.
 
 Chained with the reverse flow it is a closed loop: `pptx → pptx-to-html.py` (see the result; every shape in the HTML carries `data-slide/data-id/data-name`) → fill `edits.json` by id → `retext-pptx.py` back to pptx. **Geometry is inherited from the original; only the words change.**
 
@@ -227,7 +229,7 @@ Typing **reads all three languages, Chinese first**: a Chinese trigger scores 2,
 
 Five things are compiled into the prompt: the output form (a deck spec, not prose); hard requirements a number can check (≤26 characters, one clause per bullet, numbers carry `source`, the closing gives exactly one thing); the same banned-word table as the gate; the **four closing questions** (borrowed from the same library's prose-register criteria and turned into questions: would it hold under another theme? who is speaking? would deleting it lose information? is there a source?); and that type's skeleton (the four teaching segments are the shape a framework-semantics piece reduces to on a page).
 
-When two types both fit, follow this library's old rule and **write in segments, never mix them** — "incident retro plus budget request" means four retro pages then two proposal pages, with the type change stated in the kicker, rather than one page both assigning blame and asking for money.
+When two types both fit, follow this library's old rule and **write in segments, never mix them** — "incident retro plus budget request" means four retro pages then two proposal pages, with the type change stated in the kicker — not one page that both assigns blame and asks for money.
 
 ## Real-render verification on the cheap: take officecli's contract, not its binary
 
