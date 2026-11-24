@@ -1,11 +1,11 @@
 ---
 name: 来雪亭Lesciotia
-version: 1.2.65
+version: 1.2.66
 description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付形态（影像件／网页件／可改件）——A 影像 deck（逐页 AI 生图 → pptx/pdf，不能改字）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可改件（原生 PPTX，文本与形状都能改）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
 metadata:
   vaccineOrigin: local
   vaccineVersion: e8d93bf0731f
-  version: "1.2.65"
+  version: "1.2.66"
   created: "2026-11-10"
   sources:
     - "html-ppt (MIT, © lewis)（历史来源：2026-11-23 起本库代码件与整册已全部自写，无复制件）"

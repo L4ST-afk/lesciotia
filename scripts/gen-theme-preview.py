@@ -1323,6 +1323,16 @@ def apply_mod_scale(s, theme):
     return s[:k] + css + s[k:]
 
 
+def _style_close_in_head(page):
+    """`</style>` 在文档里的正确注入点：<head> 内最后一个。
+
+    番禺路预览的正文里另有一枚游离的 `</style>`（模板遗留的样式片段），
+    rfind/rindex 都会挑到它，把 CSS 写成正文文字（真踩过：次按钮覆盖失效）。
+    """
+    head_end = page.find('</head>')
+    return page.rfind('</style>', 0, head_end if head_end != -1 else len(page))
+
+
 def _backfill_base_tokens(page, theme_css):
     """把 assets/base.css :root 里主题未定义的 token 补进页面，插在 </style> 之前。
 
@@ -1340,7 +1350,7 @@ def _backfill_base_tokens(page, theme_css):
     block = '\n/* ============ 引擎级 token 兜底（来自 assets/base.css，主题未定义的那些） ============ */\n:root{\n'
     block += ''.join(f'  --{k}:{v};\n' for k, v in missing)
     block += '}\n'
-    k = page.rindex('</style>')
+    k = _style_close_in_head(page)
     return page[:k] + block + page[k:]
 
 
@@ -2381,7 +2391,7 @@ def main():
         # 模板自带的环境层是「草坪 / 天空 / 钢面」，与番禺路互斥：
         # 草坪换砖行、天空换石灰华、导览面板的玻璃与钢导航换硬边纸面。
         s = s.replace('<div class="g-nav cp-steel">', '<div class="g-nav pg-nav">', 1)
-        i = s.rfind('</style>')
+        i = _style_close_in_head(s)
         s = s[:i] + '''
 /* —— panyu 补丁：把模板的草坪 / 天空 / 钢面换成石灰华与砖 —— */
 .board::after{

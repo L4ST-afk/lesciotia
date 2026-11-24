@@ -451,3 +451,50 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
 .deck-nav.is-block .nv{height:44px;display:flex;align-items:center;padding:0 18px;color:var(--text-3)}
 .deck-nav.is-block .nv.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
 .deck-nav.is-block .nv.on::after{display:none}
+
+/* ---------- 18. 反哺四式（2026-11-24）：图带压卡 / 出血分栏 / 底线三段卡 / 胶囊 chips ----------
+   四式取自四张外部参考（政府汇报、医学科普、客户满意度、企业服务），只吸收机制，
+   不搬它们的配色与图标。族数不变，式数 39 → 41（`ride` 一式 + 三列卡 `cols3` 一式，
+   `bleed` 与 `chips` 做参数与组件，不单列成式）。 */
+
+/* ① 图带压卡 .ride：全幅图带压两行结论，白卡骑压带下沿。
+   卡压多深＝-88px；图上结论行落在卡上方 150px，避免与卡争同一条基线。 */
+.ride{position:relative;margin-top:34px}
+.ride .rt-img{position:relative;height:440px;border-radius:var(--radius);overflow:hidden;background:var(--surface-2)}
+.ride .rt-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ride .rt-img::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 42%,rgba(0,0,0,.30) 72%,rgba(0,0,0,.64) 100%)}
+.ride .rt-img .rt-thesis{position:absolute;left:48px;right:48px;bottom:120px;margin:0;z-index:2;
+  color:#fff;font-size:var(--t-h4);line-height:1.35;font-weight:700;max-width:1180px;letter-spacing:var(--letter-tight);
+  text-shadow:0 2px 18px rgba(0,0,0,.30)}
+.ride .rt-cards{position:relative;z-index:3;display:grid;grid-template-columns:repeat(2,1fr);
+  gap:24px;margin:-64px 48px 0}
+.ride .rt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 28px 24px;box-shadow:var(--shadow-lg)}
+.ride .rt-card b{display:block;font-size:var(--t-h4);line-height:1.3;font-weight:600;
+  color:var(--accent);margin-bottom:8px}
+.ride .rt-card p{margin:0;font-size:var(--t-body-sm);line-height:1.65;color:var(--text-2)}
+.ride .rt-card p+p{margin-top:10px}
+
+/* ② 左文右图出血 .split.bleed-img：沿用既有两栏骨架（.split/.col-text/.col-img），
+   只把图栏推到页边（-112px）。⛔ 不复用 .bleed——那是 hero 族的通栏图，语义不同。 */
+.split.bleed-img{grid-template-columns:minmax(0,46%) minmax(0,1fr)}
+.split.bleed-img .col-img{margin-right:-112px}
+.split.bleed-img .col-img .img-frame{border:0;padding:0;background:none;box-shadow:none;border-radius:var(--radius) 0 0 var(--radius)}
+
+/* ③ 底线三段卡 .cols3：三列等宽，卡内两段正文以虚线分隔，卡底一道 accent 细线。 */
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:34px}
+.cols3 .c3{display:flex;flex-direction:column;gap:12px;background:var(--surface);
+  border:1px solid var(--border);border-bottom:3px solid var(--accent);
+  border-radius:var(--radius);padding:28px 26px 22px;box-shadow:var(--shadow)}
+.cols3 .c3 .k{font-size:var(--t-cap);letter-spacing:.10em;color:var(--accent);font-weight:600}
+.cols3 .c3 .dv{border-top:1px dashed var(--border-strong);margin:2px 0}
+.cols3 .c3 p{margin:0;font-size:var(--t-body-sm);line-height:1.7;color:var(--text-2)}
+.cols3 .c3 p+p{margin-top:0}
+
+/* ④ 胶囊 chips：一行标签分组，最后可放一枚省略丸（`.more`）。 */
+.chips{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:26px}
+.chips .chip{padding:6px 18px;border-radius:999px;font-size:var(--t-cap);
+  background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+.chips .chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.chips .chip.more{background:transparent;border-style:dashed;color:var(--text-3);letter-spacing:.12em}
