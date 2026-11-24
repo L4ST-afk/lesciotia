@@ -499,3 +499,67 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
   background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
 .chips .chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
 .chips .chip.more{background:transparent;border-style:dashed;color:var(--text-3);letter-spacing:.12em}
+
+/* ---------- 19. 甘特二式 gantt2：跨年分带 + 条内嵌完成度 + 模块成组 ----------
+   与 §7 的老甘特并存：老式只有「条」，新式认日期算刻度、条里再切一段实色表示已完成。
+   刻度由 Python 算好写成 inline 的 --left/--w/--step，CSS 不猜月份。 */
+.gantt2{margin-top:30px;border-radius:var(--radius);background:var(--surface-2);
+  padding:20px 24px 14px;box-shadow:var(--shadow)}
+.gantt2 .g2-head{display:grid;grid-template-columns:150px 1fr;align-items:end;gap:0;
+  padding-bottom:8px;border-bottom:1.5px solid var(--border)}
+.gantt2 .g2-head .g2-lbl{font-size:var(--t-cap);font-weight:700;color:var(--text-2);letter-spacing:.06em}
+.gantt2 .g2-scale{display:flex;flex-direction:column;gap:4px}
+.gantt2 .g2-years{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;font-size:var(--t-cap);
+  color:var(--text-3);letter-spacing:.10em}
+.gantt2 .g2-years span{text-align:center;padding:2px 0;border-radius:6px 6px 0 0}
+.gantt2 .g2-years span:nth-child(odd){background:color-mix(in oklab, var(--accent) 12%, transparent)}
+.gantt2 .g2-months{display:grid;grid-template-columns:repeat(var(--cols),1fr);font-size:var(--t-cap);
+  color:var(--text-3)}
+.gantt2 .g2-months span{text-align:center}
+.gantt2 .g2-rows{margin-top:2px}
+.gantt2 .g2-row{display:grid;grid-template-columns:150px 1fr;align-items:center;padding:7px 0}
+.gantt2 .g2-row.is-modstart{border-top:1px dashed var(--border-strong);margin-top:2px;padding-top:9px}
+.gantt2 .g2-lbl{font-size:var(--t-cap);color:var(--text-1);line-height:1.25}
+.gantt2 .g2-lbl .g2-mod{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
+  font-size:calc(var(--t-cap) - 2px);font-weight:500;color:var(--accent);
+  background:color-mix(in oklab, var(--accent) 10%, transparent);vertical-align:1px}
+.gantt2 .g2-track{position:relative;height:38px;
+  background:repeating-linear-gradient(to right,transparent 0 calc(var(--step) - 1px),
+    var(--border) calc(var(--step) - 1px) var(--step))}
+.gantt2 .g2-bar{position:absolute;top:4px;height:30px;border-radius:999px;overflow:hidden;
+  background:color-mix(in oklab, var(--accent) 26%, var(--surface));
+  display:flex;align-items:center;padding:0 10px;font-size:var(--t-cap);color:var(--text-1)}
+.gantt2 .g2-fill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);opacity:.92}
+.gantt2 .g2-pct{position:relative;z-index:2;margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;
+  color:var(--text-1);text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.gantt2 .is-done .g2-pct{color:var(--accent-ink);text-shadow:none}
+.gantt2 .g2-foot{display:flex;gap:18px;align-items:baseline;margin-top:12px;padding-top:10px;
+  border-top:1.5px solid var(--border);font-size:var(--t-cap);color:var(--text-2)}
+.gantt2 .g2-foot b{color:var(--accent);font-weight:700}
+
+/* ---------- 20. 模块格 .mod-grid：2×2 或一格给图，其余格承载小标题＋两段 ----------
+   与 image-set 的 bento 分界：bento 整页都是图，mod-grid 是文图混排。 */
+.mod-grid{display:grid;grid-template-columns:1.04fr 1fr;gap:24px;margin-top:34px;grid-auto-rows:250px}
+.mod-grid .mod{display:flex;flex-direction:column;gap:10px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius);padding:26px 28px 24px;box-shadow:var(--shadow)}
+.mod-grid .mod>.k{font-size:var(--t-cap);letter-spacing:.10em;color:var(--accent);font-weight:600}
+.mod-grid .mod h3{font-size:var(--t-h4);line-height:1.28;font-weight:600;margin:0}
+.mod-grid .mod p{margin:0;font-size:var(--t-body-sm);line-height:1.68;color:var(--text-2)}
+.mod-grid .mod.tile-img{padding:0;border:0;overflow:hidden;min-height:0;background:var(--surface-2);position:relative}
+.mod-grid .mod.tile-img img{width:100%;height:100%;object-fit:cover;display:block}
+.mod-grid .mod.tile-img figcaption{position:absolute;left:22px;right:22px;bottom:18px;
+  font-size:var(--t-cap);color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+
+/* ---------- 21. 质感三件：光影替边框 / 玻璃面 / 气泡 ----------
+   只挂 theme token，缺省值时退回一套中性 Aqua 参数；⛔ 不改各瓦作已有的玻璃件。 */
+.soft-cast{border:0 !important;box-shadow:0 24px 64px -18px var(--shadow-ink, rgba(20,42,60,.22)),
+  0 2px 6px rgba(20,42,60,.06)}
+.glass-pane{border:0;background:var(--glass-bg, rgba(255,255,255,.52));
+  -webkit-backdrop-filter:blur(var(--glass-blur, 14px)) saturate(115%);
+  backdrop-filter:blur(var(--glass-blur, 14px)) saturate(115%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.70), inset 0 -1px 0 rgba(255,255,255,.22),
+    0 18px 48px rgba(16,50,70,.14)}
+.bubble{position:absolute;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 34% 30%, rgba(255,255,255,.92) 0 6%,
+    rgba(255,255,255,.34) 22%, rgba(255,255,255,.06) 58%, rgba(255,255,255,.28) 100%);
+  box-shadow:inset 0 -8px 18px rgba(150,210,235,.28), 0 10px 26px rgba(70,130,160,.14)}

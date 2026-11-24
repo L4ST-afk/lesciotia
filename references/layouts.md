@@ -20,14 +20,14 @@ Optional layout hints for individual slides. Specify in outline's `// LAYOUT` se
 | `cover` | cover | cover | 开场：标题、副标题、三 pill |
 | `section` | section | section-divider | 分章：一句章名 + 一句提要 |
 | `end` | end | thanks, cta | 收尾：谢谢 / 要一个动作（`cta` 加按钮） |
-| `text` | text | bullets, two-column, three-column | 要点或分栏：默认单栏，`g2`/`g3` 换栏数；`rule=bottom` 走 `.cols3`（三列卡、段间虚线、卡底 accent 线） |
+| `text` | text | bullets, two-column, three-column | 要点或分栏：默认单栏，`g2`/`g3` 换栏数；`rule=bottom` 走 `.cols3`（三列卡、段间虚线、卡底 accent 线）；`modules` 走 `.mod-grid`（2×2 模块格，末格可让给图） |
 | `quote` | quote | big-quote | 一句可引用的话 + 出处 |
 | `code` | code | code, terminal | 代码与终端输出（`chrome` 加窗框） |
 | `compare` | compare, compare-image | comparison, pros-cons, diff, image-compare | 两栏对照（`mark=pc` ✓✗、`mark=diff` 旧→新）；两图对照单列一段 |
 | `charts` | chart-axis, chart-pie, chart-radar, chart-unit, chart-waterfall, chart-dumbbell | chart-bar/line/pie/radar | 轴图（`line` 折线）、饼、雷达；另加可数点阵、瀑布、哑铃（自绘，C 出口无等价） |
 | `image` | image-bleed, image-single, image-split | image-hero/full-bleed/single/text-split | 满幅图（压字与否）、单图+说明、左文右图 |
 | `image-set` | image-set, image-band, image-round, image-card, image-phone | image-grid, image-gallery | 五式：`bento` 等分拼板 / `band` 图注压底 / `round` 圆切连排 / `card` 左文右图卡 / `phone` 窄图等高不裁（宽高比 < 0.9 过半自动选，图宽各自走）；`gallery` 错落已并入 bento。**图带压卡**走 `.ride`：图带 440px、结论行压在带内、两张白卡骑压带下沿 64px（卡内两段正文，小标题两行）|
-| `process` | process-steps, process-timeline, process-roadmap, process-gantt | 同左 | 按顺序走：步骤卡 / 时间轴 / 泳道 / 甘特条（四种排布不合并） |
+| `process` | process-steps, process-timeline, process-roadmap, process-gantt | 同左 | 按顺序走：步骤卡 / 时间轴 / 泳道 / 甘特条（四种排布不合并）；`gantt` 走 `.gantt2`：日期算刻度、跨年分带、条内嵌完成度、模块间虚线 |
 | `diagram` | flow, arch | flow-diagram, arch-diagram, mindmap | 流程链 / 分层；中心辐射并入 `ring-hub` |
 | `data` | data-stat, data-table, data-todo | kpi-grid, stat-highlight, table, todo-checklist | 数字（`n=1` 即单数字）、表、清单 |
 | `toc` | toc | toc | 目录页 |

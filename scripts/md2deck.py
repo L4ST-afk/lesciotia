@@ -114,6 +114,8 @@ def parse_pages(body):
                 pages.pop()
             cur = {'head': s[4:].strip(), 'body': [], 'parent': parent, 'layout': None, 'chips': None}
             pages.append(cur)
+        elif re.match(r'^\s*---\s*$', s):
+            continue   # 页间分隔线只是写作习惯，不是正文
         else:
             if cur is None:
                 if s.strip():
@@ -436,6 +438,95 @@ def render_bleed(head, bl, fix=None, kick=''):
     return '\n'.join(out)
 
 
+def _month_idx(s: str):
+    """把 `2026-07` / `2026-07-15` 折成绝对月序（年×12＋月），月粒度已够甘特用。"""
+    m = re.search(r'(\d{4})[-/.](\d{1,2})', s or '')
+    if not m:
+        return None
+    return int(m.group(1)) * 12 + int(m.group(2)) - 1
+
+
+def _pct(s: str) -> int:
+    m = re.search(r'(\d{1,3})', s or '')
+    return max(0, min(100, int(m.group(1)))) if m else 0
+
+
+def render_gantt(head, bl, kick=''):
+    """甘特二式：日期算刻度，跨年分带，条内嵌完成度，模块之间加一道虚线。"""
+    tbl = [b for b in bl if b[0] == 'table']
+    if not tbl:
+        return render_text(head, bl, False, kick)
+    rows = tbl[0][1]
+    if rows and ('起' in rows[0] or '开始' in rows[0]):
+        rows = rows[1:]
+    tasks = []
+    for r in rows:
+        if len(r) < 4:
+            continue
+        name, mod, st, en = r[0], r[1], r[2], r[3]
+        a, b_ = _month_idx(st), _month_idx(en)
+        if a is None or b_ is None or b_ < a:
+            continue
+        tasks.append({'name': name, 'mod': mod, 'start': a, 'end': b_,
+                      'pct': _pct(r[4]) if len(r) > 4 else 0})
+    if not tasks:
+        return render_text(head, bl, False, kick)
+    lo = min(t['start'] for t in tasks)
+    hi = max(t['end'] for t in tasks)
+    total = hi - lo + 1
+    years, months = {}, []
+    for k in range(total):
+        y, m = divmod(lo + k, 12)
+        years.setdefault(y, 0)
+        years[y] += 1
+        months.append('%02d' % (m + 1))
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    out.append('  <div class="gantt2" style="--cols:%d;--step:%.6f%%">' % (total, 100.0 / total))
+    out.append('    <div class="g2-head"><div class="g2-lbl">任务</div><div class="g2-scale">')
+    out.append('      <div class="g2-years">%s</div>' % ''.join(
+        '<span style="grid-column:span %d">%d</span>' % (n, y) for y, n in years.items()))
+    out.append('      <div class="g2-months">%s</div>' % ''.join('<span>%s</span>' % m for m in months))
+    out.append('    </div></div>')
+    out.append('    <div class="g2-rows">')
+    last_mod = None
+    for t in tasks:
+        modstart = ' is-modstart' if (last_mod is not None and t['mod'] != last_mod) else ''
+        last_mod = t['mod']
+        left = (t['start'] - lo) / total * 100
+        width = (t['end'] - t['start'] + 1) / total * 100
+        out.append('      <div class="g2-row%s">' % modstart)
+        out.append('        <div class="g2-lbl">%s%s</div>' % (
+            inline(t['name']), ('<b class="g2-mod">%s</b>' % inline(t['mod'])) if t['mod'] else ''))
+        out.append('        <div class="g2-track"><div class="g2-bar%s" style="left:%.4f%%;width:%.4f%%">'
+                   % (' is-done' if t['pct'] >= 100 else '', left, width))
+        out.append('          <i class="g2-fill" style="width:%d%%"></i><span class="g2-pct">%d%%</span></div></div>' % (t['pct'], t['pct']))
+        out.append('      </div>')
+    out.append('    </div>')
+    paras = [b[1] for b in bl if b[0] == 'para']
+    if paras:
+        out.append('    <div class="g2-foot"><b>结论</b><span>%s</span></div>' % inline(paras[-1]))
+    out.append('  </div>')
+    return '\n'.join(out)
+
+
+def render_modules(head, bl, fix=None, kick='', chips=None):
+    """模块格：卡片分格装载，末格可让给图（图满格、去圆角内缘）。"""
+    cards = [x for b in bl if b[0] == 'list' for x in b[1]]
+    imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
+    out = ['  <p class="kicker">%s</p>' % kick, '  <h2 class="h2">%s</h2>' % inline(head)]
+    if chips:
+        out.append(render_chips(chips))
+    out.append('  <div class="mod-grid">')
+    for it in cards[:4]:
+        title, ps = _card_fields(it)
+        body = ''.join('<p>%s</p>' % inline(x) for x in ps[:2])
+        out.append('    <div class="mod"><p class="k">%s</p>%s</div>' % (inline(title.upper()[:24]), body))
+    if imgs:
+        out.append('    <figure class="mod tile-img"><img src="%s" alt="%s"></figure>' % (imgs[0][1], esc(imgs[0][0])))
+    out.append('  </div>')
+    return '\n'.join(x for x in out if x)
+
+
 def split_item(s: str, limit: int = 19):
     """C 出口的 bullets 正文 32px、单条只有 19 字的位置；长句要拆成「主句 + 小注」。
 
@@ -479,10 +570,10 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
         layout = pg.get('layout')
         head = pg['head']
         foot = f'{brand} · {idx:02d}'
+        cards = [x for b in bl if b[0] == 'list' for x in b[1]]
+        paras = [b[1] for b in bl if b[0] == 'para']
+        imgs = [b for b in bl if b[0] == 'img']
         if layout in ('ride', 'cols3', 'bleed'):
-            cards = [x for b in bl if b[0] == 'list' for x in b[1]]
-            paras = [b[1] for b in bl if b[0] == 'para']
-            imgs = [b for b in bl if b[0] == 'img']
             if layout == 'ride' and imgs and cards:
                 titles, caps = [], []
                 for it in cards[:5]:
@@ -512,7 +603,33 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
             else:
                 notes.append((idx, head, 'layout 指令缺图或缺卡片，按普通页处理'))
                 layout = None
-        if layout == 'ride' or layout == 'cols3' or layout == 'bleed':
+        if layout == 'gantt':
+            tbl = [b for b in bl if b[0] == 'table']
+            rows = tbl[0][1] if tbl else []
+            if rows and ('起' in rows[0] or '开始' in rows[0]):
+                rows = rows[1:]
+            rows = [r[:5] for r in rows if len(r) >= 4]
+            if rows:
+                out.append({'type': 'table', 'title': head, 'cols': ['任务', '模块', '起', '止', '完成'],
+                            'rows': [r + [''] * (5 - len(r)) for r in rows],
+                            'source': meta.get('source', brand), 'footer': foot})
+                notes.append((idx, head, '甘特：C 侧降级为表格（日期与完成度保留，条、跨年分带不保留）'))
+            else:
+                notes.append((idx, head, '甘特缺日期表，按普通页处理'))
+                layout = None
+        elif layout == 'modules' and cards:
+            titles, caps = [], []
+            for it in cards[:5]:
+                t, ps = _card_fields(it)
+                titles.append(t)
+                caps.append(' '.join(ps)[:96])
+            out.append({'type': 'bullets', 'title': head, 'items': titles,
+                        'captions': caps, 'source': meta.get('source', brand), 'footer': foot})
+            notes.append((idx, head, '模块格：C 侧降级为列表页，图格与分格结构不保留'))
+        elif layout == 'modules':
+            notes.append((idx, head, '模块格缺卡片，按普通页处理'))
+            layout = None
+        if layout in ('ride', 'cols3', 'bleed', 'gantt', 'modules'):
             pass
         elif fam == 'quote':
             q = [b for b in bl if b[0] == 'quote'][0][1]
@@ -682,6 +799,12 @@ def build(src_path, out, theme, title_override, build_steps):
         elif layout == 'bleed' and has_img:
             inner = render_bleed(pg['head'], bl, fix_image, kick)
             fam = 'bleed'
+        elif layout == 'gantt':
+            inner = render_gantt(pg['head'], bl, kick)
+            fam = 'gantt'
+        elif layout == 'modules':
+            inner = render_modules(pg['head'], bl, fix_image, kick, pg.get('chips'))
+            fam = 'modules'
         elif fam == 'quote':
             inner = render_quote(pg['head'], bl, kick)
         elif fam == 'image1':
@@ -696,7 +819,8 @@ def build(src_path, out, theme, title_override, build_steps):
             inner = render_code(pg['head'], bl, kick if pg.get('parent') else '')
         else:
             inner = render_table(pg['head'], bl)
-        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split', 'ride': 'image-band', 'cols3': 'text', 'bleed': 'image-split'}[fam]
+        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split', 'ride': 'image-band', 'cols3': 'text', 'bleed': 'image-split',
+                             'gantt': 'process-gantt', 'modules': 'text'}[fam]
         sec.append('  <section data-style="%s" class="slide" data-title="%s">' % (style, esc(pg['head'])))
         sec.append(nav_markup(nav, nav_form, pg.get('sec'))) if nav and pg.get('sec') else None
         sec.append(inner)
