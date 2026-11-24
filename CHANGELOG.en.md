@@ -26,7 +26,7 @@ Synced with the master copy at 1.2.64:
 
 ## Unreleased (2026-11-24 — README first screen rewritten)
 
-- The README first screen now addresses an outside reader: one script, two finished forms, and what you install; the etymology, pronunciation and unverified-claim notes moved back to `naming.md`.
+- The README first screen now addresses an outside reader: one script, two finished forms, and what you install; the etymology, pronunciation and unverified-claim notes folded into one opening passage.
 - Machine locations and "not A but B" parallelisms removed.
 
 ## Unreleased (2026-11-24 — outward copy neutralised)

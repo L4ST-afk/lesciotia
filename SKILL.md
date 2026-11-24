@@ -25,7 +25,7 @@ metadata:
 
 **双槽分工**：中文槽承载意象——雪从外来、落进亭中＝接料成景；拉丁槽只承载「可念、可搜、不撞名」，不拆字义解释。
 
-**名字溯源**（亭在江心屿东北角、郭沫若引文天祥诗命名、三段音骨架 `Le／sci／tia`）见 [`references/naming.md`](references/naming.md)（2026-11-16 建；只记录名字，⛔ 不改行为，读音以本页 §读音钉死 为准）。
+**名字溯源**：亭在江心屿东北角，一九六四年郭沫若引文天祥《北归宿中川寺》「罗浮山下雪来未」诗意题「来雪亭」横额。拉丁槽 `Lesciotia` 是音骨架（`Le`／`sci`／`tia` 三段对三字，中段 `o` 承「雪」的圆唇韵），只作检索锚，⛔ 不拆字义解释；读音以本页 §读音钉死 为准。
 
 ### 三层词汇（2026-11-21 定）
 
@@ -41,7 +41,7 @@ metadata:
 
 **梁架**取木构承重骨架义，且能拆出具体式样（三架梁、五架梁），对上 17 族、39 式：一族一文件，族页里一段一式；**同骨架的变体不再单列成段，而是同段的一个参数**（`g2/g3`、`mark=pc/diff`、`chrome`、`media`…），注记写在段的 `.params` 行。
 **瓦作**取屋面工艺义（瓦、脊、滴水），是覆盖全部 17 个梁架的表面层——雪落在瓦上，不落在梁架上。
-**落雪**取 `naming.md` §四「雪从外来、落进亭中才成景」：素材是别人的，本 skill 负责把料落成一页页。
+**落雪**取「雪从外来、落进亭中才成景」这一层：素材是别人的，本 skill 负责把料落成一页页。
 
 ⛔ 三个词只是**称呼**，目录名一律不改（`assets/layouts/`、`assets/themes/` 保持原样）。
 改路径会打断全部引用与四道闸门，收益不抵成本。文档里写「14 个梁架（`assets/layouts/`）」这种带路径的形式。
@@ -348,10 +348,9 @@ python3 scripts/check_doc_claims.py                                    # 文档�
 
 ## References
 
-全部 60 份，文件名即 `references/` 下的路径，按用途分组：
+全部 59 份，文件名即 `references/` 下的路径，按用途分组：
 
 - **流程**：`references/workflow.md` / `references/prose-gate.md`（成稿闸九条）/ `references/prose-recipes.md`（五型配方）/ `references/analysis-framework.md` / `references/archetypes.md` / `references/confirmation.md` / `references/confirmation-more.md` / `references/outline-template.md` / `references/outline-slide-templates.md` / `references/page-record.md`
-- **命名**：`references/naming.md`（只记名字来历，⛔ 不改行为）
 - **出口**：`references/path-a-image.md` / `references/path-b-html.md` / `references/path-c-editable.md` / `references/effects-lens.md`（可选：玻璃透镜位移场）
 - **风格与四维**：`references/styles-unified.md` / `references/styles-blueprint.md` / `references/styles-corporate.md` / `references/styles-minimal.md` / `references/styles-notion.md` / `references/styles-bold-editorial.md` / `references/styles-editorial-infographic.md` / `references/styles-intuition-machine.md` / `references/styles-scientific.md` / `references/styles-dark-atmospheric.md` / `references/styles-pixel-art.md` / `references/styles-vintage.md` / `references/styles-watercolor.md` / `references/styles-sketch-notes.md` / `references/styles-hand-drawn-edu.md` / `references/styles-chalkboard.md` / `references/styles-vector-illustration.md` / `references/styles-fantasy-animation.md` / `references/styles-curio-cabinet.md` / `references/dimensions-texture.md` / `references/dimensions-mood.md` / `references/dimensions-typography.md` / `references/dimensions-density.md` / `references/dimensions-presets.md`
 - **设计与文案**：`references/design-guidelines.md` / `references/design-visual.md` / `references/layouts.md` / `references/style-audit.md`（外面真件的字号与几何实测）/ `references/chart-grammar.md`（数据形状→图型判据） / `references/palette-atlas.md`（备选配色起手式） / `references/content-rules.md` / `references/base-prompt.md`

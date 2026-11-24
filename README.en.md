@@ -11,7 +11,7 @@
 > the frame is raised first, the tilework laid after;
 > the material settles in, and the page is made.
 
-The line is from Wen Tianxiang's *Returning North to Rest at Zhongchuan Temple*; in 1964 Guo Moruo took this imagery to name the pavilion. See [`references/naming.md`](references/naming.md).
+The line is from Wen Tianxiang's *Returning North to Rest at Zhongchuan Temple*; in 1964 Guo Moruo took this imagery to name the pavilion. The Latin name `Lesciotia` is a sound frame, used only as a retrieval anchor and not parsed for meaning.
 
 One manuscript, three things you can hand over — named by what the recipient gets, not by a letter:
 
@@ -23,7 +23,7 @@ They are three shells over the same manuscript and the same palette tokens, not 
 
 17 layout families (39 styles), 9 themes, 5 complete decks — all offline. Each theme is named after a real Shanghai place — a road, a plaza, a river, a building or a temple (some happen to be Metro station names too): the palette is tuned to that image rather than sampled from photographs. The HTML target needs only Python 3's standard library; the PPTX target adds `python-pptx`.
 
-The name comes from Laixue Pavilion on Jiangxin Island, Wenzhou — north-east corner of the islet, facing Mount Luofu. The allusion, the pronunciation and what was given up for it: [`references/naming.md`](references/naming.md).
+The name comes from Laixue Pavilion on Jiangxin Island, Wenzhou — north-east corner of the islet, facing Mount Luofu. For the reading, see the pinned pronunciation in `SKILL.md`.
 
 ## Three layers
 
