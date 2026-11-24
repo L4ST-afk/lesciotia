@@ -1,11 +1,11 @@
 ---
 name: 来雪亭Lesciotia
-version: 1.2.73
+version: 1.2.74
 description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付形态（影像件／网页件／可改件）——A 影像 deck（逐页 AI 生图 → pptx/pdf，不能改字）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可改件（原生 PPTX，文本与形状都能改）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
 metadata:
   vaccineOrigin: local
   vaccineVersion: e8d93bf0731f
-  version: "1.2.73"
+  version: "1.2.74"
   created: "2026-11-10"
   sources:
     - "html-ppt (MIT, © lewis)（历史来源：2026-11-23 起本库代码件与整册已全部自写，无复制件）"
@@ -116,7 +116,7 @@ python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [--dark
 弧线时间轴写 `<!-- layout: timeline-arc -->`＋至多六条 `日期｜标题｜说明`：曲线与圆点在 SVG 里按贝塞尔算，卡片跟着圆点的 y 交替上下，日期竖杆连回曲线。C 侧降级为列表页。
 底部口号带写 `<!-- band: 一句话 -->`，可挂任意页：通栏一条压在页底，字距 .22em；挂带的页会自动隐藏页脚、把内容区收进 150px。
 横条比例写 `<!-- layout: bars -->`＋至多七条 `标签｜数值`：标签独立成左列，圆角轨道只留色段，实色段按比例拉长，数值钉在右端，表后一段当注脚。⛔ 别把标签放进轨道——深字压在深色段上，短条的标签会跨在实色段与浅轨道两侧，对比度必有一侧不够（1.2.70 首版就是这个毛病）。
-条身可换「皮肤」，只认七个 token，**基座默认声明、九瓦作逐个声明**，不写死在组件里：`--bar-track`（轨道底）、`--bar-rim` / `--bar-rim-bottom`（上下内亮边）、`--bar-well`（凹槽内影）、`--bar-fill`（条身渐变）、`--bar-fill-gloss`（条身高光层）、`--bar-fill-ring`（条身内圈与落影）。基座 `base.css` 有一组中性兜底（tint 轨道、纯 accent 条身），任何新瓦作不声明也不会崩；但 `check-theme-colors.py` 要求九个瓦作各自显式声明这七件（缺一记 `BAR` FAIL），兜底不算交付。数值列一律用 `--text-1`，⛔ 不用 `--accent`——世纪广场的标线黄压浅底只有 1.79:1，数字必须跟正文同色。广兰路已按 Aqua 口径声明：轨道是水槽玻璃、条身是果冻凝胶，高光走 `--aero-gloss` 同族但更薄，⛔ 别直接整条套 `--aero-gloss`（它按 18/21px 的硬水线取值，44px 的条上会糊成一片白）。数值带 `%` 直接当百分比，超过 100 的大数按最大值归一。这是「排名＋占比」的清单读法，⛔ 不与 charts 族的坐标轴图表混用。C 侧降级为两列表格。
+条身可换「皮肤」，只认九个 token，**基座默认声明、九瓦作逐个声明**，不写死在组件里：`--bar-track`（轨道底）、`--bar-rim` / `--bar-rim-bottom`（上下内亮边）、`--bar-well`（凹槽内影）、`--bar-fill`（条身渐变）、`--bar-fill-gloss`（条身高光层）、`--bar-fill-ring`（条身内圈与落影）、`--bar-radius`（轨道与条身圆角）、`--bar-border`（轨道外框）。基座 `base.css` 有一组中性兜底（tint 轨道、纯 accent 条身），任何新瓦作不声明也不会崩；但 `check-theme-colors.py` 要求九个瓦作各自显式声明这九件（缺一记 `BAR` FAIL），兜底不算交付。数值列一律用 `--text-1`，⛔ 不用 `--accent`——世纪广场的标线黄压浅底只有 1.79:1，数字必须跟正文同色。广兰路已按 Aqua 口径声明：轨道是水槽玻璃、条身是果冻凝胶，高光走 `--aero-gloss` 同族但更薄，⛔ 别直接整条套 `--aero-gloss`（它按 18/21px 的硬水线取值，44px 的条上会糊成一片白）。形状也归主题：默认胶囊（`--bar-radius:999px`）；凡材质是纸面/版块/混凝土的瓦作改 `--bar-radius:0`，用 `--bar-border` 立一条实线框。已落直角的是番禺路（2px 墨框）、虬江、福州路、万航渡（1px 同色细线）；玻璃、灯箱、金属、立柱四类仍走胶囊——⛔ 别把番禺路改回圆角，也别给虬江/福州路/万航渡加玻璃高光。数值带 `%` 直接当百分比，超过 100 的大数按最大值归一。这是「排名＋占比」的清单读法，⛔ 不与 charts 族的坐标轴图表混用。C 侧降级为两列表格。
 团队卡写 `<!-- layout: team -->`＋二至四条 `姓名｜职务｜一句简介`，再按同序列图：人像切进有机形状（四组 `border-radius` 百分比拧出来，不用 SVG），形状在后方错位探出一角；无图时同形退成 accent 淡色块。⛔ 人像要用抠好的透明底 PNG 或纯色底，白底棚拍会在有机形里留一圈白。C 侧降级为列表页，人像与有机形不保留。
 **实心块上的字只有一种写法**：品牌色（`--accent`/`--accent-2`/`--accent-3`/`--primary`）做底时，字色一律 `var(--accent-ink)`，逐主题按 WCAG 算过（白字压 accent-2 常见只有 2–3:1）。⛔ 不硬写 `#fff`、⛔ 不放 `--text-1/2/3`；浅色 tint（`color-mix(accent 10–26%, surface)`）才是深字的合法底。闸门 `check-theme-colors.py` 会逐块扫这条。
 

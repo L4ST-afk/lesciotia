@@ -1,8 +1,8 @@
 {
   "theme": "qiu-r",
   "source": "../themes/qiu-r.css",
-  "source_sha256": "f0a6e88d0b6d7d59bb71e3ba200f2540f1c04c7689f9af470f8834857ac3cc45",
-  "generated": "2026-11-25T01:35:15",
+  "source_sha256": "73468676e3a9aed0e8e4a5e6c33e3e1588833a5b258a49f8e956a6a9ce625adb",
+  "generated": "2026-11-25T01:58:45",
   "renderer": "chrome-headless",
   "palette": [
     "#1B3A41",

@@ -94,14 +94,16 @@
   --accent-3:var(--sage);
   --accent-ink:#ffffff;        /* 赤陶色块上的字用纸白（4.96:1）；墨黑压赤陶只有 3.47，不够 */
 
-  /* 比例条：混凝土槽 + 赤陶平板（新粗野主义：无高光，只一条实边） */
+  /* 比例条：混凝土槽 + 赤陶平板（新粗野主义：直角矩形、2px 墨框、无高光） */
   --bar-track:#e5dccb;
   --bar-rim:transparent;
   --bar-rim-bottom:transparent;
-  --bar-well:rgba(90,50,30,.14);
+  --bar-well:rgba(20,18,16,.10);
   --bar-fill:var(--primary);
   --bar-fill-gloss:none;
-  --bar-fill-ring:inset 0 0 0 1px rgba(90,35,25,.30);
+  --bar-fill-ring:none;
+  --bar-radius:0;              /* ⛔ 番禺路不套胶囊：直角矩形是这一作的语法 */
+  --bar-border:2px solid #141414;
   --good:#4e5a3d;
   --warn:#8a6a18;
   --bad:#963826;

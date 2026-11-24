@@ -1,8 +1,8 @@
 {
   "theme": "wanhang-fy",
   "source": "../themes/wanhang-fy.css",
-  "source_sha256": "be96a11a39582b03ddd63c83aef5689dc37fa07a2360068c1a09605875edb6c7",
-  "generated": "2026-11-25T01:36:09",
+  "source_sha256": "03920386d7bc1c79470ab2a9207483c4ad775b85a355a33db2b8f34033fe7251",
+  "generated": "2026-11-25T02:00:24",
   "renderer": "chrome-headless",
   "palette": [
     "#22475E",

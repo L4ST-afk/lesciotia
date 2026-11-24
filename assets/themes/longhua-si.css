@@ -127,6 +127,8 @@
   --bar-fill:linear-gradient(180deg,#8d4c36 0%,#68321f 55%,#4b2315 100%);
   --bar-fill-gloss:linear-gradient(180deg,rgba(255,240,222,.28) 0,rgba(255,240,222,.04) 30%,rgba(255,255,255,0) 58%);
   --bar-fill-ring:inset 0 1px 0 rgba(255,240,222,.35), 0 2px 6px rgba(70,40,25,.18);
+  --bar-radius:999px;
+  --bar-border:none;
   /* 模板沿用的旧名，一律别名到本主题实色 */
   --primary-hi:#8a452c;
   --primary-lo:#4a2213;

@@ -1,8 +1,8 @@
 {
   "theme": "longhua-si",
   "source": "../themes/longhua-si.css",
-  "source_sha256": "30b4b5587cb78988e7523464e0cc1997b6d54e9f6b4e6a5380d1ba59a0216464",
-  "generated": "2026-11-25T01:33:00",
+  "source_sha256": "002dbb8e397346ed0406a43c58a2abee42fd9fb8033fec8ec8e4f4f90f49e606",
+  "generated": "2026-11-25T01:49:35",
   "renderer": "chrome-headless",
   "palette": [
     "#2A2521",

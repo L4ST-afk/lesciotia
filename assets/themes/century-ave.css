@@ -61,6 +61,8 @@
   --bar-fill:linear-gradient(180deg,#ffe29a 0%,#f5b942 55%,#c98f1c 100%);
   --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.50) 0,rgba(255,255,255,.10) 30%,rgba(255,255,255,0) 62%,rgba(255,255,255,.10) 100%);
   --bar-fill-ring:inset 0 1px 0 rgba(255,246,214,.55), 0 2px 8px rgba(0,0,0,.38);
+  --bar-radius:999px;
+  --bar-border:none;
   --good:#7a9b63;
   --warn:#d69a3f;
   --bad:#c56b78;

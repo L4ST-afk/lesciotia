@@ -1,8 +1,8 @@
 {
   "theme": "panyu-rd",
   "source": "../themes/panyu-rd.css",
-  "source_sha256": "454cfc6748e1448c579049072c7604790306785ad7c34b7bfebe536d48828df8",
-  "generated": "2026-11-25T01:34:17",
+  "source_sha256": "3e638fd035d85ac21b467b883680796722b663b8c1e9a31fff75a99665a31dba",
+  "generated": "2026-11-25T01:50:50",
   "renderer": "chrome-headless",
   "palette": [
     "#141414",

@@ -81,6 +81,8 @@
   --bar-fill:linear-gradient(180deg,#5f8769 0%,#3f6449 60%,#2c4a34 100%);
   --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.16) 0,rgba(255,255,255,0) 32%);
   --bar-fill-ring:inset 0 0 0 1px rgba(63,100,73,.35);
+  --bar-radius:0;              /* 裁切纸边：直角 */
+  --bar-border:1px solid rgba(63,100,73,.24);
   /* 预览页模板沿用的旧名，一律别名到本主题实色，不新开 hex */
   --primary-hi:var(--plane-hi);
   --primary-lo:var(--plane-lo);

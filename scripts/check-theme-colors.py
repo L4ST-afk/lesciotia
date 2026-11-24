@@ -387,9 +387,10 @@ def audit(path):
                                    g.get('cfgs', 0), (g.get('drops') or 0) * 100,
                                    '、按 oklch 插值' if g.get('interp') == 'ok' else '')))
 
-    # 比例条七件：每个瓦作都必须显式声明（base 有兜底，但兜底不算交付）
+    # 比例条九件：每个瓦作都必须显式声明（base 有兜底，但兜底不算交付）
     bar_tokens = ('bar-track', 'bar-rim', 'bar-rim-bottom', 'bar-well',
-                  'bar-fill', 'bar-fill-gloss', 'bar-fill-ring')
+                  'bar-fill', 'bar-fill-gloss', 'bar-fill-ring',
+                  'bar-radius', 'bar-border')
     raw = open(path, encoding='utf-8').read()
     miss = [t for t in bar_tokens if not re.search(r'--%s\s*:' % re.escape(t), raw)]
     if miss:

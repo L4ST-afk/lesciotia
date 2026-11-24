@@ -80,6 +80,8 @@
   --bar-fill:linear-gradient(180deg,#5a959d 0%,#3c757e 58%,#2b565d 100%);
   --bar-fill-gloss:linear-gradient(180deg,rgba(255,255,255,.24) 0,rgba(255,255,255,.03) 32%,rgba(255,255,255,0) 60%);
   --bar-fill-ring:inset 0 1px 0 rgba(255,255,255,.30), 0 2px 5px rgba(40,80,80,.16);
+  --bar-radius:0;              /* 方格稿纸是切边纸：直角 */
+  --bar-border:1px solid rgba(60,117,126,.35);
   --good:#2f6b57;
   --warn:#8a6a18;
   --bad:#8a3932;

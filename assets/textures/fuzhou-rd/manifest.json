@@ -1,8 +1,8 @@
 {
   "theme": "fuzhou-rd",
   "source": "../themes/fuzhou-rd.css",
-  "source_sha256": "20062c3be159e497607c0be15750c287fb83ca84d91b95301528d8f16ce7eabd",
-  "generated": "2026-11-25T01:31:55",
+  "source_sha256": "3dafd7113a2c6095d5b6a3fb7410a7a78aeb1b417185202d069077dbc8e7b4db",
+  "generated": "2026-11-25T01:59:32",
   "renderer": "chrome-headless",
   "palette": [
     "#14110E",

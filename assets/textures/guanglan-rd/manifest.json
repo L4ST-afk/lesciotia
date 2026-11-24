@@ -1,8 +1,8 @@
 {
   "theme": "guanglan-rd",
   "source": "../themes/guanglan-rd.css",
-  "source_sha256": "96f3e61977bcfa2c6063ffa7583dc3f2586b85335b8f7caa9c261861a74fe6cc",
-  "generated": "2026-11-25T01:16:06",
+  "source_sha256": "418794dc7c7e1cb2711be35f376da323076a6a90d423ef54a32c5c28d3c09aaa",
+  "generated": "2026-11-25T01:48:32",
   "renderer": "chrome-headless",
   "palette": [
     "#000A0F",

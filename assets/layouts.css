@@ -609,11 +609,12 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
    与 charts 族分界：charts 是坐标轴图表，bars 是「排名＋占比」的清单式读法，行数少、字大。 */
 .bars{margin-top:28px;display:flex;flex-direction:column;gap:16px}
 .bars .bar-row{display:grid;grid-template-columns:236px 1fr 84px;align-items:center;gap:20px}
-.bars .track{position:relative;height:44px;border-radius:999px;overflow:hidden;
+.bars .track{position:relative;height:44px;border-radius:var(--bar-radius);
+  border:var(--bar-border);box-sizing:border-box;overflow:hidden;
   background:var(--bar-track);
   box-shadow:inset 0 2px 6px var(--bar-well),
     inset 0 1px 0 var(--bar-rim), inset 0 -1px 0 var(--bar-rim-bottom)}
-.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;overflow:hidden;
+.bars .fill{position:absolute;left:0;top:0;bottom:0;border-radius:var(--bar-radius);overflow:hidden;
   background:var(--bar-fill);box-shadow:var(--bar-fill-ring)}
 .bars .fill::after{content:'';position:absolute;inset:0;border-radius:inherit;
   background:var(--bar-fill-gloss);pointer-events:none}

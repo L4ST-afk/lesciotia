@@ -30,6 +30,8 @@
   --bar-fill:var(--accent);
   --bar-fill-gloss:none;
   --bar-fill-ring:none;
+  --bar-radius:999px;    /* 比例条圆角：默认胶囊；新粗野主义瓦作改 0 */
+  --bar-border:none;     /* 轨道外框：默认无；直角瓦作用实线框立边界 */
   --accent-ink:#000000;   /* 默认取墨字：#3b6cff 上白 4.40:1、墨 4.77:1，只有墨过 AA */
   --accent-edge:color-mix(in srgb,var(--text-1) 30%,transparent); /* 主色块描边：压底<3:1 时靠它立边界 */
   --accent-2:#7a5cff;
