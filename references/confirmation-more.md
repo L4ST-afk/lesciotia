@@ -91,7 +91,7 @@ options:
   - label: 可以，继续（推荐）
     description: 进入逐页记录
   - label: 先改大纲
-    description: 我改 outline.md 再继续
+    description: 改 outline.md 再继续
   - label: 重出大纲
     description: 换个结构重写
 ```
@@ -105,7 +105,7 @@ options:
   - label: 可以，开渲（推荐）
     description: 按确认的出口出产物
   - label: 先改逐页记录
-    description: 我改 pages/NN.md 再继续
+    description: 改 pages/NN.md 再继续
   - label: 重出逐页记录
     description: 换一种组织方式重写
 ```

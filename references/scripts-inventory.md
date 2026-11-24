@@ -58,6 +58,6 @@
 
 判据级闸（直接读产物/字体文件对账，不是「脚本能起来」）：`check-preview-sync.py`（预览页漂移）、`check-fonts.py`（字体子集与 token）、`check-theme-textures.py`（材质图与主题源对账）、`check-bitmap-assets.py`（位图登记与磁盘/主题对账，B1–B11）、`probe-texture-visibility.py`（位图是否真的可见）、`check-deck-sync.py`（交付 deck 与主题是否同步）、外加符号链接检查与 `check-morph.py`（morph 结构，不当判据闸——播放验不了）。
 
-改主题必跑：`check-theme-textures` → `check-bitmap-assets` → `probe-texture-visibility` → `selftest` → `check_doc_claims` → `check-theme-colors` → `check-preview-sync` → `check-deck-sync`（太玉洞的 `check_limits` / `vaccinate` 按库规矩另加）。
+改主题必跑：`check-theme-textures` → `check-bitmap-assets` → `probe-texture-visibility` → `selftest` → `check_doc_claims` → `check-theme-colors` → `check-preview-sync` → `check-deck-sync`（另有 `check_limits` / `vaccinate` 两支体量与体检闸，按库规矩另加）。
 
 ⛔ 只有 `check-theme-textures`（3 条）、`check-bitmap-assets`（5 条）与 `check-wash`（4 条，conic／union／未定义 token／未知 shape）在 `selftest.py` 里带负例，另加「布尔数值（解析 lens 作标尺 + 自交必拒）」「双出口漂移」与「morph 配对（跨页型零同名必红）」三组，其余各闸的负例见 `SELFTEST.md`——别把「自检 PASS」当「七道都验过」。

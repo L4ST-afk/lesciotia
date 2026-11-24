@@ -35,7 +35,7 @@ B 出口只有 texture/density 能被主题+版式精确承接；mood/typography
 | 12 | `watercolor` | 水彩 | organic+warm+humanist+minimal | `styles-watercolor.md` | `soft-pastel` | 生活方式、健康、旅行 | 硬核技术 |
 | 13 | `sketch-notes` | 手绘笔记 | organic+warm+handwritten+balanced | `styles-sketch-notes.md` | `soft-pastel`（降级） | 教程、入门、图解 | 需要精确数据 |
 | 14 | `hand-drawn-edu` | 手绘教学 | organic+macaron+handwritten+balanced | `styles-hand-drawn-edu.md` | `soft-pastel`（降级） | 教学图解、流程解释 | 高管汇报 |
-| 15 | `chalkboard` | 黑板 | organic+warm+handwritten+balanced | `styles-chalkboard.md` | `academic-paper`（降级） | 课堂、教学 | 品牌发布 |
+| 15 | `chalkboard` | 黑板 | organic+warm+handwritten+balanced | `styles-chalkboard.md` | `academic-paper`（降级） | 现场讲解、教学 | 品牌发布 |
 | 16 | `vector-illustration` | 矢量插画 | clean+vibrant+humanist+balanced | `styles-vector-illustration.md` | `memphis-pop` | 儿童、创意、轻松内容 | 严肃研究 |
 | 17 | `fantasy-animation` | 奇幻 | organic+vibrant+handwritten+minimal | `styles-fantasy-animation.md` | `aurora` | 故事、奇幻、动画感 | 数据汇报 |
 | 18 | `swiss-grid` | 瑞士网格 | grid+cool+technical+dense | 无（用 `custom: grid+cool+technical+dense`） | `swiss-grid` | 数据汇报、设计/工程、强网格 | 温情叙事 |

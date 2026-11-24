@@ -226,9 +226,9 @@ python3 scripts/check-prose.py deck.json --suggest  # type after the gate
 
 Typing **reads all three languages, Chinese first**: a Chinese trigger scores 2, English/Japanese 1 (English matched on word boundaries, so `report` does not hit `reporter`). In mixed text the author's language wins — measured on "这周汇报一下进展……我讲 budget 与 proposal 那部分", typed as briefing (7 vs 2), not dragged off by the embedded English words.
 
-Five things are compiled into the prompt: the output form (a deck spec, not prose); hard requirements a number can check (≤26 characters, one clause per bullet, numbers carry `source`, the closing gives exactly one thing); the same banned-word table as the gate; the **four closing questions** (borrowed from 浮沙言 — the same library's documentation-register criteria — and turned into questions: would it hold under another theme? who is speaking? would deleting it lose information? is there a source?); and that type's skeleton (the four teaching segments are the shape that 矮凳桥 — the same library's framework-semantics piece — reduces to on a page).
+Five things are compiled into the prompt: the output form (a deck spec, not prose); hard requirements a number can check (≤26 characters, one clause per bullet, numbers carry `source`, the closing gives exactly one thing); the same banned-word table as the gate; the **four closing questions** (borrowed from the same library's prose-register criteria and turned into questions: would it hold under another theme? who is speaking? would deleting it lose information? is there a source?); and that type's skeleton (the four teaching segments are the shape a framework-semantics piece reduces to on a page).
 
-When two types both fit, follow 矮凳桥's old rule and **write in segments, never mix them** — "incident retro plus budget request" means four retro pages then two proposal pages, with the type change stated in the kicker, rather than one page both assigning blame and asking for money.
+When two types both fit, follow this library's old rule and **write in segments, never mix them** — "incident retro plus budget request" means four retro pages then two proposal pages, with the type change stated in the kicker, rather than one page both assigning blame and asking for money.
 
 ## Real-render verification on the cheap: take officecli's contract, not its binary
 

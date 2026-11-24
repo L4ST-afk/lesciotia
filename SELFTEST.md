@@ -113,9 +113,9 @@ python3 scripts/merge-to-pdf.py slides --force --json
 ## 7. 疫苗与结构闸
 
 ```bash
-python3 <skills-root>/太玉洞Tagnodon/scripts/vaccinate.py .            # 14/14
-python3 <skills-root>/太玉洞Tagnodon/scripts/vaccinate.py . --upgrade  # vaccineVersion: e8d93bf0731f
-python3 <skills-root>/太玉洞Tagnodon/scripts/check_limits.py .          # 无硬超限
+python3 <judgement-skill>/scripts/vaccinate.py .            # 14/14（`<judgement-skill>` 见 SKILL.md 说明；没装跳过）
+python3 <judgement-skill>/scripts/vaccinate.py . --upgrade  # vaccineVersion: e8d93bf0731f
+python3 <judgement-skill>/scripts/check_limits.py .          # 无硬超限
 ```
 
 - 疫苗 **14/14**：V1 体量预算、V2 引用只一层、V5 写操作门禁、V6 写后回读、V7 基线不落临时目录、V8 写入幂等、V9 生成背景、V10 失败样本三要素、V11 non-goals、V12 腐化信号、V13 反例优先。
@@ -175,8 +175,8 @@ python3 <skills-root>/太玉洞Tagnodon/scripts/check_limits.py .          # 无
 **实测**：
 
 ```bash
-python3 <skills-root>/太玉洞Tagnodon/scripts/check_limits.py .   # exit 0，❌ 计数 0
-python3 <skills-root>/太玉洞Tagnodon/scripts/vaccinate.py .      # 14/14（vaccineOrigin: local 严格档）
+python3 <judgement-skill>/scripts/check_limits.py .   # exit 0，❌ 计数 0
+python3 <judgement-skill>/scripts/vaccinate.py .      # 14/14（vaccineOrigin: local 严格档）
 python3 -m py_compile scripts/*.py && bash -n scripts/render-png.sh   # 全过
 grep 悬空审计                                        # 无输出
 ```
@@ -311,7 +311,7 @@ merge：1 页 13.33×7.50 in；PDF 1 页 167,333 B
 
 ## 16. 第六版（1.1.5）· 三方评估反哺落地＋文档对账闸
 
-**背景**：2026-11-14 六维三态评估三方平行（本会话＋loomy＋minimax，汇总 3/5），本轮把可实施建议全部落地。
+**背景**：2026-11-14 六维三态评估三方平行（三家不同厂商的外部评审，汇总 3/5），本轮把可实施建议全部落地。
 
 **改动清单**：
 
@@ -343,7 +343,7 @@ merge：1 页 13.33×7.50 in；PDF 1 页 167,333 B
 
 14 张 PNG 全 1920×1080、var>5、ink>0.3%；gallery 3 页渲染目检占位 SVG 全显示（data URL 内联生效）。
 
-**V13 事件（判据是库级共享资产）**：轮中 run_skill_gates 曾报疫苗 13/14、V13 ❌「规则在反例之前」——其时太玉洞并发会话把 V13 暂改成结构化锚（`**反例**`/`**规则**` 比顺序），本 skill 的 `**踩坑**` 标签不命中锚。随后并发会话独立复核回退该判据（195 件误伤 6 件合规），恢复「剥 frontmatter＋700 字窗口」；复跑 14/14，**本 skill 正文零改动**。教训：库级闸红先查判据自身是否刚被改，⛔ 别急着改正文迁就判据。
+**V13 事件（判据是库级共享资产）**：轮中 run_skill_gates 曾报疫苗 13/14、V13 ❌「规则在反例之前」——其时另一并发会话把 V13 暂改成结构化锚（`**反例**`/`**规则**` 比顺序），本 skill 的 `**踩坑**` 标签不命中锚。随后并发会话独立复核回退该判据（195 件误伤 6 件合规），恢复「剥 frontmatter＋700 字窗口」；复跑 14/14，**本 skill 正文零改动**。教训：库级闸红先查判据自身是否刚被改，⛔ 别急着改正文迁就判据。
 
 **范围声明（本轮没判到的）**：只验 B 出口机制、文档对账与库级闸；A 出口真实生图、C 出口 3 页出件本轮未重跑（§15 读数是 6.7.2 时期，引擎已升 6.9.0，见 §10 新登记）；77 主题版式未逐张重渲染（§14 读数属 1.1.2 时期）。
 
@@ -919,7 +919,7 @@ deck 重打包 3,639,004B；封面截图 1x 下 CTA 与旁边四枚小标签（�
 
 ## 外部评审整改（2026-11-23，v1.2.15）
 
-用 `九山书会` 三席（nemotron / deepseek / iceman）审本库，挑单分批落地。九道闸现状全绿。
+用三家不同厂商的外部评审审本库，挑单分批落地。九道闸现状全绿。
 
 **批一——闸门真实性**
 
@@ -973,7 +973,7 @@ deck 重打包 3,639,004B；封面截图 1x 下 CTA 与旁边四枚小标签（�
 
 ## 渐变中段掉饱和（2026-11-23，v1.2.18）
 
-来源：私信最新一条《什么是电影感的渐变？》＋渐变实验室。落地两件：
+来源：一条公开视频《什么是电影感的渐变？》＋渐变实验室。落地两件：
 
 - `check-theme-colors.py` 新增 `audit_grad()`：按 sRGB 路径取 8 点/段，算 **OKLCH 彩度**；
   两端 ΔH ≥60° 且路径彩度相对两端最低值掉 ≥25% ⇒ `D`（⚠️）；沿路径 L* 反向跳 >3 ⇒ `M`（ℹ️）。
@@ -1800,9 +1800,9 @@ ATTRIBUTION 与 THIRD_PARTY 均改为「仅 `runtime.js` 一件是上游派生�
 **四、五套整册改写，这是撤声明的前提。** 先用 `SequenceMatcher.quick_ratio()` 量旧件与上游示例：
 `weekly-report` / `pitch-deck` / `course-module` / `tech-sharing` / `presenter-mode-reveal` 与对应上游模板
 **相似度≈0.99** —— 即「只改了品牌字样」的搬运件。故本批把五册连各自那份 `style.css` 一并改写：
-内容换成本库自己的语域（周报讲本周拆上游、课程册讲义、路演册讲三出口、技术分享讲规格化、演讲者册讲键位与四张卡），
+内容换成本库自己的语域（周报讲本周拆上游、讲义册、路演册讲三出口、技术分享讲规格化、演讲者册讲键位与四张卡），
 结构只吃 `base.css` + 主题（`style.css` 五份**全部删除**），页码与 `assets/decks.json` 登记值对齐（7/10/6/8/7）。
-课程册主题改挂 `qiu-r`（虬江），与「讲义」气质相配；登记名同步为「模板 · 课程单元 × 虬江」。
+讲义册主题改挂 `qiu-r`（虬江），与「讲义」气质相配；登记名同步为「模板 · 讲义单元 × 虬江」。
 
 **五、声明整份撤除。** `LICENSE-html-ppt.txt` 删除；`ATTRIBUTION.md` 的 lewis 行改为「2026-11-23 起 0 件」，
 并写明判据是「有没有复制件」而非「读过没读过」；`THIRD_PARTY_NOTICES.md` 的捆绑代码表改为「无上游代码件」。

@@ -20,7 +20,7 @@ Deep content analysis for effective slide deck creation.
 
 | 目的 | archetype | 典型信号 |
 |---|---|---|
-| 教 | `course` / `tech-talk` / `explainer` | 课程、培训、教程、科普、讲清 |
+| 教 | `course` / `tech-talk` / `explainer` | 讲义、培训、教程、科普、讲清 |
 | 说服 | `pitch` / `launch` | 融资、招商、发布、demo day |
 | 交代 | `weekly` / `review` | 周报、进展、复盘、评审、决策 |
 | 证 | `research` | 研究、白皮书、答辩、实验 |

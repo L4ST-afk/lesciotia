@@ -51,7 +51,7 @@
 
 `VISUAL_DENSITY`（1 画廊 – 10 驾驶舱）与 `references/dimensions-density.md` 是**同一件事**。
 
-**裁定：deck 语域只认 dimensions 四维；taste 三旋钮（`DESIGN_VARIANCE`／`MOTION_INTENSITY`／`VISUAL_DENSITY`）只在「网页落地页／作品集」语域生效。** ⛔ 一份 deck 里同时用两套变量名——两套并存必漂（禅院塔 §2.6 归口唯一）。
+**裁定：deck 语域只认 dimensions 四维；taste 三旋钮（`DESIGN_VARIANCE`／`MOTION_INTENSITY`／`VISUAL_DENSITY`）只在「网页落地页／作品集」语域生效。** ⛔ 一份 deck 里同时用两套变量名——两套并存必漂（库级铁律 §2.6 归口唯一）。
 
 ## 五、什么时候回读原卷
 

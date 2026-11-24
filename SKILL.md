@@ -1,7 +1,7 @@
 ---
 name: 来雪亭Lesciotia
 version: 1.2.53
-description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付出口——A 影像 deck（逐页 AI 生图 → pptx/pdf）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可编辑 PPTX（原生文本/形状）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、课件、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个 B 出口主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 课件, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
+description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付出口——A 影像 deck（逐页 AI 生图 → pptx/pdf）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可编辑 PPTX（原生文本/形状）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个 B 出口主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
 metadata:
   vaccineOrigin: local
   vaccineVersion: e8d93bf0731f
@@ -327,10 +327,12 @@ python3 scripts/check-prose.py deck.json --suggest   # 闸后顺手判型（page
 改完跑这三条（前两条是库里的现成尺，第三条是本 skill 自己的文档对账闸——那两支都不读「43 个主题」这句话是不是真的）：
 
 ```bash
-python3 <skills-root>/太玉洞Tagnodon/scripts/check_limits.py <本目录>   # 体量：谁超了
-python3 <skills-root>/太玉洞Tagnodon/scripts/vaccinate.py <本目录>      # 结构免疫 14 支
+python3 <judgement-skill>/scripts/check_limits.py <本目录>   # 体量：谁超了
+python3 <judgement-skill>/scripts/vaccinate.py <本目录>      # 结构免疫 14 支
 python3 scripts/check_doc_claims.py                                    # 文档断言对账，exit 0 才算过
 ```
+
+`<judgement-skill>` ＝ 本机另行安装的体量与判据体检件，⛔ 不在本仓内；没装则跳过前两条，第三条始终可跑。
 
 第三条查七类：数字与磁盘事实不符、**断言锚点消失**（文档被改写＝失去覆盖，同样算不过）、本地引用悬空（全目录扫，含 `assets/` 里的 md/html）、html 破图破链、字段名过期与幽灵路径、把历史读数当当前状态、SKILL.md 清单与 `references/` 目录双向不齐。**它必须能红**：13 支注入反例 + 1 支正例基线的实测见 `SELFTEST.md` 第 16 节。
 

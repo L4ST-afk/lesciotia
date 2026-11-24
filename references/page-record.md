@@ -22,7 +22,7 @@
 - **refs**: [增长看板 2026-10](source-growth.csv)
 ```
 
-字段语义（**槽位表**：空着的槽，这页就不成立——矮凳桥路径 B 框架语义）：
+字段语义（**槽位表**：空着的槽，这页就不成立——框架语义路径 B）：
 
 | 字段 | 谁读它 | 必填 | 空着的后果 | 说明 |
 |---|---|---|---|---|
@@ -57,7 +57,7 @@ B 出口再加 `layout`，A 出口再加 `visual`。
 | `points` | `items` |
 | `refs` | `source` |
 
-⛔ 改这张表就是改契约（禅院塔 §2.18）：`export-pptx.py` 认的是右列。
+⛔ 改这张表就是改契约（库级铁律 §2.18）：`export-pptx.py` 认的是右列。
 
 ### type 词表（⚠ 三套并存，待收口）
 
@@ -94,7 +94,7 @@ pages/NN.md  ──┬─→ prompts/NN-slide-{slug}.md   （A：加 STYLE_INSTR
 6. **notes 不上面**：讲稿只进 `notes` 字段（B 出口进 `.notes`，A 出口进 `notes.json`，C 出口进备注页），绝不写进正页。
 7. **⛔ 不手写 spec.json**：它是派生件。要喂 `export-pptx.py` 就跑
    `python3 scripts/check-prose.py pages/ --emit-spec deck.json`，机器生成。
-   手写一份＝第二份正本＝禅院塔 §2.6 那颗炸弹。
+   手写一份＝第二份正本＝库级铁律 §2.6 那颗炸弹。
 
 ## 复用与重出
 

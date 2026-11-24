@@ -52,7 +52,7 @@
 | 3–6 张图 | `image-set` | 等分网格或大小错落 |
 | 金句 | `quote` | 一句 + 出处 |
 | 收束 | `end` | 谢谢式或行动式：给下一步动作，不是「谢谢」 |
-| 清单/自测 | `data` | 勾选清单式，课程 archetype 的 objectives/自测页用它 |
+| 清单/自测 | `data` | 勾选清单式，讲解 archetype 的 objectives/自测页用它 |
 
 ## B2 · 搭 deck
 
