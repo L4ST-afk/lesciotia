@@ -25,8 +25,6 @@ They are three shells over the same manuscript and the same palette tokens, not 
 
 The name comes from Laixue Pavilion on Jiangxin Island, Wenzhou — north-east corner of the islet, facing Mount Luofu. The allusion, the pronunciation and what was given up for it: [`references/naming.md`](references/naming.md).
 
-Provenance, pronunciation and the costs accepted are recorded in [`references/naming.md`](references/naming.md).
-
 ## Three layers
 
 | Word | What it governs | Directory | Count |
@@ -36,6 +34,44 @@ Provenance, pronunciation and the costs accepted are recorded in [`references/na
 | **Snow** | The raw material the user brings in | none (input side) | — |
 
 Snow falls on the tiles, not on the beams — so "snow" belongs to the tilework layer, while what you bring is called **falling snow**. These three words are names only; directory names do not change. See [`SKILL.md`](SKILL.md) §three layers.
+
+## Nine tileworks: one place name, one palette
+
+All nine names point at real places in Shanghai — a road, a plaza, a river, a building, a temple (not all are Metro station names, though some places happen to be stations too; "Friendship Bldg" takes the Sino-Soviet Friendship Building as its image). Walk to each and you are looking at where that palette and material came from. The nine slices are cropped from the matching preview boards (`python3 scripts/gen-theme-slices.py` regenerates them in one command); the full boards are in `examples/previews/<slug>-theme-preview.html`.
+
+<table>
+<tr>
+<td width="33%"><img src="docs/themes/century-sq.png" width="290"><br><b>世纪广场</b> Century Sq<br>Lane-marking yellow over fair-faced concrete, 1:1.618 modular</td>
+<td width="33%"><img src="docs/themes/century-ave.png" width="290"><br><b>世纪大道</b> Century Ave<br>Same family, dark: sodium-lamp warmth on phenolic board</td>
+<td width="33%"><img src="docs/themes/guanglan-rd.png" width="290"><br><b>广兰路</b> Guanglan Rd<br>Aqua glass, cyan-blue highlights, pill corners</td>
+</tr>
+<tr>
+<td><img src="docs/themes/friendship-bldg.png" width="290"><br><b>友谊大厦</b> Friendship Bldg<br>Cream granitic plaster, gilt, white birch</td>
+<td><img src="docs/themes/qiu-r.png" width="290"><br><b>虬江</b> Qiu R<br>Xuan paper, river green, indigo hairlines, brick-red plate numbers</td>
+<td><img src="docs/themes/panyu-rd.png" width="290"><br><b>番禺路</b> Panyu Rd<br>Arches and fluted shafts; typography goes neo-brutalist</td>
+</tr>
+<tr>
+<td><img src="docs/themes/fuzhou-rd.png" width="290"><br><b>福州路</b> Fuzhou Rd<br>Newsprint, process indigo, process vermilion, 45° halftone</td>
+<td><img src="docs/themes/wanhang-fy.png" width="290"><br><b>万航渡</b> Wanhang Ferry<br>Animation paper, plane-tree green, ink wash, riverbank</td>
+<td><img src="docs/themes/longhua-si.png" width="290"><br><b>龙华寺</b> Longhua Si<br>Incense ash, pagoda eaves, white walls; gilt only in lines</td>
+</tr>
+</table>
+
+**Where the inspiration comes from** (the hex values are tuned to the image, not sampled from photographs; read them as leads, not as swatches):
+
+- **Century Sq**: the yellow of Shanghai's lane markings, laid over fair-faced concrete and marble; the plaza paving is exactly that tone, which is why it became the primary. Column widths, blocks and spacing move on Le Corbusier's 1:1.618 modular, so the layout scales with the page; materials are marble, brushed steel, frosted finish only.
+- **Century Ave**: the dark version of the same family — sodium-lamp warmth on phenolic board, light type on a deep ground, for decks shown at night.
+- **Guanglan Rd**: the Aqua-glass interface of the turn of the millennium — cyan-blue highlights, pill corners, fine white outlines; use it for technical and product material, where it reads neither dated nor loud.
+- **Friendship Bldg**: the 1955 Sino-Soviet Friendship Building (today the Shanghai Exhibition Center) — cream granitic plaster, white-marble columns, a gilt spire, white birch veneer, and a touch of Soviet-era painted ornament.
+- **Qiu R**: the campus air of the two banks of the Wujiaochang waterway — xuan paper ground, solid river green, indigo hairlines, brick red only for plate numbers; graph paper, water lines and river-step stone in the recipe.
+- **Panyu Rd**: the arch outlines, fluted shafts and terrazzo grain of Sun Ke's villa at 60 Panyu Rd (1931, Hudec); typography runs the other way, neo-brutalist: 3px ink-black frames, 4px solid hard shadows.
+- **Fuzhou Rd**: formerly Fourth Avenue, the newspaper and bookshop street — newsprint ground, process indigo as primary, process vermilion for marks, a small gamboge plate; motifs are the 45° halftone, misregistration, column rules and the double rule of a masthead. Gradients must have a printing reason (screen transition, ink and paper ageing).
+- **Wanhang Ferry**: Wanhangdu Rd runs 4,830 m and has been renamed repeatedly since 1864 (Jessfield Road then); add the hand-made air of the animation studio at 618 — animation paper, plane-tree green, river-blue hairlines, ink wash, revetment and tracing-paper fibre; headings in Ximai.
+- **Longhua Si**: Longhua Pagoda, 977 CE, octagonal seven-storey brick-and-timber — incense-ash ground, white walls, sandalwood-red primary, pagoda-shadow blue; gilt only for lines and small plaques, spring peach only as fallen petals, never as large colour fields.
+
+The nine slices crop only the board head, the palette and the material swatches; the type-licensing notice is not cropped (that is not a style, it is a disclaimer).
+
+**Place names and dates have been checked one by one**: Century Plaza is at 2100 Century Ave (beside the Shanghai Science and Technology Museum station); the Sino-Soviet Friendship Building broke ground in 1954, was completed in 1955, became the Shanghai Exhibition Hall in 1968 and took its present name in 1984; Sun Ke's villa is at 60 Panyu Rd, built 1931, designed by Hudec; Longhua Pagoda was rebuilt in 977 CE (Taiping Xingguo 2), seven storeys, octagonal, brick core with timber eaves; Wanhangdu Rd is 4,830 m long, built as Jessfield Road in 1864, renamed Fanhuangdu Rd in 1943, and given its present homophone name in 1964.
 
 ## The approach: tilework decided a priori
 
