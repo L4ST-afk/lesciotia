@@ -1,11 +1,11 @@
 ---
 name: 来雪亭Lesciotia
-version: 1.2.53
-description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付出口——A 影像 deck（逐页 AI 生图 → pptx/pdf）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可编辑 PPTX（原生文本/形状）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个 B 出口主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
+version: 1.2.64
+description: "把内容做成一份 deck：一份大纲、一套风格系统、三种交付形态（影像件／网页件／可改件）——A 影像 deck（逐页 AI 生图 → pptx/pdf，不能改字）、B 网页 deck（单文件 HTML，键盘翻页 + 演讲者模式 + 逐字稿）、C 可改件（原生 PPTX，文本与形状都能改）。当用户要做 PPT、slides、slide deck、presentation、keynote、幻灯片、演示文稿、教学演示、培训材料、pitch deck、发布会 deck、技术分享 slides、周报/复盘 deck、科普长图或小红书图文，或要求「把这份文档/文章/笔记做成 X 页」、「逐页改某一页」、「加演讲者视图/讲稿」、「要可编辑的 pptx」时使用；用户要求给某个主题做预览页、theme preview、风格总览板、看某主题长什么样时也使用。Keywords: ppt, pptx, slides, slide deck, deck, presentation, keynote, slideshow, 幻灯片, 演示文稿, 教学演示, 讲稿, 演讲者模式, theme preview, 主题预览, style board, 风格板。"
 metadata:
   vaccineOrigin: local
   vaccineVersion: e8d93bf0731f
-  version: "1.2.53"
+  version: "1.2.64"
   created: "2026-11-10"
   sources:
     - "html-ppt (MIT, © lewis)（历史来源：2026-11-23 起本库代码件与整册已全部自写，无复制件）"
@@ -33,13 +33,13 @@ metadata:
 
 | 词 | 管什么 | 对应目录 | 数量 |
 |---|---|---|---|
-| **梁架** | 骨架：信息怎么排、几栏、什么顺序 | `assets/layouts/` + `assets/layouts.css` | 17 族 / 38 式（族页给式，`layouts.css` 给结构；每段 `data-style` 与 `_families.json` 的 `styles` 对账） |
+| **梁架** | 骨架：信息怎么排、几栏、什么顺序 | `assets/layouts/` + `assets/layouts.css` | 17 族 / 39 式（族页给式，`layouts.css` 给结构；每段 `data-style` 与 `_families.json` 的 `styles` 对账） |
 
 梁架闸 `scripts/check-layouts.py`：族↔文件、段落数↔式数、旧名不得复活、文档不得再用旧名、族页不许指外网。
 | **瓦作** | 表面：配色、字体、材质 | `assets/themes/` | 9 |
 | **落雪** | 用户投进来的原始素材 | 无（输入侧） | — |
 
-**梁架**取木构承重骨架义，且能拆出具体式样（三架梁、五架梁），对上 17 族、38 式：一族一文件，族页里一段一式；**同骨架的变体不再单列成段，而是同段的一个参数**（`g2/g3`、`mark=pc/diff`、`chrome`、`media`…），注记写在段的 `.params` 行。
+**梁架**取木构承重骨架义，且能拆出具体式样（三架梁、五架梁），对上 17 族、39 式：一族一文件，族页里一段一式；**同骨架的变体不再单列成段，而是同段的一个参数**（`g2/g3`、`mark=pc/diff`、`chrome`、`media`…），注记写在段的 `.params` 行。
 **瓦作**取屋面工艺义（瓦、脊、滴水），是覆盖全部 17 个梁架的表面层——雪落在瓦上，不落在梁架上。
 **落雪**取 `naming.md` §四「雪从外来、落进亭中才成景」：素材是别人的，本 skill 负责把料落成一页页。
 
@@ -49,7 +49,7 @@ metadata:
 
 把内容炼成一份 deck。**一份 plan，三条渲染路径**：大纲、逐页记录、风格映射共享；出口只决定「最后长成什么文件」。
 
-**B 出口主题预览（2026-11-20 内化）**：六份预览页在 `examples/previews/`——`century-sq-theme-preview.html`（世纪广场）、`century-ave-theme-preview.html`（世纪大道）、`guanglan-rd-theme-preview.html`（广兰路）、`friendship-bldg-theme-preview.html`（友谊大厦）、`qiu-r-theme-preview.html`（虬江）、`panyu-rd-theme-preview.html`（番禺路），均为自包含单文件（字体 data URI，可直接发人）。生成脚本 `scripts/gen-theme-preview.py` + 模板 `scripts/preview-template.html` 已放进 skill，自定位、不依赖工作区：
+**主题预览（2026-11-20 内化，2026-11-24 补齐九份）**：九个主题各有一份预览页在 `examples/previews/<slug>-theme-preview.html`（`century-sq` 世纪广场、`century-ave` 世纪大道、`guanglan-rd` 广兰路、`friendship-bldg` 友谊大厦、`qiu-r` 虬江、`panyu-rd` 番禺路、`fuzhou-rd` 福州路、`wanhang-fy` 万航渡、`longhua-si` 龙华寺），均为自包含单文件（字体 data URI，可直接发人）。生成脚本 `scripts/gen-theme-preview.py` + 模板 `scripts/preview-template.html` 已放进 skill，自定位、不依赖工作区：
 
 ```bash
 python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [--dark|--aero]
@@ -57,6 +57,7 @@ python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [--dark
 ```
 
 完整制作方法与验收判据见 `references/theme-preview.md`（三种 flavor 判据、生成链路、新主题接入 checklist、踩坑）。改完预览必跑 `scripts/check_doc_claims.py` 与 `scripts/selftest.py`。
+主题预览还能截成「风格切片」放主页：`python3 scripts/gen-theme-slices.py` 读九份预览板、隐藏字体授权提示条（`.fb/.lh/.py-fontnote`）、按固定框 380,8–1520,700 裁出板头＋色板＋材质，缩到 900 宽写进 `docs/themes/<slug>.png`；⛔ 预览板版面一变就得同步改裁切框，否则切片会带进下一节。
 
 ## 反例优先：踩坑在前，规则在后
 
@@ -93,18 +94,21 @@ python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [--dark
 ## 为什么会有这个 skill（生成背景）
 
 1. **出生背景**：库里那份四维风格系统的 slide-deck 效果不错（下载量最高），但它缺场景页序、演讲者视图、可编辑交付、交付前质检四块；库里另有五个 skill 各补一块——于是收敛成一个入口。改写与许可说明见 `ATTRIBUTION.md`，正文不再逐个点名来源。
-2. **样本来源**：B 出口资产 9 主题——**9 件自建实体**（`century-sq` / `century-ave` / `guanglan-rd` / `friendship-bldg` / `qiu-r` / `panyu-rd` / `fuzhou-rd` / `longhua-si` / `wanhang-fy`），本库是唯一正本；**2026-11-23 起上游主题全数删除**（36 → 28 → 0）；要临时换气质，从 `references/palette-atlas.md` 的六组起手式抄 token，不落成文件；17 族版式（38 式）、三类场景页序、C 出口的外部引擎与三套硬纪律。取自与维护的边界见 `assets/themes/README.md`。
+2. **样本来源**：B 出口资产 9 主题——**9 件自建实体**（`century-sq` / `century-ave` / `guanglan-rd` / `friendship-bldg` / `qiu-r` / `panyu-rd` / `fuzhou-rd` / `longhua-si` / `wanhang-fy`），本库是唯一正本；**2026-11-23 起上游主题全数删除**（36 → 28 → 0）；要临时换气质，从 `references/palette-atlas.md` 的六组起手式抄 token，不落成文件；17 族版式（39 式）、三类场景页序、C 出口的外部引擎与三套硬纪律。取自与维护的边界见 `assets/themes/README.md`。
 3. **未言明的偏好**：要的不是「再来一个模板库」，而是「一次 plan、按需长成三种文件」——所以收敛成一份 `pages/NN.md` 作正本，三个出口都从它派生。
 4. **失败样本**：见下条。
 5. **压缩损失**：上游的 WebGL 背景、37 份规则卷、FX 特效模块（`fx-runtime.js` 及其依赖的 `fx/`，2026-11-14 已连同空壳一并删除）、外部引擎的几何库都没并进来；要这些能力按下方分流表转走上游。
 
 **失败样本**（v1.0.0，2026-11-10）：第一次自测，`render-png.sh` 把 5 页报成 6 页。缺的上下文是「内联后的 HTML 里，`runtime.js` 自己的注释也含 `<section class="slide">` 字样」——我照搬了上游的 grep 判据，没意识到 HTML 已被我们内联成单文件。重来会这么改：先剥 `<script>` 再数，并把页数与 `pages/` 份数对账后再继续。
 
-| 出口 | 交付物 | 强在哪 | 弱在哪 | 什么时候选 |
+| 拿到手的东西 | 文件形态 | 强在哪 | 做不到的（失效边界） | 什么时候选 |
 |---|---|---|---|---|
-| **A · 影像 deck** | `NN-slide-*.png` → `.pptx` / `.pdf` | 视觉密度高、逐页可控、社媒好传播 | 文字不可编辑；改字要重出图 | 阅读型/分享型 deck，或没有模板约束的创意稿 |
-| **B · 网页 deck** | 单个 `.html`（双击可开，离线可用） | 键盘翻页、动效、S 键演讲者模式（当前/下一页 + 逐字稿 + 计时）、真字体 | 静态页，不能多人协同编辑；导 pptx 只是图片 | 要**讲**：分享、内训、发布会、demo day |
-| **C · 可编辑 PPTX** | 原生 `.pptx`（文本/形状/图片可改） | 甲方能自己改字、和 HTML 侧共用一套瓦作 token | `export-pptx.py` 覆盖 10 个页型（含 `figure` 一图一页）；渐变与布尔经 `wash_bridge.py` 换算成 `a:gradFill` / `a:custGeom`；页切换按瓦作 `.slide` 的时长出 `p:transition`（含 morph）；spec 里 `wash`/`shapes` 的 `fill`（渐变）与 `boolean`（两圆差/交）由 `wash_bridge.py` 在导出时求值；加 `--animate` 才写 `p:timing`——每页内容形状按阅读顺序切 ≤4 组，放映时一次回车淡入一组（`animate:false` 单页关、`animate_groups` 改组数）；导出时顺手删掉母版里残留的日期/页脚/页码占位 | 客户明确要改字，或要「HTML 与 PPT 同风格」 |
+| **影像件（A · 影像 deck）** | `NN-slide-*.png` → `.pptx` / `.pdf` | 视觉密度高、逐页可控、社媒好传播 | 文字不可编辑；改字要重出图 | 阅读型/分享型 deck，或没有模板约束的创意稿 |
+| **网页件（B · 网页 deck）** | 单个 `.html`（双击可开，离线可用） | 键盘翻页、动效、S 键演讲者模式（当前/下一页 + 逐字稿 + 计时）、真字体 | 静态页，不能多人协同编辑；导 pptx 只是图片 | 要**讲**：分享、内训、发布会、demo day |
+| **可改件（C · 可编辑 PPTX）** | 原生 `.pptx`（文本/形状/图片可改） | 甲方能自己改字、和 HTML 侧共用一套瓦作 token | `export-pptx.py` 覆盖 12 个页型（含 `figure` 一图一页、`figures` 多图一页；图与图组按 `--radius` 同值裁成圆角，圆角是图片形状本身，不是贴角遮罩）；渐变与布尔经 `wash_bridge.py` 换算成 `a:gradFill` / `a:custGeom`；页切换按瓦作 `.slide` 的时长出 `p:transition`（含 morph）；spec 里 `wash`/`shapes` 的 `fill`（渐变）与 `boolean`（两圆差/交）由 `wash_bridge.py` 在导出时求值；加 `--animate` 才写 `p:timing`——每页内容形状按阅读顺序切 ≤4 组，放映时一次回车淡入一组（`animate:false` 单页关、`animate_groups` 改组数）；导出时顺手删掉母版里残留的日期/页脚/页码占位 | 客户明确要改字，或要「HTML 与 PPT 同风格」 |
+
+**三个名字怎么用**：给用户说功能名（网页件 / 可改件 / 影像件），A/B/C 只留在命令、脚本与 `check-wash` 这类工具名里。
+**常见错误**：把网页件当可改件发出去（对方改不了字）；以为两件像素全同（同一套瓦作、两个渲染器：圆角按同值裁形，裁切取景与动效仍有差）；拿影像件应急后又改内容（只能整页重出）。
 
 **不适用**：飞书幻灯片（走 `ppt` skill）；纯数据看板/图表页（走 `lieflat-charts`）；PDF 打印适配（走 `print-safe`）；没有内容只要空模板（走 `assets/full-decks/` 自取）。
 

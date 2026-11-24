@@ -217,16 +217,49 @@ def render_image_single(head, bl, build, fix=None):
     return '\n'.join(out)
 
 
+def image_style(bl) -> str:
+    """图组选式：窄图过半走 phone；否则 1-3 格 bento / 4-5 圆切 / 6 卡列。"""
+    imgs = [b for b in bl if b[0] == 'img']
+    n = len(imgs)
+    narrow = sum(1 for b in imgs if _is_narrow(b[2]))
+    if n >= 2 and narrow * 2 >= n:
+        return 'image-phone'
+    # 4-5 张宽的走 band（c1 主图 2×2、其余填格、图注压 accent 条），与 C 出口的 figures bento 同构
+    return 'image-band' if 4 <= n <= 5 else ('image-set' if n <= 3 else 'image-card')
+
+
+def _is_narrow(path: str) -> bool:
+    """宽高比 < 0.9 视为窄图；读不到尺寸就当不窄，宁可走默认版式也不误判。"""
+    try:
+        from PIL import Image
+    except Exception:
+        return False
+    try:
+        f = path if os.path.isabs(path) else os.path.join(os.getcwd(), path)
+        with Image.open(f) as im:
+            return im.width / im.height < 0.9
+    except Exception:
+        return False
+
+
 def render_images(head, bl, build, fix=None):
     imgs = [(b[1], fix(b[2]) if fix else b[2]) for b in bl if b[0] == 'img']
     paras = [b for b in bl if b[0] == 'para']
     n = len(imgs)
-    mode, cls = ('image-grid', 'gg') if n <= 3 else (('image-round', 'gal rnd') if n <= 5 else ('image-card', 'gal card'))
+    mode = image_style(bl)
+    cls = {'image-phone': 'gal phone', 'image-set': 'gal three', 'image-band': 'gg band',
+           'image-card': 'gal card'}[mode]
     out = ['  <h2 class="h2">%s</h2>' % inline(head)]
     if paras:
         out.append('  <p class="lede mb-l">%s</p>' % inline(paras[0][1]))
     tag = ' data-build' if build else ''
-    if mode == 'image-card':
+    if mode == 'image-band':
+        out.append('  <div class="%s"%s data-anim-target>' % (cls, tag))
+        for i, (alt, src) in enumerate(imgs, 1):
+            out.append('    <div class="cell c%d step"><img src="%s" alt="%s"><span>%s</span></div>'
+                       % (i, src, esc(alt), esc(alt)))
+        out.append('  </div>')
+    elif mode == 'image-card':
         out.append('  <div class="%s"%s data-anim-target>' % (cls, tag))
         for alt, src in imgs:
             out.append('    <figure class="step"><img src="%s" alt="%s"><figcaption>%s</figcaption></figure>' % (src, esc(alt), esc(alt)))
@@ -354,7 +387,25 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
                         'captions': [p_[1] for p_ in pairs],
                         'source': meta.get('source', brand), 'footer': foot})
         elif fam == 'image':
-            skipped.append((idx, head, '图组：C 出口没有「一图一页」的等价页型'))
+            imgs = [b for b in bl if b[0] == 'img']
+            paras = [b[1] for b in bl if b[0] == 'para']
+            if any(b[2].lower().endswith('.svg') for b in imgs):
+                skipped.append((idx, head, '图组里有 SVG：C 出口只认位图，换 PNG 或留在 B 出口'))
+                continue
+            items = []
+            for alt, src in [(b[1], b[2]) for b in imgs][:5]:
+                if re.match(r'(https?:|data:)', src):
+                    skipped.append((idx, head, '图组里有网络图：C 出口要本地文件'))
+                    items = []
+                    break
+                if not src.startswith('/'):
+                    src = str((a_src_dir / src).resolve()) if a_src_dir else src
+                items.append({'image': src, 'caption': alt})
+            if not items:
+                continue
+            out.append({'type': 'figures', 'title': head, 'items': items,
+                        'lede': (re.sub(r'<[^>]+>', '', paras[0]) if paras else ''),
+                        'source': meta.get('source', brand), 'footer': foot})
         elif fam == 'image1':
             img = [b for b in bl if b[0] == 'img'][0]
             paras = [b[1] for b in bl if b[0] == 'para']
@@ -395,7 +446,7 @@ def emit_pptx(a, build_steps: bool) -> int:
     for idx, head, why in spec['skipped']:
         print(f'  · 跳过第 {idx} 页「{head}」：{why}')
     cmd = [sys.executable, str(ROOT / 'scripts' / 'export-pptx.py'), str(tmp),
-           '-o', str(a.pptx), '--theme', theme, '--allow-prose']
+           '-o', str(a.pptx), '--theme', theme, '--allow-prose', '--force']
     # md 是这册的正源：成稿闸的「字数够不够 / 单条太长」判据是给手写 spec 用的，
     # 从 md 映射出来的页一律放行（跳过的页已逐条列出，不会悄悄丢内容）。
     if a.pptx_animate or build_steps:
@@ -464,7 +515,7 @@ def build(src_path, out, theme, title_override, build_steps):
             inner = render_code(pg['head'], bl, kick if pg.get('parent') else '')
         else:
             inner = render_table(pg['head'], bl)
-        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': 'image-set' if len([b for b in bl if b[0] == 'img']) <= 3 else ('image-round' if len([b for b in bl if b[0] == 'img']) <= 5 else 'image-card'), 'code': 'code', 'table': 'split'}[fam]
+        style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split'}[fam]
         sec.append('  <section data-style="%s" class="slide" data-title="%s">' % (style, esc(pg['head'])))
         sec.append(inner)
         sec.append('  </section>')

@@ -12,7 +12,7 @@ Optional layout hints for individual slides. Specify in outline's `// LAYOUT` se
 ## 归并：36 式 → 17 族（2026-11-23）
 
 旧版按「一页一个文件」铺了 36 个单页，择页时要在 36 个名字里挑；实际大半是同一骨架换栏数、
-换画法。现在并成 17 族 / 38 式，**一族一个文件**，族页里一段一式（`charts` 一页就能看完柱/线/饼/雷达）。
+换画法。现在并成 17 族 / 39 式，**一族一个文件**，族页里一段一式（`charts` 一页就能看完柱/线/饼/雷达）。
 旧 stem 不再作为文件名存在，对照表在 `assets/layouts/_families.json`（唯一正本）：
 
 | 族 | 段（`data-style`） | 旧 stem（只作别复活的针） | 什么时候用 |
@@ -26,7 +26,7 @@ Optional layout hints for individual slides. Specify in outline's `// LAYOUT` se
 | `compare` | compare, compare-image | comparison, pros-cons, diff, image-compare | 两栏对照（`mark=pc` ✓✗、`mark=diff` 旧→新）；两图对照单列一段 |
 | `charts` | chart-axis, chart-pie, chart-radar, chart-unit, chart-waterfall, chart-dumbbell | chart-bar/line/pie/radar | 轴图（`line` 折线）、饼、雷达；另加可数点阵、瀑布、哑铃（自绘，C 出口无等价） |
 | `image` | image-bleed, image-single, image-split | image-hero/full-bleed/single/text-split | 满幅图（压字与否）、单图+说明、左文右图 |
-| `image-set` | image-set, image-band, image-round, image-card | image-grid, image-gallery | 四式：`bento` 等分拼板 / `band` 图注压底 / `round` 圆切连排 / `card` 左文右图卡；`gallery` 错落已并入 bento |
+| `image-set` | image-set, image-band, image-round, image-card, image-phone | image-grid, image-gallery | 五式：`bento` 等分拼板 / `band` 图注压底 / `round` 圆切连排 / `card` 左文右图卡 / `phone` 窄图等高不裁（宽高比 < 0.9 过半自动选，图宽各自走）；`gallery` 错落已并入 bento |
 | `process` | process-steps, process-timeline, process-roadmap, process-gantt | 同左 | 按顺序走：步骤卡 / 时间轴 / 泳道 / 甘特条（四种排布不合并） |
 | `diagram` | flow, arch | flow-diagram, arch-diagram, mindmap | 流程链 / 分层；中心辐射并入 `ring-hub` |
 | `data` | data-stat, data-table, data-todo | kpi-grid, stat-highlight, table, todo-checklist | 数字（`n=1` 即单数字）、表、清单 |

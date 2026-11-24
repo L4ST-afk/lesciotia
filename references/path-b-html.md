@@ -78,7 +78,7 @@
 </body></html>
 ```
 
-**成套模板怎么用**：打开 `assets/full-decks/<name>/index.html`，**抄 `<section>` 块**进自己的 index.html。五套模板都没有私有 `style.css`：版式全走 `assets/layouts.css` 的族页（17 族 38 式），底子走 `assets/base.css`，配色由主题一件决定，所以抄完只需保证自己的 `<link>` 也是这三样。**不要整文件复制**——它的 `../../../assets/` 相对深度是按模板自己的位置算的，复制到别处会全断链。
+**成套模板怎么用**：打开 `assets/full-decks/<name>/index.html`，**抄 `<section>` 块**进自己的 index.html。五套模板都没有私有 `style.css`：版式全走 `assets/layouts.css` 的族页（17 族 39 式），底子走 `assets/base.css`，配色由主题一件决定，所以抄完只需保证自己的 `<link>` 也是这三样。**不要整文件复制**——它的 `../../../assets/` 相对深度是按模板自己的位置算的，复制到别处会全断链。
 
 **可选件（要才引）**：`.sk12` 十二列骨架在 `layouts.css` 里；玻璃透镜另引
 `assets/effects/lens.css` + `lens.js`（见 [effects-lens.md](effects-lens.md)）。

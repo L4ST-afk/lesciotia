@@ -46,7 +46,7 @@
 
 1. 换主题：只改 `index.html` 里 `theme-link` 的 href（`../../../assets/themes/<slug>.css`），
    同步改 `assets/decks.json` 的 `theme` 字段，跑闸。
-2. 加模板：页全用 `layouts.css` 的族页（17 族 38 式），不写私有 CSS → 插 `theme-link`
+2. 加模板：页全用 `layouts.css` 的族页（17 族 39 式），不写私有 CSS → 插 `theme-link`
    → `build-deck.py <template>/index.html -o out.html --force` 打包 → 截图看封面是否变色
    （⛔ 不接受"CSS 里写了"当证据）→ 登记 `decks.json`。
 

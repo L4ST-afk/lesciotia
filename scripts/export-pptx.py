@@ -37,6 +37,11 @@ import time
 from pathlib import Path
 
 try:
+    from PIL import Image
+except Exception:  # 没装 Pillow 就按方图走，不阻塞出件
+    Image = None
+
+try:
     from lxml import etree
     from pptx import Presentation
     from pptx.dml.color import RGBColor
@@ -75,6 +80,29 @@ FONT_FALLBACK = {
     'latin-sans': ['Helvetica Neue', 'Arial'],
 }
 FALLBACK_NOTE = 'PPTX 不带字体，本机缺哪款就退到下一档'
+
+
+def round_pic(pic, radius: float, w: float, h: float) -> None:
+    """把图片的几何改成圆角矩形——PowerPoint 按形状裁切图片，等价于 HTML 的 border-radius。
+
+    为什么不是「四角贴底色块」：底色可能是渐变或材质图，贴纯色块会在角上留下四块假边。
+    为什么不是圆角遮罩图：那要把每张图重新栅格化一遍，C 出口的图必须仍是原图（可换、不重采样）。
+    adj 的口径：roundRect 的 adj = 圆角半径 / min(宽,高)，上限 50000（＝半圆）。18px 画布换算过来
+    就是 val 18/min(w,h)*100000，跟 HTML 用同一个 --radius 值。
+    """
+    if radius <= 0 or not w or not h:
+        return
+    adj = int(min(0.5, radius / min(w, h)) * 100000)
+    spPr = pic._element.spPr
+    for g in spPr.findall(qn('a:prstGeom')):
+        spPr.remove(g)
+    geom = spPr.makeelement(qn('a:prstGeom'), {'prst': 'roundRect'})
+    av = geom.makeelement(qn('a:avLst'), {})
+    gd = av.makeelement(qn('a:gd'), {'name': 'adj', 'fmla': 'val %d' % adj})
+    av.append(gd)
+    geom.append(av)
+    xfrm = spPr.find(qn('a:xfrm'))
+    spPr.insert(spPr.index(xfrm) + 1 if xfrm is not None else 0, geom)
 
 
 def px(v: float) -> Inches:
@@ -1070,11 +1098,142 @@ class Deck:
             ratio = box_h / (pic.height / 7620.0)
             pic.width, pic.height = int(pic.width * ratio), px(box_h)
         pic.left = px(LEFT + (box_w - pic.width / 7620.0) / 2)
+        round_pic(pic, 18, pic.width / 7620.0, pic.height / 7620.0)
         if d.get('caption'):
             pic_w = int(pic.width / 7620.0)
             cap_y = top + pic.height / 7620.0 + 14
             self.text(s, LEFT + (box_w - pic_w) / 2, cap_y, pic_w, 40,
                       [(d['caption'], 'sans', 15, False, '--text-3')])
+        self.footer(s, d.get('footer', ''), page_no, total)
+
+    def figures(self, d, page_no, total):
+        """多图一页：窄图（手机截图/竖版）走「等高不裁」一排，宽图走网格；图注各自在图下。
+
+        spec：{"type":"figures","title":…,"lede":…,"items":[{"image":…,"caption":…}]}
+        规则：窄图不裁、高度对齐、宽度各自走（抽象自简册卡的「框定比例、图不迁就版式」）；
+        宽图按网格 contain，仍不裁；超过 5 张只取前 5 张并在页脚提示。
+        """
+        s = self.slide()
+        self.head(s, d)
+        items = list(d.get('items') or [])[:5]
+        if not items:
+            raise ValueError('figures 页没有 items')
+        top = max(236.0, self.head_bottom + 16)
+        if d.get('lede'):
+            self.text(s, LEFT, top, CW, 30, [(str(d['lede']), 'sans', 15, False, '--text-3')])
+            top += 42
+        bottom = 706  # 图组页比文字页多借 16px，窄图才站得住
+        gap = 26
+        cap_h = 34
+        paths, aspects = [], []
+        for it in items:
+            src = Path(str(it['image']))
+            if not src.is_absolute():
+                src = (Path(getattr(self, 'base_dir', Path('.'))) / src).resolve()
+            if not src.is_file():
+                raise ValueError(f'figures 页图不存在：{src}')
+            if src.suffix.lower() == '.svg':
+                raise ValueError('figures 页不收 SVG：pptx 只能塞位图')
+            try:
+                with Image.open(src) as im:
+                    aspects.append(im.width / im.height)
+            except Exception:
+                aspects.append(1.0)
+            paths.append(src)
+        narrow_share = sum(1 for x in aspects if x < 0.9)
+        region_h = bottom - top - cap_h
+
+        if narrow_share * 2 >= len(items):
+            # 一排等高：高度会同，宽度按各自比例；总宽超版心就整体缩
+            h = region_h
+            widths = [h * a for a in aspects]
+            total_w = sum(widths) + gap * (len(items) - 1)
+            if total_w > CW:
+                scale = (CW - gap * (len(items) - 1)) / sum(widths)
+                h *= scale
+                widths = [w * scale for w in widths]
+                total_w = sum(widths) + gap * (len(items) - 1)
+            x = LEFT + (CW - total_w) / 2
+            for i, (pth, w) in enumerate(zip(paths, widths)):
+                pic = s.shapes.add_picture(str(pth), px(x), px(top), width=px(w), height=px(h))
+                round_pic(pic, 16, w, h)
+                cap = items[i].get('caption')
+                if cap:
+                    self.text(s, x, top + h + 10, w, 24, [(str(cap), 'sans', 12, False, '--text-3')],
+                              align=PP_ALIGN.CENTER)
+                x += w + gap
+        elif (d.get('layout') == 'bento') or (not d.get('layout') and len(items) >= 3):
+            # bento：主图占左 3/5、满高；辅图在右侧竖叠；图注统一压在图内底边的 accent 条上（同 HTML 的 .gg.band）
+            big_w = CW * 0.615
+            side_w = CW - big_w - 24
+            m = len(items) - 1
+            # 辅图与 B 出口的 .gg.band 同构：4 张排成 2×2，3 张竖叠一列
+            gcols = 2 if m >= 4 else 1
+            grows = (m + gcols - 1) // gcols
+            side_h = (region_h - 24 * (grows - 1)) / grows
+            side_w1 = (side_w - 24 * (gcols - 1)) / gcols
+
+            def place(pth, i, x0, y0, w, h):
+                target = w / h
+                pic_ = s.shapes.add_picture(str(pth), px(x0), px(y0), width=px(w), height=px(h))
+                a_ = aspects[i]
+                if a_ > target:
+                    cut = (1 - target / a_) / 2
+                    pic_.crop_left = pic_.crop_right = cut
+                elif a_ < target:
+                    cut = (1 - a_ / target) / 2
+                    pic_.crop_top = pic_.crop_bottom = cut
+                round_pic(pic_, 18, w, h)
+                cap_ = items[i].get('caption')
+                if cap_:
+                    bar_h = 34
+                    # 图注条只圆底角（转 180° 的「同侧两角」），上沿保持平口，和 HTML 的卡片裁切一致
+                    bar = s.shapes.add_shape(MSO_SHAPE.ROUND_2_SAME_RECTANGLE, px(x0), px(y0 + h - bar_h), px(w), px(bar_h))
+                    bar.rotation = 180
+                    try:
+                        bar.adjustments[0] = 0.5
+                    except Exception:
+                        pass
+                    bar.fill.solid()
+                    bar.fill.fore_color.rgb = self.c('--accent')
+                    bar.line.fill.background()
+                    bar.shadow.inherit = False
+                    cap_w = max(10, int(w / (11 * 1.0)))
+                    self.text(s, x0 + 14, y0 + h - bar_h + 8, w - 24, 20,
+                              [(str(cap_)[:cap_w], 'sans', 11, True, '--accent-ink')])
+
+            place(paths[0], 0, LEFT, top, big_w, region_h)
+            for k in range(m):
+                rr, cc = divmod(k, gcols)
+                place(paths[k + 1], k + 1,
+                      LEFT + big_w + 24 + cc * (side_w1 + 24), top + rr * (side_h + 24), side_w1, side_h)
+        else:
+            cols = len(items) if len(items) <= 3 else 3
+            rows = (len(items) + cols - 1) // cols
+            cell_w = (CW - gap * (cols - 1)) / cols
+            cell_h = (region_h - 10 * (rows - 1)) / rows
+            for i, pth in enumerate(paths):
+                r_, c_ = divmod(i, cols)
+                row_n = min(cols, len(items) - r_ * cols)
+                row_w = cell_w * row_n + gap * (row_n - 1)
+                x0 = LEFT + (CW - row_w) / 2 + (cell_w + gap) * c_
+                y0 = top + (cell_h + 10) * r_
+                frame_h = cell_h - cap_h - 8
+                # 宽图铺满格子：按格子的比例裁（HTML 的 .gal 也是 cover），不留两侧空带
+                target = cell_w / frame_h
+                pic = s.shapes.add_picture(str(pth), px(x0), px(y0), width=px(cell_w), height=px(frame_h))
+                a = aspects[i]
+                if a > target:
+                    cut = (1 - target / a) / 2
+                    pic.crop_left = pic.crop_right = cut
+                elif a < target:
+                    cut = (1 - a / target) / 2
+                    pic.crop_top = pic.crop_bottom = cut
+                round_pic(pic, 18, cell_w, frame_h)
+                cap = items[i].get('caption')
+                if cap:
+                    self.text(s, x0, y0 + frame_h + 8, cell_w, 22,
+                              [(str(cap)[:16], 'sans', 12, False, '--text-3')], align=PP_ALIGN.CENTER)
         self.footer(s, d.get('footer', ''), page_no, total)
 
     def code(self, d, page_no, total):
@@ -1115,20 +1274,26 @@ class Deck:
                     shown.append(ln[:cut])
                     ln = '    ' + ln[cut:].lstrip()
             shown.append(ln)
-        cap = int((690 - top - 48) // (size * 1.6))
+        # 行高按 line_spacing 1.15 实算：字号是 pt，版心 120 px/inch，少算这一层就会顶出面板压页脚
+        # line_spacing 的倍数是乘在字体默认行高（约 1.2 em）上的，不是乘字号
+        lh = size * 1.2 * 1.15 * PX_PER_IN / 72.0
+        cap = int((690 - top - 84) // lh)
         lines = shown[:max(1, cap)]
-        box_h = max(120.0, min(690 - top, len(lines) * size * 1.6 + 48))
+        box_h = max(120.0, min(690 - top, len(lines) * lh + 76))
         # 短代码块别贴着标题吊在上半页：在正文区里垂直居中，页面重心才不歪
         if 690 - top > box_h:
             top += (690 - top - box_h) / 2
         self.panel(s, LEFT, top, CW, box_h, '--surface', '--border')
         if d.get('lang'):
-            self.text(s, LEFT, top - 26, 160, 22,
-                      [(str(d['lang']).upper(), 'sans', 11, True, '--text-3')])
-        if len(shown) > len(lines):
-            lines[-1] = lines[-1][:max(0, per_line - 3)] + '…'
+            # 语言标签贴标题行右侧，跟着标题走，不占正文；贴面板上沿会撞标题下缘
+            self.text(s, LEFT + CW - 160, max(150.0, self.head_bottom - 24), 160, 22,
+                      [(str(d['lang']).upper(), 'sans', 11, True, '--text-3')], align=PP_ALIGN.RIGHT)
+        truncated = len(shown) > len(lines)
+        if truncated:
+            # 截断不把尾巴糊在半句代码上：末行单独一个省略号，更像注释器给出的“还有”
+            lines = lines[:-1] + ['…']
         # 代码行不走 text()：它会按 sans 量宽再折行，等宽段必须自己控制换行
-        box = s.shapes.add_textbox(px(LEFT + 28), px(top + 22), px(CW - 56), px(box_h - 44))
+        box = s.shapes.add_textbox(px(LEFT + 28), px(top + 30), px(CW - 56), px(box_h - 56))
         tf = box.text_frame
         tf.word_wrap = False
         tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
@@ -1136,15 +1301,17 @@ class Deck:
             p_ = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
             p_.line_spacing = 1.15
             r = p_.add_run()
-            r.text = ln if ln else ' '
+            # textbox 会吃掉行首空格：缩进改用不换行空格，四空格 = 4 个 NBSP
+            ind = len(ln) - len(ln.lstrip(' '))
+            r.text = ('\u00a0' * ind + ln[ind:]) if ln else ' '
             r.font.size = Pt(size)
             r.font.name = 'Menlo'
             r.font.color.rgb = self.c('--text-2')
         if d.get('note'):
             self.text(s, LEFT, top + box_h + 10, CW, 30, [(d['note'], 'sans', 14, False, '--text-3')])
-        if len(shown) > len(lines):
-            self.text(s, LEFT + CW - 160, top + box_h + 10, 160, 30,
-                      [(f'共 {len(shown)} 行，截到 {len(lines)}', 'sans', 12, False, '--text-3')],
+        if truncated:
+            self.text(s, LEFT + CW - 260, top + box_h - 30, 236, 22,
+                      [(f'共 {len(shown)} 行 · 显示前 {max(1, len(lines) - 1)} 行', 'sans', 12, False, '--text-3')],
                       align=PP_ALIGN.RIGHT)
         self.footer(s, d.get('footer', ''), page_no, total)
 
@@ -1329,7 +1496,7 @@ def render_preview(path: Path, outdir: Path) -> list[Path]:
 PAGES = {
     'cover': 'cover', 'bullets': 'bullets', 'kpi': 'kpi', 'end': 'end',
     'comparison': 'comparison', 'timeline': 'timeline', 'table': 'table', 'quote': 'quote',
-    'figure': 'figure', 'code': 'code',
+    'figure': 'figure', 'figures': 'figures', 'code': 'code',
     'chart': 'chart', 'wash': 'wash',
 }
 

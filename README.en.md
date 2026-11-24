@@ -1,12 +1,27 @@
 [中文](README.md) · English
 
-<!-- cover slot: once `docs/cover.jpg` lands, insert <img src="docs/cover.jpg" alt="Lesciotia — new-year snow scene: octagonal pavilion with a gilded finial, vermilion columns under grey tiled snow, frosted trees and a stone bridge beyond" width="720">. Spec and inscription: docs/封面.md. ⛔ No placeholder link while the image is missing. -->
+<img src="docs/cover.jpg" alt="Lesciotia — new-year snow scene: octagonal pavilion with a gilded finial, vermilion columns under grey tiled snow, frosted trees and a stone bridge beyond" width="720">
 
 # 来雪亭 Lesciotia
 
-One script, two artefacts: a **single-file HTML** deck you page through in any browser, offline; and a **native PPTX** whose text and shapes stay editable. When the output must look exactly right and will not be touched again, there is a third road: per-page images.
+> Has the snow fallen below Luofu yet?
+>
+> A pavilion stands mid-river, waiting for that snow.
+> You send in a first snowfall, broad and light;
+> the frame is raised first, the tilework laid after;
+> the material settles in, and the page is made.
 
-17 layout families (38 styles), 9 themes, 5 complete decks — all offline. Each theme carries the name of a Shanghai Metro station: one station's first step out of the gates, one palette and one surface. The HTML target needs only Python 3's standard library; the PPTX target adds `python-pptx`.
+The line is from Wen Tianxiang's *Returning North to Rest at Zhongchuan Temple*; in 1964 Guo Moruo took this imagery to name the pavilion. See [`references/naming.md`](references/naming.md).
+
+One manuscript, three things you can hand over — named by what the recipient gets, not by a letter:
+
+- **web deck** (`B`): one `.html`, paged with arrow keys, speaker view included, works offline;
+- **editable deck** (`C`): a native `.pptx` whose text and images stay editable in PowerPoint;
+- **image deck** (`A`): per-page PNGs baked into pptx/pdf, for the case that must look exactly right and will never be edited again.
+
+They are three shells over the same manuscript and the same palette tokens, not three separate tools. What each one cannot do is listed under “three shells” in the Chinese README.
+
+17 layout families (39 styles), 9 themes, 5 complete decks — all offline. Each theme is named after a real Shanghai place — a road, a plaza, a river, a building or a temple (some happen to be Metro station names too): the palette is tuned to that image rather than sampled from photographs. The HTML target needs only Python 3's standard library; the PPTX target adds `python-pptx`.
 
 The name comes from Laixue Pavilion on Jiangxin Island, Wenzhou — north-east corner of the islet, facing Mount Luofu. The allusion, the pronunciation and what was given up for it: [`references/naming.md`](references/naming.md).
 
@@ -16,7 +31,7 @@ Provenance, pronunciation and the costs accepted are recorded in [`references/na
 
 | Word | What it governs | Directory | Count |
 |---|---|---|---|
-| **Frame** | Skeleton: how information is ordered, how many columns, in what sequence | `assets/layouts/` | 17 families / 38 styles |
+| **Frame** | Skeleton: how information is ordered, how many columns, in what sequence | `assets/layouts/` | 17 families / 39 styles |
 | **Tilework** | Surface: palette, type, material | `assets/themes/` | 9 |
 | **Snow** | The raw material the user brings in | none (input side) | — |
 
@@ -144,7 +159,7 @@ Three things it does not do, stated plainly: it does not change font family (go 
 
 ## Frame: 36 styles merged into 17 families
 
-The old version laid out 36 single pages, one file each, so picking a layout meant scanning a 36-row table. Most were one skeleton with a different column count or drawing: two-column / three-column / bullets are the same card grid, chart-bar/line/pie/radar are the same canvas. They are now 17 families / 38 styles, **one file per family, one style per section** (`charts` shows bar, line, pie and radar in a single page, plus a countable dot matrix, waterfall and dumbbell):
+The old version laid out 36 single pages, one file each, so picking a layout meant scanning a 36-row table. Most were one skeleton with a different column count or drawing: two-column / three-column / bullets are the same card grid, chart-bar/line/pie/radar are the same canvas. They are now 17 families / 39 styles, **one file per family, one style per section** (`charts` shows bar, line, pie and radar in a single page, plus a countable dot matrix, waterfall and dumbbell):
 
 `cover` `section` `end` `text` `quote` `code` `compare` `charts` `image` `image-set` `process` `diagram` `data` `toc` `ring` `split` `quiz`
 
@@ -276,7 +291,7 @@ python3 scripts/selftest.py; echo "EXIT=$?"
 | `SKILL.md` | Main entry: routing, command surface, size budget |
 | `references/` | Per-topic volumes (layouts, themes, naming, paths, QA) |
 | `assets/themes/` | 9 tileworks (theme CSS), such as `qiu-r.css` |
-| `assets/layouts/` | 17 frame families (38 styles, one style per section) |
+| `assets/layouts/` | 17 frame families (39 styles, one style per section) |
 | `assets/full-decks/` | 5 complete decks |
 | `assets/textures/` | material images exported from the 9 tileworks (derived, `board.png` plus `mat-*.png`/`tex-*.png`) |
 | `assets/textures-src/` | source bitmaps and registry (`registry.json`); derived tiles land in `assets/textures/<theme>/` and are guarded by `scripts/check-bitmap-assets.py` |

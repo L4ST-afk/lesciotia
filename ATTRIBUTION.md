@@ -6,7 +6,7 @@
 
 | 来源 | 版本 | 许可 | 复制了什么 |
 |---|---|---|---|
-| ~~html-ppt~~（github.com/lewislulu/html-ppt-skill，© 2026 lewis） | 库内快照 2026-09/10 | MIT | **2026-11-23 起 0 件**：`runtime.js` / `base.css` / `fonts.css` / `animations/animations.css` / `render-png.sh` 逐件自写重写；`themes/upstream/`（36→0）；`layouts/` 并成 17 族 / 38 式并逐页重写；`full-decks/` 5 套连各自 `style.css` 一并改写为自有内容（2026-11-23 实测与上游示例 `quick_ratio`≈0.99，故不能只改字体与品牌字样）。⛔ 表中已无任何一件上游资产，`LICENSE-html-ppt.txt` 随之删除；历史比对见 `SELFTEST.md` 第 17 节（留档，不再对应当前文件） |
+| ~~html-ppt~~（github.com/lewislulu/html-ppt-skill，© 2026 lewis） | 库内快照 2026-09/10 | MIT | **2026-11-23 起 0 件**：`runtime.js` / `base.css` / `fonts.css` / `animations/animations.css` / `render-png.sh` 逐件自写重写；`themes/upstream/`（36→0）；`layouts/` 并成 17 族 / 39 式并逐页重写；`full-decks/` 5 套连各自 `style.css` 一并改写为自有内容（2026-11-23 实测与上游示例 `quick_ratio`≈0.99，故不能只改字体与品牌字样）。⛔ 表中已无任何一件上游资产，`LICENSE-html-ppt.txt` 随之删除；历史比对见 `SELFTEST.md` 第 17 节（留档，不再对应当前文件） |
 | **Chart.js** 4.4.3（github.com/chartjs/Chart.js） | 2026-11-23 从 jsDelivr 取回 | **MIT** | `assets/vendor/chart.umd.min.js`（205,637 B）：`layouts/charts` 一族画柱/线/饼/雷达用；此前指 CDN，离线打开是空白 |
 
 ## 同类项目勘察（无复制件）

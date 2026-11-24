@@ -231,6 +231,16 @@ pre.card code{display:block;font-size:var(--t-body-sm);line-height:1.55}
 .gal.card .txt b{font-size:var(--t-body);font-weight:600}
 .gal.card .txt p{margin:0;font-size:var(--t-cap);color:var(--text-3);line-height:1.55}
 .gal.card img{width:42%;flex:none;height:100%;object-fit:cover;display:block}
+/* phone：窄图（手机截图、票据、竖版海报）不裁不压扁——高度定死、宽度跟着各自比例走，
+   卡与卡之间只留呼吸，图注在卡下居中。参考简册卡「框定比例、图不迁就版式」的做法。 */
+.gal.three{grid-template-columns:repeat(3,1fr)}
+.gal.phone{display:flex;justify-content:center;align-items:flex-start;gap:32px;height:auto}
+.gal.phone figure{margin:0;display:flex;flex-direction:column;align-items:center;flex:0 0 auto;
+  height:auto;aspect-ratio:auto;overflow:visible;background:none;border-radius:0}
+/* 高度定死、宽度跟图走：图不放大也不裁，列宽只负责居中 */
+.gal.phone img{height:520px;width:auto;max-width:100%;border-radius:16px;display:block;
+  box-shadow:0 22px 46px rgba(0,0,0,.34)}
+.gal.phone figcaption{margin-top:12px;text-align:center}
 
 /* ---------- 11. 整图 image：hero / bleed / fig / split ---------- */
 .hero,.bleed{position:relative;flex:1;border-radius:var(--radius);overflow:hidden;min-height:0}

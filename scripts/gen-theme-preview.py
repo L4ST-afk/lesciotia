@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """把 skill 的字体声明 + 指定主题 CSS 内联进预览版式，生成自包含单文件预览页。
 
-用法：python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [输出html] [--dark|--aero]
+用法：python3 scripts/gen-theme-preview.py <主题名> <中文名> <英文名> [输出html] [--dark|--aero] [--subset-fonts]
 例：  python3 scripts/gen-theme-preview.py century-sq 世纪广场 "Century Sq"
       python3 scripts/gen-theme-preview.py century-ave   世纪大道 "Century Ave" --dark
       python3 scripts/gen-theme-preview.py guanglan-rd   广兰路   "Guanglan Rd" --aero
@@ -1235,11 +1235,70 @@ MOD_SCALE = {
                         'linear-gradient(90deg,#8b7ce8,#c8bff5)',
                         'linear-gradient(90deg,#e0632f,#f5b28d)',
                         'linear-gradient(90deg,#168f70,#8ccfae)'),
-    'longhua-si':      ('#d5cbb6', '#4a5a5e', '#5f2e1c', '#2a2521'),
+    'longhua-si':      ('#c8a45c', '#5f2e1c', '#4a5a5e', '#2a2521'),
     'panyu-rd':        ('#ba4a33', '#141414', '#e0a32e', '#63594e'),
     'qiu-r':           ('#3c757e', '#1d2421', '#8a3932', '#4c5651'),
     'wanhang-fy':      ('#3f6449', '#241c15', '#ad6a45', '#6f5f4d'),
 }
+
+
+# ── 预览页字体子集化（可选，2026-11-24）──────────────────────────────────────
+# 实例：一份预览页 97% 的体积是 data:font 的 base64（woff2 已压缩，base64 又涨 4/3）。
+# 预览板上的字是固定的样板字，用不到整副 3000+ 字库。
+# 借「单文件保存」类扩展的思路做自包含，但不靠单个文件，而是把字库裁到本页实际用到的字。
+# ⚠️ 只用于 examples/previews 的分发件；assets 里的全量字体是给真 deck 用的，不许裁。
+_FONT_KEEP = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' \
+             '·・、，。；：！？（）【】「」『』《》〈〉“”‘’—…-–/\\%+=#@&*<>[]{}|~^$'
+_FONT_MARGIN = '春夏秋冬东南西北年月日时天地人山水风花雪云光影色茶酒诗书画琴剑鹤鹿雀梅兰竹菊松荷'
+_FONT_RE = re.compile(r'data:font/(woff2|woff|ttf|otf);base64,([A-Za-z0-9+/=]+)')
+
+
+def _visible_chars(s):
+    body = re.sub(r'<style[^>]*>.*?</style>', ' ', s, flags=re.S)
+    body = re.sub(r'<script[^>]*>.*?</script>', ' ', body, flags=re.S)
+    body = re.sub(r'<!--.*?-->', ' ', body, flags=re.S)
+    body = re.sub(r'<[^>]+>', ' ', body)
+    return {c for c in body if ord(c) > 31} | set(_FONT_KEEP) | set(_FONT_MARGIN)
+
+
+def subset_fonts(s):
+    """把 s 里每个 data:font 的 base64 字库裁到本页用到的字。失败则原样保留。"""
+    try:
+        import io
+        from fontTools.ttLib import TTFont
+        from fontTools.subset import Subsetter, Options
+    except Exception:
+        print('  ! 缺 fontTools/brotli，跳过子集化', file=sys.stderr)
+        return s
+    chars = ''.join(sorted(_visible_chars(s)))
+    cache = {}
+
+    def repl(m):
+        kind, b64 = m.group(1), m.group(2)
+        if b64 in cache:
+            return cache[b64]
+        try:
+            data = __import__('base64').b64decode(b64)
+            ft = TTFont(io.BytesIO(data))
+            opt = Options()
+            opt.flavor = 'woff2'
+            opt.layout_features = ['*']
+            sub = Subsetter(options=opt)
+            sub.populate(text=chars)
+            sub.subset(ft)
+            buf = io.BytesIO()
+            ft.save(buf)
+            nb = __import__('base64').b64encode(buf.getvalue()).decode()
+            res = 'data:font/woff2;base64,' + nb
+            print('  字库 %dKB → %dKB' % (len(data) // 1024, len(buf.getvalue()) // 1024),
+                  file=sys.stderr)
+        except Exception as e:                                   # 裁不动就留着原样，⛔ 别让预览打不开
+            print('  ! 子集化失败，保留原字库：%s' % e, file=sys.stderr)
+            res = m.group(0)
+        cache[b64] = res
+        return res
+
+    return _FONT_RE.sub(repl, s)
 
 
 def apply_mod_scale(s, theme):
@@ -1253,7 +1312,9 @@ def apply_mod_scale(s, theme):
     css += '.mod-scale .ms:nth-child(1) i{background:%s}\n' % cols[0]
     for n, c in zip((2, 3, 4), cols[1:]):
         css += '.mod-scale .ms:nth-child(%d) i{background:%s}\n' % (n, c)
-    k = s.rindex('</style>')
+    # 用 index 而不是 rindex：番禺路页里另有一个游离的 </style>（正文里的样式片段），
+    # rindex 会挑到它，把 CSS 写成正文文字（真踩过，页顶出现 CSS 字符串）。
+    k = s.index('</style>')
     return s[:k] + css + s[k:]
 
 
@@ -1394,7 +1455,8 @@ def main():
     aero = '--aero' in args
     if dark and aero:
         raise SystemExit('--dark 与 --aero 互斥')
-    args = [a for a in args if a not in ('--dark', '--aero')]
+    subset = '--subset-fonts' in args
+    args = [a for a in args if a not in ('--dark', '--aero', '--subset-fonts')]
     theme, zh, en = args[:3]
     out = args[3] if len(args) > 3 else None
 
@@ -1426,7 +1488,7 @@ def main():
     # data-theme 供模板里 [data-theme="X"] 作用域的主题专属材质选择器命中
     head = ('<!DOCTYPE html>\n<html lang="zh-CN" data-theme="' + theme + '">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
-            f'<title>{zh} {en} · 来雪亭 B 出口主题预览</title>\n<style>\n'
+            f'<title>{zh} {en} · 来雪亭 主题预览</title>\n<style>\n'
             + imports +
             '/* ============ 内化字体（data URI，随文件可移植） ============ */\n'
             f'{fonts}\n/* ============ 主题：{theme} ============ */\n{theme_css}\n')
@@ -1924,8 +1986,8 @@ def main():
             ('<div class="g-foot">示例文案 · 用于展示层级与材质，不代表真实广场公告</div>',
              '<div class="g-foot">示例文案 · 用于展示层级与材质，不代表真实园区公告</div>'),
             # 顶部 meta：世纪广场的路径与「磨砂玻璃版」改为广兰路事实
-            ('<div class="mono">来雪亭Lesciotia / B 出口主题</div>',
-             '<div class="mono">来雪亭Lesciotia / B 出口主题</div>'),
+            ('<div class="mono">来雪亭Lesciotia ｜ 主题预览</div>',
+             '<div class="mono">来雪亭Lesciotia ｜ 主题预览</div>'),
             ('<code>assets/themes/century-sq.css</code><br>\n      磨砂玻璃版 · 2026-11-19',
              '<code>assets/themes/guanglan-rd.css</code><br>\n      Aqua / Frutiger Aero · 2026-11-20'),
             # 中性色阶：世纪广场混凝土灰 → 广兰路玻璃蓝阶
@@ -1952,8 +2014,8 @@ def main():
         # 页眉事实更正：世纪大道是从 century-sq（亮色版）fork 的暖光夜景版，
         # 不是从 guanglan-rd fork 的磨砂玻璃版（模板硬编码的是后者）。
         meta_swaps = [
-            ('<div class="mono">来雪亭Lesciotia / B 出口主题</div>',
-             '<div class="mono">来雪亭Lesciotia / B 出口主题</div>'),
+            ('<div class="mono">来雪亭Lesciotia ｜ 主题预览</div>',
+             '<div class="mono">来雪亭Lesciotia ｜ 主题预览</div>'),
             ('<code>assets/themes/century-sq.css</code><br>\n      磨砂玻璃版 · 2026-11-19',
              '<code>assets/themes/century-ave.css</code><br>\n      暖光夜景版 · 2026-11-19'),
             # 材质圆词：亮色版的「混凝土/大理石/钢」在夜景里对应暖光酚醛
@@ -2053,8 +2115,8 @@ def main():
             ('<span class="cap">ALERT STRIPE / LINE 6</span>', '<span class="cap">ALERT / RED GLASS</span>'),
             ('<span class="cap">SELECTED / FIXED YELLOW</span>', '<span class="cap">SELECTED / GOLD</span>'),
             # 页眉事实：从 century-sq 的骨架重建，材质换成石墙/汉白玉/水磨石/鎏金
-            ('<div class="mono">来雪亭Lesciotia / B 出口主题</div>',
-             '<div class="mono">来雪亭Lesciotia / B 出口主题</div>'),
+            ('<div class="mono">来雪亭Lesciotia ｜ 主题预览</div>',
+             '<div class="mono">来雪亭Lesciotia ｜ 主题预览</div>'),
             ('<code>assets/themes/century-sq.css</code><br>\n      磨砂玻璃版 · 2026-11-19',
              '<code>assets/themes/friendship-bldg.css</code><br>\n      石墙 · 汉白玉 · 水磨石 · 鎏金 · 2026-11-20'),
             # 主按钮必须是鎏金（主题的 .pill-accent），模板用的是次级 .pill，主色缺席
@@ -2419,6 +2481,8 @@ def main():
         DEFAULT_OUTDIR.mkdir(parents=True, exist_ok=True)
         outp = DEFAULT_OUTDIR / f'{theme}-theme-preview.html'
     s = apply_mod_scale(s, theme)
+    if subset:
+        s = subset_fonts(s)
     outp.write_text(s, encoding='utf-8')
     print(f'OK {outp} ({outp.stat().st_size // 1024} KB) | {theme} | {zh} {en} | '
           f'dark={dark} aero={aero}')

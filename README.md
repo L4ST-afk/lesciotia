@@ -2,11 +2,26 @@
 
 [English](README.en.md) · 中文
 
-<!-- 封面位：`docs/cover.jpg` 落盘后在此挂 <img src="docs/cover.jpg" alt="来雪亭 Lesciotia — 新版画雪景：八角亭鎏金宝顶、朱柱灰瓦覆雪，亭外霜林与石桥" width="720">；规格与题铭见 docs/封面.md。⛔ 图未入库时不挂空链接。 -->
+<img src="docs/cover.jpg" alt="来雪亭 Lesciotia — 新版画雪景：八角亭鎏金宝顶、朱柱灰瓦覆雪，亭外霜林与石桥" width="720">
 
-一套讲稿，出两种成稿：**单文件 HTML**，浏览器里翻页，断网也放得开；**原生 PPTX**，文字与形状都能再改。要 100% 像、且不打算再改时，另走逐页影像一条。
+> 罗浮山下雪来未？
+>
+> 江中有亭，此亭待雪。
+> 你飞来一场初雪，洋洋洒洒，
+> 而梁架先立，瓦色后施，
+> 料落其间，遂成一篇。
 
-17 族梁架（38 式）、9 种瓦作、5 套整册，全部离线可跑。瓦作各取一个上海地铁站名：一站出站那一眼，就是一套配色与材质。HTML 出口只用 Python 3 标准库；PPTX 出口多一个 `python-pptx`。
+「罗浮山下雪来未」出文天祥《北归宿中川寺》；一九六四年郭沫若取此诗意题「来雪亭」横额。详见 [`references/naming.md`](references/naming.md)。
+
+一份讲稿，三种能拿到手的东西：
+
+- **网页件**：一个 `.html`，双击就开，键盘翻页，讲稿跟着走。
+- **可改件**：一个 `.pptx`，文字是真文本、图是真图，甲方在 PowerPoint 里自己改字。
+- **影像件**：一堆逐页 PNG 再合成 pptx / pdf，要 100% 像、且今后不再改时用。
+
+三件是同一份内容的三种壳，不是三个 skill；选哪个、代价在哪，见下节「三种壳」。
+
+17 族梁架（39 式）、9 种瓦作、5 套整册，全部离线可跑。瓦作各取一个上海真实地点——路、广场、河道、楼、寺都算（『友谊大厦』取中苏友好大厦的意象）；走一趟那里，看到的就是一套配色与材质。网页件只用 Python 3 标准库；可改件多一个 `python-pptx`。
 
 名字取自温州江心屿的「来雪亭」——亭在孤屿东北角，北望罗浮山。典故、读音与让掉的代价见 [`references/naming.md`](references/naming.md)。
 
@@ -16,12 +31,64 @@
 
 | 词 | 管什么 | 目录 | 数量 |
 |---|---|---|---|
-| **梁架** | 骨架：信息怎么排、几栏、什么顺序 | `assets/layouts/` | 17 族 / 38 式 |
+| **梁架** | 骨架：信息怎么排、几栏、什么顺序 | `assets/layouts/` | 17 族 / 39 式 |
 | **瓦作** | 表面：配色、字体、材质 | `assets/themes/` | 9 |
 | **落雪** | 用户投进来的原始素材 | 无（输入侧） | — |
 
 雪落在瓦上，不落在梁架上——所以「雪」归瓦作这一层，而用户带来的料叫**落雪**。
 三个词只是称呼，目录名不改。详见 [`SKILL.md`](SKILL.md) §三层词汇。
+
+## 三种壳：拿到手的是什么、代价在哪
+
+「出口」是问「最后长成什么文件」，不是三个独立工具。同一份 `pages/NN.md` 和同一套瓦作，按你要做的事选一件：
+
+| 拿它干什么 | 选哪个 | 你收到什么 | 收件人能做什么 | 做不到的（失效边界） |
+|---|---|---|---|---|
+| 讲给人听：分享、内训、发布会 | **网页件** | 单个 `.html`，几 MB，断网能开 | 按方向键翻页、按 S 开演讲者视图（当前页/下一页/逐字稿/计时） | 对方不能改字；导成 pptx 只是贴图 |
+| 交给要改字的人 | **可改件** | 原生 `.pptx` | 在 PowerPoint 里改文字、换图、挪形状 | 圆角按 `--radius` 同值裁成（图仍是可换的原图）；图片取景裁切、动效与网页件不完全等同；渐变是换算后的近似 |
+| 要求 100% 像，且今后不动 | **影像件** | 逐页 PNG → pptx / pdf | 只能整页换图 | 一个标点也改不了；改字要重出图 |
+
+**常见错误**：① 把网页件当可改件发出去，对方要动一个字也得回来找你；② 以为可改件与网页件像素全同——它们是同一套瓦作的两个渲染器，不是同一张截图（`SELFTEST.md` §1.2.59 记的就是这条：同一个图组页，两边摆法最初不一致，甲方以为是两版稿）；③ 拿影像件应急，事后又要改内容，只能整页重出图。
+
+**怎么记**：A＝影像件，B＝网页件，C＝可改件。字母只在命令行与脚本里用，文档与对话里说功能名。
+
+## 九种瓦作：一个地名，一套配色
+
+九个名字都对着上海真实的路、广场、河道、楼与寺（不全是地铁站名，有的地名恰好也是站名；『友谊大厦』取中苏友好大厦的意象）；到那儿走一遍，看到的就是这套配色与材质的由来。九张切片都从对应预览板截出（`python3 scripts/gen-theme-slices.py` 一条命令重出），完整预览板在 `examples/previews/<slug>-theme-preview.html`。
+
+<table>
+<tr>
+<td width="33%"><img src="docs/themes/century-sq.png" width="290"><br><b>世纪广场</b> Century Sq<br>标线黄压清水混凝土，模度 1:1.618</td>
+<td width="33%"><img src="docs/themes/century-ave.png" width="290"><br><b>世纪大道</b> Century Ave<br>同族暗色版：钠灯暖光、酚醛板</td>
+<td width="33%"><img src="docs/themes/guanglan-rd.png" width="290"><br><b>广兰路</b> Guanglan Rd<br>Aqua 玻璃、青蓝高光、胶囊圆角</td>
+</tr>
+<tr>
+<td><img src="docs/themes/friendship-bldg.png" width="290"><br><b>友谊大厦</b> Friendship Bldg<br>乳黄水刷石、鎏金、白桦木</td>
+<td><img src="docs/themes/qiu-r.png" width="290"><br><b>虬江</b> Qiu R<br>宣纸、河青、靛蓝细线、砖红图版号</td>
+<td><img src="docs/themes/panyu-rd.png" width="290"><br><b>番禺路</b> Panyu Rd<br>拱券与柱身凹槽，排印走新粗野主义</td>
+</tr>
+<tr>
+<td><img src="docs/themes/fuzhou-rd.png" width="290"><br><b>福州路</b> Fuzhou Rd<br>新闻纸、套版靛、套版朱、45° 网点</td>
+<td><img src="docs/themes/wanhang-fy.png" width="290"><br><b>万航渡</b> Wanhang Ferry<br>画稿纸、梧桐绿、水墨晕、河岸</td>
+<td><img src="docs/themes/longhua-si.png" width="290"><br><b>龙华寺</b> Longhua Si<br>香灰、塔檐、白墙，鎏金只走线</td>
+</tr>
+</table>
+
+**灵感来处**（瓦作里的 hex 是按意象调的，不是从照片取样；只当取意的线索看）：
+
+- **世纪广场**：上海交通标线的那道黄，压在清水混凝土与大理石上；广场铺装正是这个调子，所以它成了主色。栏宽、色块与间距按柯布西耶模度 1:1.618 收放，所以版式换页也同比例；材质只用大理石、拉丝钢、磨砂面。
+- **世纪大道**：同一个族的暗色版——高压钠灯的暖光打在酚醛板上，深底白字，适合晚上放的稿。
+- **广兰路**：千禧年前后的 Aqua 玻璃界面，青蓝高光、胶囊圆角、细白描边；讲技术、讲产品时用它，不显旧也不喧宾夺主。
+- **友谊大厦**：1955 年的中苏友好大厦（今上海展览中心），乳黄水刷石墙面、汉白玉柱、鎏金塔尖、白桦木饰面，加一点苏式彩绘记号。
+- **虬江**：五角场河道两岸的校园气——宣纸底、河青实心、靛蓝细线，砖红只做图版号；配方格稿纸、河面波线、河埠石。
+- **番禺路**：番禺路 60 号孙科别墅（1931，邬达克）的拱券外轮廓、柱身凹槽、水磨石颗粒；排印反着来，走新粗野主义：3px 墨黑框、4px 实心硬投影。
+- **福州路**：旧称四马路，报馆街与书店街——新闻纸底、套版靛主色、套版朱标记、藤黄小牌，母题是 45° 网点、套印错位、栏线与报头双线；渐变必须有印刷来由（网目过渡、油墨与纸的衰老）。
+- **万航渡**：万航渡路 4830 米，1864 年极司菲尔路一路改名至今；加上路 618 号美术电影制片厂旧址的手工气——画稿纸、梧桐绿、河青细线，水墨晕、驳岸与拷贝纸纤维；标题用喜脉体。
+- **龙华寺**：龙华塔 977 年，八角七级砖木楼阁式——香灰底、白墙、檀赭主色、塔影青；鎏金只做线与小匾，春桃只做落瓣，不做大面积彩。
+
+九张切片只截板头、色板与材质样片；字体授权提示条不截（那不是风格，是免责声明）。
+
+**地名与年份已经逐条核对过**：世纪广场在世纪大道 2100 号（上海科技馆站旁）；中苏友好大厦 1954 年动工、1955 年建成，1968 年改上海展览馆、1984 年定名上海展览中心；孙科别墅在番禺路 60 号，1931 年建成，邬达克设计；龙华塔 977 年（太平兴国二年）重建，七层八角，砖心木檐；万航渡路全长 4830 米，1864 年筑极司非尔路，1943 年改梵皇渡路，1964 年谐音定今名。
 
 ## 技术路线：瓦作先验
 
@@ -32,7 +99,7 @@ computed style，映射成原生形状。代表是 `slidesmith`、`GX-Alex/html2
 抓不到的东西（复杂渐变、布尔形状、动效）只能退回整页截图。
 
 来雪亭反过来做：瓦作是**先验**的——`--hex` token 与一套 1600×900 栅格存在文件里，
-B 出口（HTML）与 C 出口（原生 PPTX）从同一份 `:root` 各自出件，字体用同一批随包文件
+网页件与可改件从同一份 `:root` 各自出件，字体用同一批随包文件
 量宽、把换行点写死。目标只有一个：换一遍瓦作，两边一起变。截图级的相似不在目标里。
 
 可复核的三条：
@@ -80,7 +147,7 @@ B 出口（HTML）与 C 出口（原生 PPTX）从同一份 `:root` 各自出件
 三处踩过的坑都写进代码注释了：`p:style` 会给形状挂主题投影（瓦作里这些是平的，必须删）、
 `#RRGGBB` 直接当颜色（不然深底白字静默落成黑字）、`:root` 的 token 代换必须报「未定义」，不许拿整串顶回去。
 
-## 双出口漂移：`--html`
+## 两份壳对账：`--html`
 
 同一份落雪出两个口，最容易出的事：**有人只改了一边**。
 `check-wash.py spec.json --html deck.html` 就是把 spec 里那串声明（渐变原文、`--token`）
@@ -90,8 +157,8 @@ B 出口（HTML）与 C 出口（原生 PPTX）从同一份 `:root` 各自出件
 
 ## 页切换：读瓦作，不猜速度
 
-B 出口的页切换写在 `assets/base.css` 里：`.slide{opacity:0; transform:translateX(30px); transition:opacity .5s …}`
-——一层淡入加一小段横移。C 出口不猜「大概 0.5 秒」，**读同一个声明块**：
+网页件的页切换写在 `assets/base.css` 里：`.slide{opacity:0; transform:translateX(30px); transition:opacity .5s …}`
+——一层淡入加一小段横移。可改件不猜「大概 0.5 秒」，**读同一个声明块**：
 时长取 `transition` 的第一个时间值，位移取 `translateX()` 的符号判方向。
 
 默认映射成 `fade`，不映射成 `push`。原因是量级：30px 在 1600 宽的画布上是 1.9%，
@@ -116,7 +183,7 @@ CSS 的多层 `background` 换成多个同位置形状——层数、z 序、每
 不换算的写死：`conic-gradient`、`repeating-*`、`background-blend-mode`、`filter`。
 动效不做——HTML 侧保留，PPT 侧出静版。
 
-剩下的代价：动效拿不到，复杂阴影与混合模式拿不到，渐变插值是近似（premultiplied sRGB 与 sRGB+alpha 不同）。要它们时走 A 出口（逐页图，
+剩下的代价：动效拿不到，复杂阴影与混合模式拿不到，渐变插值是近似（premultiplied sRGB 与 sRGB+alpha 不同）。要它们时走影像件（逐页图，
 100% 像但不可改）或把 `ppt-master` 当外部引擎调用，不在本库内置。
 
 ## 可选后端：装了就用，没装就说降级
@@ -127,7 +194,7 @@ CSS 的多层 `background` 换成多个同位置形状——层数、z 序、每
 | 后端 | 拿来做什么 | 装了 | 没装 |
 |---|---|---|---|
 | `skia-pathops` | 曲线布尔的**真裁剪**（沿曲线切，结果带 `cubicBezTo`） | `boolean` 的两边都是 `path` 时自动走它；`curves:"require"` 强制 | 退回折线求值，并打印「降级：N 个布尔退回折线」；`require` 直接报错 |
-| `uharfbuzz` | C 出口量宽改走**整段 shaping**（带字偶距与连字） | `--hb-measure` 打开后生效 | 回落逐字累加，打印「要 --hb-measure 但没装」 |
+| `uharfbuzz` | 可改件量宽改走**整段 shaping**（带字偶距与连字） | `--hb-measure` 打开后生效 | 回落逐字累加，打印「要 --hb-measure 但没装」 |
 
 `pip install skia-pathops uharfbuzz` 即可。能力表在出件 `--json` 的 `wash.backend`
 （`{"pathops": true, "uharfbuzz": false}`）——**同一份 spec 在两台机器上是不是同一档精度，看这一行**。
@@ -136,7 +203,7 @@ CSS 的多层 `background` 换成多个同位置形状——层数、z 序、每
 
 ## 逆流：PPTX → HTML
 
-正向是「内容 → B/C 两个出口」。实际用起来还有反方向：手上有别人给的 pptx，要放进网页、
+正向是「内容 → 网页件 / 可改件」。实际用起来还有反方向：手上有别人给的 pptx，要放进网页、
 或改成 HTML 继续编辑。
 
 ```bash
@@ -153,7 +220,7 @@ python3 scripts/pptx-to-html.py deck.pptx -o deck.html --notes  # 备注按 n �
 - **表格 → `<table>`**，图片 → base64 内联，备注 → 隐藏的 `<aside>`。
 
 它是**近似还原**，三处明说：图表/SmartArt 只留占位框并计数；主题色的继承链只解到文件里写死的那层
-（解不出的落中性灰并记数）；阴影、3D、艺术字不还原（与 C 出口同一条取舍：瓦作里它们是平的）。
+（解不出的落中性灰并记数）；阴影、3D、艺术字不还原（与可改件同一条取舍：瓦作里它们是平的）。
 
 反向（HTML → PPTX）仍然只是「先写 spec 再出件」，**不做通用抓取**——理由在开头那条技术路线：
 抓渲染得到的数值是「那一刻的快照」，换个主题就得整页重算。逆流读的是 PPT 自己的结构，
@@ -188,14 +255,14 @@ python3 scripts/retext-pptx.py new.pptx --verify                     # 调 offic
 和逆流串起来就是闭环：`pptx → pptx-to-html.py`（看效果，HTML 里每个形状带 `data-slide/data-id/data-name`）
 → 照 id 填 `edits.json` → `retext-pptx.py` 出回 pptx。**几何沿用原件，只有字变。**
 
-不做的三件事，明说：不换字体族（要换就回 B 出口改模板再出件）；不重排断行（字数远超原框会溢出，
+不做的三件事，明说：不换字体族（要换就回网页件改模板再出件）；不重排断行（字数远超原框会溢出，
 当前只比几何指纹、不查溢出）；不动图片与图表。
 
 ## 梁架：36 式并成 17 族
 
 旧版按「一页一个文件」铺了 36 个单页，挑版式要在一张 36 行的表里翻。大半其实是同一骨架换栏数、
 换画法：two-column / three-column / bullets 都是同一套卡片网格，chart-bar/line/pie/radar 都是同一个 canvas。
-现在并成 17 族 / 38 式，**一族一个文件，族页里一段一式**（`charts` 一页就能连着看完柱/线/饼/雷达，另加可数点阵、瀑布、哑铃三式）：
+现在并成 17 族 / 39 式，**一族一个文件，族页里一段一式**（`charts` 一页就能连着看完柱/线/饼/雷达，另加可数点阵、瀑布、哑铃三式）：
 
 `cover` `section` `end` `text` `quote` `code` `compare` `charts` `image` `image-set` `process` `diagram` `data` `toc` `ring` `split` `quiz`
 
@@ -326,13 +393,13 @@ officecli 二进制 32 MB，耗时 90% 在渲染器本身——把它塞进本�
 1. 解压本包，把 `来雪亭Lesciotia/` 整个目录**放进** skills 根目录（与其它 skill 同级）；或直接
    `git clone https://github.com/L4ST-afk/lesciotia.git 来雪亭Lesciotia`——**仓库名是 `lesciotia`，
    安装后的目录名仍是 `来雪亭Lesciotia`**，两者不可互换（脚本按目录名定位自己的根）。
-2. B 出口（HTML）无需任何安装：脚本只用 Python 3 标准库，字体与样式已随包内化。
-3. C 出口（原生 PPTX）只需一项：`pip install python-pptx`。没有它时 `export-pptx.py` 按
+2. 网页件无需任何安装：脚本只用 Python 3 标准库，字体与样式已随包内化。
+3. 可改件只需一项：`pip install python-pptx`。没有它时 `export-pptx.py` 按
    退出码 2 报错，**不会**退回「逐页截图塞 pptx」——那不是可编辑件。
 4. 可选：`officecli`（单二进制，装在 `~/.local/bin/officecli`）。它做两件事——
    OpenXML 序列校验、逐页真渲染（`view screenshot` / `view pdf`）。`export-pptx.py --render-check`
    会把这两步跑一遍；没有它时跳过并明说，不退回自绘近似冒充渲染。
-5. `ppt-master` 引擎**不再是 C 出口的必经之路**：它的 2.3 MB SVG→PPTX 管道依赖
+5. `ppt-master` 引擎**不再是可改件的必经之路**：它的 2.3 MB SVG→PPTX 管道依赖
    skia-pathops / uharfbuzz，且是「另一套作者层」，与本库「同一份瓦作出件」相冲。
    只有在需要复杂渐变、布尔合并、动效时才把它当外部引擎调用，且不在包内。
 
@@ -347,7 +414,7 @@ python3 scripts/selftest.py; echo "EXIT=$?"
 
 `EXIT=0` 为通过。逐项明细与各闸门的单独跑法见 `SELFTEST.md`。
 
-**两个出口各有一个真渲染器**：C 侧是 `officecli`（`validate` + 逐页截图），B 侧是
+**两份壳各有一个真渲染器**：可改件侧是 `officecli`（`validate` + 逐页截图），网页件侧是
 Chrome/Chromium 的 `--headless --screenshot`（`scripts/render-png.sh` 就用它）。两边都是真画像素，
 所以「同一份声明在两个渲染器下是不是同一个方向」可以互证——弧的 `sweep` 方向就是这么验的
 （一条 `M 100 100 A 150 150 0 0 1 250 250` 叠一条 `sweep=0` 的虚线，Chrome 截图与我们算出的点序
@@ -360,15 +427,15 @@ Chrome/Chromium 的 `--headless --screenshot`（`scripts/render-png.sh` 就用�
 | `SKILL.md` | 主入口：路由、命令面、体量门 |
 | `references/` | 分卷细则（版式、主题、命名、路径、质检等） |
 | `assets/themes/` | 9 种瓦作（主题 CSS），`qiu-r.css` 等 |
-| `assets/layouts/` | 17 族梁架（38 式，族内一段一式） |
+| `assets/layouts/` | 17 族梁架（39 式，族内一段一式） |
 | `assets/full-decks/` | 5 套整册 |
 | `assets/textures/` | 9 套瓦作导出的材质图（派生件，`board.png` + `mat-*.png`/`tex-*.png`） |
 | `assets/textures-src/` | 真位图的**源图**与登记表（`registry.json`）；派生 tile 落在 `assets/textures/<theme>/`，由 `scripts/check-bitmap-assets.py` 守 |
 | `examples/previews/` | 主题预览板（单文件 HTML，可直接开） |
-| `scripts/export-pptx.py` | 主生成器：一份 spec → 原生 PPTX；加 `--html` 同源并出 B 出口 |
+| `scripts/export-pptx.py` | 主生成器：一份 spec → 原生 PPTX；加 `--html` 同源并出网页件 |
 | `scripts/pptx-to-html.py` | 逆流：别人给的 `.pptx` → 单文件 HTML（读形状，不抓渲染） |
 | `scripts/retext-pptx.py` | 往返：只换文字节点，几何指纹不变就放行 |
-| `scripts/check-*.py` | 12 道离线闸门：`check-wash`（B/C 双出口同一份声明）、`check-theme-colors` / `check-theme-textures`（瓦作与材质图）、`check-fit`（装得下，F1–F4）、`check-layouts`（梁架族/式/旧名/离线/vendor）、`check-prose`（成稿密度）、`check-morph`（过渡配对）、`check-deck-sync` / `check-preview-sync`（整册与预览板同步）、`check-bitmap-assets`（位图源与派生件）、`check-fonts` / `check-installed-fonts`（随包与已装字体） |
+| `scripts/check-*.py` | 12 道离线闸门：`check-wash`（两份壳同一份声明）、`check-theme-colors` / `check-theme-textures`（瓦作与材质图）、`check-fit`（装得下，F1–F4）、`check-layouts`（梁架族/式/旧名/离线/vendor）、`check-prose`（成稿密度）、`check-morph`（过渡配对）、`check-deck-sync` / `check-preview-sync`（整册与预览板同步）、`check-bitmap-assets`（位图源与派生件）、`check-fonts` / `check-installed-fonts`（随包与已装字体） |
 | `scripts/check_doc_claims.py` | 文档对账闸：md 里写的数字与名字逐条对回磁盘（锚点消失也算红） |
 | `scripts/selftest.py` | 自检套件：装完先跑它，`EXIT=0` 即完整 |
 | `SELFTEST.md` | 逐项判据与各闸门的单独跑法 |
