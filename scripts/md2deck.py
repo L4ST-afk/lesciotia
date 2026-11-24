@@ -46,6 +46,23 @@ def inline(s):
     return s
 
 
+def read_nav(body: str):
+    """读册级导航条：首部 `<!-- nav: 序 > 现状 > 判断 -->`；`nav-block:` 出色块型。
+
+    返回 (章节名列表, 形式)，没有指令就 (None, 'text')。分隔符认 `>` 与全角「｜」，
+    不认逗号——章节名里常有逗号。
+    """
+    names, form = None, 'text'
+    for tag in ('nav', 'nav-block'):
+        m = re.search(r'<!--\s*%s:\s*(.*?)\s*-->' % tag, body)
+        if m:
+            raw = m.group(1)
+            names = [x.strip() for x in re.split(r'\s*>\s*|｜', raw) if x.strip()]
+            form = 'block' if tag == 'nav-block' else 'text'
+            body = body.replace(m.group(0), '', 1)
+    return names, form
+
+
 def split_front(text):
     meta, body = {}, text
     m = re.match(r'^---\n(.*?)\n---\n', text, re.S)
@@ -59,11 +76,20 @@ def split_front(text):
 
 
 def parse_pages(body):
-    """按 `## ` 切页；`# ` 只在最前面当封面标题。"""
+    """按 `## ` 切页；`# ` 只在最前面当封面标题。
+
+    `<!-- sec: 现状 -->` 是本页所属章节，记在 `page['sec']` 里并**从正文删掉**——
+    注释混进 blocks() 会被当成一段文字，把 family_of 判歪。
+    """
     lines = body.splitlines()
     title, lead, pages, cur = None, [], [], None
     for ln in lines:
         s = ln.rstrip()
+        m_sec = re.match(r'\s*<!--\s*sec:\s*(.*?)\s*-->\s*$', s)
+        if m_sec:
+            if cur is not None:
+                cur['sec'] = m_sec.group(1).strip()
+            continue
         if s.startswith('# ') and not s.startswith('## '):
             if title is None and cur is None:
                 title = s[2:].strip()
@@ -339,6 +365,15 @@ def split_item(s: str, limit: int = 19):
     return s[:limit] + '…', s[limit:].strip()
 
 
+def nav_markup(nav, form, cur):
+    """导航条标记（B 出口）：一章一项，当前页所属那项加 .on。"""
+    cls = 'deck-nav is-block' if form == 'block' else 'deck-nav'
+    items = ''.join(
+        '<span class="nv%s">%s</span>' % (' on' if (cur and n == cur) else '', esc(n))
+        for n in nav)
+    return '  <nav class="%s" aria-label="章节">%s</nav>' % (cls, items)
+
+
 def to_spec(pages, meta, title, brand, a_src_dir=None):
     """把 md 的页映射成 C 出口的 spec。**只映射 C 里真有的页型**，其余跳过并明说。
 
@@ -427,6 +462,8 @@ def to_spec(pages, meta, title, brand, a_src_dir=None):
                         'source': meta.get('source', brand), 'footer': foot})
         else:
             skipped.append((idx, head, '未映射'))
+        if pg.get('sec') and out and out[-1].get('type') != 'cover':
+            out[-1]['sec'] = pg['sec']
     out.append({'type': 'end', 'title': '谢谢', 'lede': meta.get('outro', '讲完这一册，剩下的交给现场。'),
                 'source': meta.get('source', brand), 'footer': brand})
     return {'slides': out, 'skipped': skipped}
@@ -436,13 +473,19 @@ def emit_pptx(a, build_steps: bool) -> int:
     """同一份 md 再出一件原生 PPTX：先映射成 spec，再调 export-pptx.py。"""
     import json, subprocess, tempfile
     meta, body = split_front(a.src.read_text(encoding='utf-8'))
+    nav, nav_form = read_nav(body)
+    body = re.sub(r'<!--\s*nav(?:-block)?:\s*.*?-->', '', body, count=1, flags=re.S)
     title, _lead, pages = parse_pages(body)
     title = a.title or meta.get('title') or title or a.src.stem
     theme = meta.get('theme') or a.theme or 'guanglan-rd'
     brand = meta.get('brand', '来雪亭')
     spec = to_spec(pages, meta, title, brand, a.src.parent.resolve())
     tmp = pathlib.Path(tempfile.mkdtemp()) / 'spec.json'
-    tmp.write_text(json.dumps({'slides': spec['slides']}, ensure_ascii=False), encoding='utf-8')
+    payload = {'slides': spec['slides']}
+    if nav:
+        payload['nav'] = nav
+        payload['nav_form'] = nav_form
+    tmp.write_text(json.dumps(payload, ensure_ascii=False), encoding='utf-8')
     for idx, head, why in spec['skipped']:
         print(f'  · 跳过第 {idx} 页「{head}」：{why}')
     cmd = [sys.executable, str(ROOT / 'scripts' / 'export-pptx.py'), str(tmp),
@@ -457,6 +500,8 @@ def emit_pptx(a, build_steps: bool) -> int:
 def build(src_path, out, theme, title_override, build_steps):
     src = src_path
     meta, body = split_front(src.read_text(encoding='utf-8'))
+    nav, nav_form = read_nav(body)
+    body = re.sub(r'<!--\s*nav(?:-block)?:\s*.*?-->', '', body, count=1, flags=re.S)
     title, lead, pages = parse_pages(body)
     title = title_override or meta.get('title') or title or src.stem
     theme = meta.get('theme') or theme
@@ -517,6 +562,7 @@ def build(src_path, out, theme, title_override, build_steps):
             inner = render_table(pg['head'], bl)
         style = {'quote': 'quote', 'image1': 'image-single', 'text': 'text', 'process': 'process-steps', 'image': image_style(bl), 'code': 'code', 'table': 'split'}[fam]
         sec.append('  <section data-style="%s" class="slide" data-title="%s">' % (style, esc(pg['head'])))
+        sec.append(nav_markup(nav, nav_form, pg.get('sec'))) if nav and pg.get('sec') else None
         sec.append(inner)
         sec.append('  </section>')
 

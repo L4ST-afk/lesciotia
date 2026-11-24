@@ -51,6 +51,8 @@ GHOST_BTN_OVERRIDE = r'''
   border:1.5px solid var(--line-2);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
 }
+/* 板内组件同高：主按钮在 .board 里降到 13px，次按钮不跟就会比主按钮还大（2026-11-24 报障） */
+.board .cp-btn-2{font-size:13px;padding:8px 14px;border-radius:999px}
 '''
 
 LIGHT_STEEL_OVERRIDE = r'''
@@ -1116,6 +1118,9 @@ body{background:#eaf7ff}
 .skyline g rect{fill:#b6d6ec}
 
 /* cp-* 组件类已收进 assets/themes/guanglan-rd.css 本体，此处不再兜底 */
+
+/* 板内次按钮与主按钮同高：主题 .cp-btn-2 用 --t-cap(24px)，比板内 13px 的主按钮大 */
+.board .cp-btn-2{font-size:13px;padding:8px 14px;border-radius:999px}
 '''
 
 DARK_OVERRIDE = r'''

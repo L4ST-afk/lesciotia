@@ -14,7 +14,7 @@
 
 | 脚本 | 用途 | 依赖 |
 |---|---|---|
-| `scripts/md2deck.py` | **Markdown 入口**：`.md` → 单册 HTML（`#` 封面 / `##` 切页；≥2 图→image-set 族（窄图过半→image-phone；4-5 张→band bento 主图 2×2；≤3 张→gal three），代码块→code，表→split，列表→text 卡列、编号≥3→process、单图→image-single、纯引用→quote、`###` 分节各自成页；`--inline` 走 `build-deck.py` 出单文件；`--pptx` 把同一份 md 映射成 C 出口 spec 并调 `export-pptx.py`（cover/bullets/quote/table/end/figure 有对应，图组与代码页跳过并列出；长句自动拆「主句+小注」）。只认这几条映射，装不下仍要跑 `check-fit.py` | 无 |
+| `scripts/md2deck.py` | **Markdown 入口**：`.md` → 单册 HTML（`#` 封面 / `##` 切页；≥2 图→image-set 族（窄图过半→image-phone；4-5 张→band bento 主图 2×2；≤3 张→gal three），代码块→code，表→split，列表→text 卡列、编号≥3→process、单图→image-single、纯引用→quote、`###` 分节各自成页；首部 `<!-- nav: 序 > 现状 -->` + 每页 `<!-- sec: 现状 -->` 长出册级导航条（`nav-block:` 出色块型）；`--inline` 走 `build-deck.py` 出单文件；`--pptx` 把同一份 md 映射成 C 出口 spec 并调 `export-pptx.py`（cover/bullets/quote/table/end/figure 有对应，图组与代码页跳过并列出；长句自动拆「主句+小注」）。只认这几条映射，装不下仍要跑 `check-fit.py` | 无 |
 | `scripts/build-deck.py` | 把 B 出口的 deck 内联成**单文件 HTML**（css/js/本地图全内联，主题收敛）；打包前先扫**中文半角标点**（罗蛇 T03，`--allow-punct` 降级为警告） | 无 |
 | `scripts/render-png.sh` | headless Chrome 逐页截图（QA 与 A 出口的图片核验） | Google Chrome / Chromium |
 | `scripts/selftest.py` | **冒烟自检**：编译全部脚本＋入口 `--help` 探测，并对瓦作/位图/染层三道闸跑负例（3＋5＋4 条），另加布尔数值、双出口漂移、morph 配对（正例必须配、跨页型零同名必须红）、曲线布尔（装了 pathops 就与解析 lens 对账；`curves=require` 在屏蔽 pathops 的环境里必须红）与 PPTX→HTML（页数与文字必须过来）、往返闭环（改字后几何指纹必须一模一样）；⛔ 只证「脚本没坏到语法都过不去」，不证业务口径 | 无 |

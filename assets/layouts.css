@@ -434,3 +434,20 @@ ul.todo .tag{font-size:var(--t-cap);color:var(--text-3)}
 .l5{grid-column:span 5}.l6{grid-column:span 6}.l7{grid-column:span 7}.l8{grid-column:span 8}
 .l9{grid-column:span 9}.l10{grid-column:span 10}.l11{grid-column:span 11}.l12{grid-column:span 12}
 .sk12 .full{grid-column:1 / -1}
+
+/* ============ 册级导航条：章节 nav（2026-11-24 自「导航栏」吸收） ============
+   放顶部，两式：文字型（默认，当前节 accent + 下划线）／色块型（is-block，通栏底 + 当前节实块）。
+   ⛔ 不放左侧：左右版心各 112px，竖排要么压版心要么挤标题；⛔ 不放底部：与页脚抢行。
+   ⛔ 不做图标型：库里没有图标体系，贴 emoji 即假。高度上限 44px——页面上内边距 72px，条再高就压内容。
+   数据由 md2deck 注入：首部 `<!-- nav: 序 > 现状 -->`，每页 `<!-- sec: 现状 -->`。 */
+.deck-nav{position:absolute;top:30px;left:112px;right:112px;z-index:3;
+  display:flex;gap:34px;align-items:baseline;pointer-events:none;
+  font-family:var(--font-note);font-size:13px;letter-spacing:.10em;color:var(--text-3)}
+.deck-nav .nv{white-space:nowrap}
+.deck-nav .nv.on{color:var(--accent);position:relative}
+.deck-nav .nv.on::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:2px;background:var(--accent)}
+.deck-nav.is-block{top:0;left:0;right:0;height:44px;gap:0;align-items:center;padding:0 112px;
+  background:var(--surface-2);letter-spacing:.06em}
+.deck-nav.is-block .nv{height:44px;display:flex;align-items:center;padding:0 18px;color:var(--text-3)}
+.deck-nav.is-block .nv.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.deck-nav.is-block .nv.on::after{display:none}

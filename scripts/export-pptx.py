@@ -433,8 +433,11 @@ def set_font(run, latin: str, ea: str, size_px: float, bold: bool = False, color
 class Deck:
     def __init__(self, tokens: dict[str, str], fonts: dict[str, dict], lock: bool = True,
                  head: tuple[str, float] = ('sans', 54.0), transition: dict | None = None,
-                 wash_css: list[Path] | None = None):
+                 wash_css: list[Path] | None = None, nav: list[str] | None = None,
+                 nav_form: str = 'text'):
         self.t = tokens
+        self.nav = nav or []
+        self.nav_form = nav_form
         self.head_role, self.head_size = head
         # 标题压下来多少，内容就让多少：68px 标题配 224px 起的卡片会顶到色条
         self.head_bottom = 128 + self.head_size * 1.42
@@ -482,6 +485,8 @@ class Deck:
         s = self.prs.slides.add_slide(self.blank)
         s.background.fill.solid()
         s.background.fill.fore_color.rgb = self.c('--bg', '#ffffff')
+        # 导航条挂在建页这一步：bullets/kpi 等页不走 head()，挂在 head 里会漏页
+        self.draw_nav(s, {'sec': getattr(self, 'current_sec', None)})
         self.expected += 1
         self._wash_n = 0
         if self.pending_wash:
@@ -826,6 +831,52 @@ class Deck:
         if left:
             self.text(s, LEFT, 790, 700, 26, [(left, 'sans', 14, False, '--text-3')])
         self.text(s, 1440, 790, 80, 26, [(f'{idx} / {total}', 'sans', 14, False, '--text-3')])
+
+    def draw_nav(self, s, d):
+        """册级导航条（C 出口）：与 B 侧的 .deck-nav 同数据、同位置、同两式。
+
+        只用顶部 44px——页眉起点是 86，条再高就压标题。字号 11pt 是 C 侧的图注档，
+        与 18px 的 CSS 不是同一把尺，两边看齐的是「谁是当前节」，不是像素。
+        """
+        if not self.nav:
+            return
+        cur = d.get('sec')
+        size = 11
+        adv_cjk = size / 72 * PX_PER_IN      # 11pt 中文一个字宽 ≈ 18.3px
+
+        def w_of(t):
+            return sum(adv_cjk if ord(ch) > 127 else adv_cjk * 0.55 for ch in t)
+
+        if self.nav_form == 'block':
+            strip = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, px(CANVAS_W), px(44))
+            strip.fill.solid()
+            strip.fill.fore_color.rgb = self.c('--surface-2')
+            strip.line.fill.background()
+            strip.shadow.inherit = False
+            x = LEFT - 18   # 与文字型同一起点：块从版心左界起，文字落在 112
+            for n in self.nav:
+                pw = w_of(n) + 36
+                if n == cur:
+                    blk = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, px(x), 0, px(pw), px(44))
+                    blk.fill.solid()
+                    blk.fill.fore_color.rgb = self.c('--accent')
+                    blk.line.fill.background()
+                    blk.shadow.inherit = False
+                    self.text(s, x + 18, 13, pw - 18, 18,
+                              [(n, 'sans', size, True, '--accent-ink')])
+                else:
+                    self.text(s, x + 18, 13, pw - 18, 18,
+                              [(n, 'sans', size, False, '--text-3')])
+                x += pw
+        else:
+            x = LEFT
+            for n in self.nav:
+                w = w_of(n)
+                self.text(s, x, 24, w + 6, 20,
+                          [(n, 'sans', size, n == cur, '--accent' if n == cur else '--text-3')])
+                if n == cur:
+                    self.bar(s, x, 42, w, 2, '--accent')
+                x += w + 30
 
     def head(self, s, d, size=None, role=None):
         """页标题：kicker 在上，标题在下——四个内容页型共用，别各写一份。
@@ -2008,7 +2059,7 @@ def main() -> int:
         tr_default['direction'] = 'from-right' if tr_metrics['shift_px'] > 0 else 'from-left'
     wash_css = [ASSETS / 'base.css', THEMES / f'{args.theme}.css'] + ([deck_css] if deck_css else [])
     deck = Deck(tokens, fonts, lock=not args.no_lock, head=head, transition=tr_default,
-                wash_css=wash_css)
+                wash_css=wash_css, nav=spec.get('nav'), nav_form=spec.get('nav_form', 'text'))
     deck.base_dir = spec_path.parent
     total = len(slides)
     for i, d in enumerate(slides, 1):
@@ -2017,6 +2068,7 @@ def main() -> int:
             print(f'✗ 第 {i} 页 type 未知：{kind}（可选 {"/".join(PAGES)}）', file=sys.stderr)
             return 2
         deck.pending_wash = d.get('wash') or d.get('shapes')
+        deck.current_sec = d.get('sec')
         try:
             getattr(deck, PAGES[kind])(d, i, total)
             deck.role_names(deck.prs.slides[-1], kind)

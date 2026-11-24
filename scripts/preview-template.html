@@ -300,8 +300,8 @@ h3,.h3,h4,.h4{font-weight:700}
 /* 次按钮＝描边幽灵：实心填充会与主色按钮抢层级，次色只做描边与文字 */
 .cp-btn-2{
   display:inline-flex;align-items:center;justify-content:center;
-  padding:12px 26px;border-radius:12px;
-  font-family:var(--font-sans);font-weight:700;color:var(--line-2);
+  padding:11px 18px;border-radius:var(--radius-sm);
+  font-family:var(--font-sans);font-weight:700;font-size:15px;line-height:1.2;color:var(--line-2);
   background:rgba(255,255,255,.72);
   border:1.5px solid var(--line-2);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
@@ -364,6 +364,7 @@ body{margin:0;padding:30px 0 54px;background:#e9eef3;color:var(--text-1);font-fa
 /* 覆盖主题里为 1920×1080 deck 写的尺寸，预览板是 1080×720 */
 .board .card{padding:16px 18px;border-radius:6px}
 .board .pill{font-size:13px;padding:7px 16px 9px}
+.board .cp-btn-2{font-size:13px;padding:8px 14px}
 .board .glass{border-radius:14px}
 
 /* ---------- 共用：大理石标题台 ---------- */
