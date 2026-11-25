@@ -80,7 +80,7 @@ python3 scripts/verify-pptx-editable.py "<出件.pptx>" --json
 
 ## C4 · 本 skill 与 C 出口的边界
 
-- **不打包** ppt-master 的资产（78MB、13,019 文件、自带授权闸门），只作指针引用：本机实例在 `~/Library/CloudStorage/坚果云-tsingford@qq.com/Ob/Kroma/ppt-master`，仓库内 `skills/ppt-master` 是指向它的软链。所以 来雪亭Lesciotia 在没有 ppt-master 的机器上仍然能用 A/B 两出口。
+- **不打包** ppt-master 的资产（78MB、13,019 文件、自带授权闸门），只作指针引用：本机实例在本地云盘的 Kroma 目录（`<云盘>/Ob/Kroma/ppt-master`），仓库内 `skills/ppt-master` 是指向它的软链。所以 来雪亭Lesciotia 在没有 ppt-master 的机器上仍然能用 A/B 两出口。
 - **不接管** ppt-master 的执行纪律（它自己的 blocking gate 优先）。
 - **只提供**：分析、archetype 页序、大纲、逐页记录、质检口径。
 - 换到 C 出口后，`pages/NN.md` 仍是正本；ppt-master 的中间产物归它自己的 artifact ownership 规则管，不要再复制一份到 `pages/`。

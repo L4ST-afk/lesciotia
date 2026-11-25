@@ -199,14 +199,12 @@ def used_families(css):
     return used
 
 
-SYS_DIRS = ["/Users/%(u)s/Library/Fonts", "/Library/Fonts",
+SYS_DIRS = [os.path.expanduser("~/Library/Fonts"), "/Library/Fonts",
             "/System/Library/Fonts", "/System/Library/Fonts/Supplemental"]
 
 
 def _sys_dirs():
-    import getpass
-    u = getpass.getuser()
-    return [d % {"u": u} if "%(u)s" in d else d for d in SYS_DIRS]
+    return list(SYS_DIRS)
 
 
 # 族名 → 文件名关键字。macOS 上族名与文件名经常对不上：

@@ -98,7 +98,7 @@
 | **Playfair Display / Inter / Space Grotesk / JetBrains Mono**（`assets/fonts/latin/*.ttf`，各 Regular + Bold） | 均 SIL OFL 1.1。Playfair Display © The Playfair Display Project Authors；Inter © The Inter Project Authors；Space Grotesk © 2020 The Space Grotesk Project Authors；JetBrains Mono © 2020 The JetBrains Mono Project Authors | **Latin 子集**，woff2→ttf 解包后未改字形；四族共 8 个面（RIBBI）。⚠ Space Grotesk 400 实例内部族名被上游写作「Space Grotesk Light」，PPT 侧按内部名匹配 | `assets/fonts/latin/OFL.txt`（四族合并） |
 
 **万航渡喜脉体（2026-11-21 派生并内化）**：只被 `assets/themes/wanhang-fy.css` 引用（标题、引语）。这是本库第一款**自己加工过**的字体：
-原字是坚果云 `字体/字制区喜脉喜欢体1.00/字制区喜脉喜欢体.ttf`（9,487,176 B，upem 2048，7787 字形，`FontQu Smile` v1.0，
+原字取自外部字体库 `字体/字制区喜脉喜欢体1.00/字制区喜脉喜欢体.ttf`（9,487,176 B，upem 2048，7787 字形，`FontQu Smile` v1.0，
 `nameID 13` 内附 SIL OFL 1.1 全文，`nameID 0` 记 © 探火（深圳）品牌策划有限公司，原字带 DSIG 数字签名）。
 先 `pyftsubset` 裁 GB2312 一级字，再用 `skia-pathops` 把每个字形的外轮廓等宽外扩 100/2048 em（每边约 2.4%，`stroke` round join 后与原形并集，
 不是横向放大的「伪粗」），最后改 name 表为 `Wanhang Ximai / 万航渡喜脉体`。OFL 的保留字名条款要求修改版改名，故原名不再出现于字体族名，
@@ -176,7 +176,7 @@ All Rights Reserved」——「保留所有权利」和「永久免费使用」�
 奶盖宋只被 `assets/themes/qiu-r.css` 引用（标题、引语），其余主题不加载；正文字体思源黑体**不内化**，直接引用系统字体（`Source Han Sans SC` → 苹方 → 黑体）。裁子集是为守住单文件 ≤ 8 MB 的体量门（`scripts/build-deck.py` 的 `MAX_BYTES`）：整字库 ttf 80 MB、裁出的 ttf 9.0 MB 都过不了，转 woff2 后 2.6 MB 才落得进去。
 
 **爨八体（2026-11-21 内化）**：只被 `assets/themes/longhua-si.css` 引用（标题），其余主题不加载。
-原字 `坚果云 字体/爨八体/爨八体2.00.ttf`（19,720,968 B，upem 1000，9182 字形，`CanBaTi2.0`，
+原字 `外部字体库 字体/爨八体/爨八体2.00.ttf`（19,720,968 B，upem 1000，9182 字形，`CanBaTi2.0`，
 `nameID 0/13/14` **原为空**——作者没在字体里写版权和许可）。
 
 - **为什么选它**：龙华寺是禅寺主题，需要碑刻的顿笔与飞白。爨八体以二爨为基础，
@@ -201,7 +201,7 @@ All Rights Reserved」——「保留所有权利」和「永久免费使用」�
 
 **法华文楷（2026-11-21 降为提示项）**：不再被任何主题的 `@font-face` 声明，也不随包。
 
-- 原字 `坚果云 字体/法华文楷/法华文楷标准版.ttf`（7,430,744 B，upem 2048，6899 字形，
+- 原字 `外部字体库 字体/法华文楷/法华文楷标准版.ttf`（7,430,744 B，upem 2048，6899 字形，
   `FahwaWenkai-Standard`，`nameID 0` 记 © 2026 谢宏雲，`nameID 8` 记「文徵字库」）。
 - **为什么不随包**：zfont.cn（font_777）把许可标为**商标/嵌入/衍生三项禁止**，
   许可协议栏为「无标准协议（作者文字声明）」，原文在小红书笔记（需 App 扫码，抓不到）。
@@ -289,7 +289,7 @@ All Rights Reserved」——「保留所有权利」和「永久免费使用」�
 
 ## 外部样本（仅抽口径，未复制文件）
 
-2026-11-23 为校准字号与几何，检视了本地样本库 `/Users/nath/Desktop/利兄原创PPT`（PPT 版式库 200 页、
+2026-11-23 为校准字号与几何，检视了本地外部样本库「利兄原创PPT」（PPT 版式库 200 页、
 模板 50 套 1011 页）。**只抽取统计口径**——字号档位与层级比、页边距百分比、卡片栏数分布、描边与行距频次、
 主色与 accent 用法；**不复制任何版式文件、图片、配色方案或成页构图**。抽象结果记在
 `references/style-audit.md`，落进 `assets/base.css` 的 `--t-*` 阶梯，源文件本身不随库分发。

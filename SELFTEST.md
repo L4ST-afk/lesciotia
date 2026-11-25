@@ -131,7 +131,7 @@ python3 scripts/merge-to-pdf.py slides --force --json
 
 **遗留缺陷（同日发现，第 13 节修掉）**：第 6 节修好引擎之后，`references/path-c-editable.md` 的 C0 还留着「返回 78 ⇒ C 出口当前不可用」，两边自相矛盾。出口路由读的是 path 文档，于是「要可编辑 pptx」被降级成 A 的位图合图——产物后缀、页数、能不能打开全对，只有形状层是错的。
 
-⚠️ 体积：补齐后 ppt-master 是 **78MB / 13,019 文件**（guard 要求的完整分发，2026-11-10 读数）。2026-11-10 已整体迁到 `~/Library/CloudStorage/坚果云-tsingford@qq.com/Ob/Kroma/ppt-master`，仓库内 `skills/ppt-master` 只留**软链指针**；经软链跑闸门仍 exit 0，`svg_quality_checker.py --help` / `project_manager.py --help` 照常起。
+⚠️ 体积：补齐后 ppt-master 是 **78MB / 13,019 文件**（guard 要求的完整分发，2026-11-10 读数）。2026-11-10 已整体迁到本地云盘的 Kroma 目录（不在本仓），仓库内 `skills/ppt-master` 只留**软链指针**；经软链跑闸门仍 exit 0，`svg_quality_checker.py --help` / `project_manager.py --help` 照常起。
 ⚠️ **2026-11-14 重测**：`find -L skills/ppt-master -type f | wc -l` = **13,117**（引擎自身有增补）。⛔ 别拿 13,019 当当前值——文件数不是判据，**C 能不能用只认 `attribution_guard.py` 当次退出码**。另注：`find` 不跟软链，量这个目录必须带 `-L`，否则返回 0（本轮踩过）。
 
 ## 7. 疫苗与结构闸
@@ -179,7 +179,7 @@ python3 <judgement-skill>/scripts/check_limits.py .          # 无硬超限
 1. ~~`AGENTS.md` 技能计数~~ 已改：271 → 205，`check_agents_wiring.py` exit 0。
 2. 宿主入口若是指向 skills 根目录的整目录软链，改名后自动跟随，无需再挂。
 3. 库里 6 个重叠件仍原样保留；`VAX-NEEDED.md` 仍在 ppt-master 目录（那是库级疫苗缺口清单，不属于官方分发）。
-4. ppt-master 已落在 Kroma、仓库内只留软链，**不进 git**。⚠️ 该软链依赖坚果云同步盘在本地可用；盘未登录或文件未下载时，C 出口会指向空路径（闸门会立刻报 78，不会静默降级）。
+4. ppt-master 已落在 Kroma、仓库内只留软链，**不进 git**。⚠️ 该软链依赖本地云盘同步可用；盘未登录或文件未下载时，C 出口会指向空路径（闸门会立刻报 78，不会静默降级）。
 
 ## 12. 第二版（1.1.0）· 两塔经验怎么落进来的
 
@@ -537,7 +537,7 @@ A 出口靠 21 风格键逐页生图、C 出口交外部引擎，两侧都不读
 - **A/C 出口端到端仍未跑**（旧账）：`board.png` 当 `--ref style` 只通到文档层，
   C 出口底纹撞 `FULLBLEED_RATIO=0.9` 只有判据没有实测。
 - `assets/covers/guanglan-rd-hills.jpg`（219,810 B）仍悬空 0 引用，未处置。
-- `dia-skills` 改动未提交；坚果云镜像与 GitHub 未同步。
+- 主仓改动未提交；镜像与 GitHub 未同步。
 
 ## 20. 八版续（1.1.8）· 世纪广场接线落地（2026-11-22）
 
@@ -572,7 +572,7 @@ CSS 里的 `../textures/…` 按**临时页面**解析 → 404。结果 `mat-cp-
   tile 的 sha（即「这张样片 = CSS + 哪张 tile」），留到下一次动导出脚本时定。
 - 其余 8 个主题的同类材质（水磨石、水刷石、香灰、宣纸纤维、砖、木饰面）还没做；暗色姐妹版
   `century-ave` 的 `.cp-marble` 仍走纯 CSS（暗底上 multiply 几乎不可见，需要另定 blend 口径）。
-- A/C 出口端到端、covers 悬空图、git 提交与坚果云/GitHub 同步：照旧未动。
+- A/C 出口端到端、covers 悬空图、git 提交与镜像/GitHub 同步：照旧未动。
 
 ## 21. 第九版（1.1.9）· 家族制：材质按物理家族共享 + 大理石改「大脉络 cover」（2026-11-22）
 
@@ -641,7 +641,7 @@ fiber 1.06–1.11、travertine 0.92–1.07。
 - `assets/covers/guanglan-rd-hills.jpg` 悬空（全库 0 引用），未删未挂。
 - A/C 出口端到端仍未跑：`board.png` 当 `--ref style` 只通到文档层；
   C 出口若把材质当底纹，会撞 `FULLBLEED_RATIO=0.9` 的红线，目前只有判据没有实测。
-- `dia-skills` 未提交，坚果云镜像与 GitHub 未同步。
+- 主仓未提交，镜像与 GitHub 未同步。
 
 ### 21.1 收尾复核又抓到三个（都是「闸绿了但页面是错的」）
 
@@ -963,7 +963,7 @@ deck 重打包 3,639,004B；封面截图 1x 下 CTA 与旁边四枚小标签（�
 
 **批三——卫生与体积**
 
-11. 23 个 `*.bak*` 与 `__pycache__` 移入 `/Users/nath/dia-skills/_archive/20261123-来雪亭-备份/`（保留相对路径）。
+11. 23 个 `*.bak*` 与 `__pycache__` 移入库外归档目录 `_archive/20261123-来雪亭-备份/`（保留相对路径）。
 12. 整张脚本表下沉为 `references/scripts-inventory.md`（唯一清单），`SKILL.md` 490→346 行；文档闸改为扫 references 并集，避免表下沉后误报。
 
 **复跑**：`check-theme-textures` / `check-bitmap-assets` / `probe-texture-visibility` / `selftest` / `check_doc_claims`（499 项）/ `check-theme-colors` / `check-preview-sync` / `check-deck-sync` / `check-fonts` 全 PASS；`check_limits` 仅既有 references 超建议长度（未动）。
@@ -1611,7 +1611,7 @@ L5 族页指外网、L6 vendor 存在）。负例实测：故意造一个 `bulle
 
 ## 1.2.35（2026-11-23）：字号阶梯、结构层、装得下闸
 
-**起因**：用户让拿外部真件（`/Users/nath/Desktop/利兄原创PPT`，200 页版式库 ＋ 50 套模板 1011 页）反查
+**起因**：用户让拿外部真件（本地样本库「利兄原创PPT」，200 页版式库 ＋ 50 套模板 1011 页）反查
 我们的版式口径。实测结论写进 `references/style-audit.md`：画布 960×540pt（1920×1080 上 1pt＝2px）；
 字号只用 7 档（32pt 页标题 517 页最众、14pt 正文主力 296 次、12pt 图注），层级靠**少档位＋大跳步**；
 页左边距众数 6%；卡片 4 栏 123 / 3 栏 102 / 2 栏 79；无描边 2112 ≫ 1pt 描边 662；主色黑白＋单 accent。

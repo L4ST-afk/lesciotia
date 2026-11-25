@@ -17,7 +17,7 @@
 ⚠️ 只有一档（usWeightClass 700）。@font-face 声明 700–900，标题写 800 也不会合成假粗。
 
 原字来源：字制区「喜脉喜欢体」v1.0（FontQu Smile，SIL OFL 1.1，字体 name 表内附全文），
-本机原在坚果云 `字体/字制区喜脉喜欢体1.00/`。重跑本脚本需要自备该 ttf，路径不写死。
+本机原在外部字体库 `字体/字制区喜脉喜欢体1.00/`。重跑本脚本需要自备该 ttf，路径不写死。
 """
 import argparse
 import subprocess
