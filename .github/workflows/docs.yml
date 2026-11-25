@@ -1,0 +1,115 @@
+name: docs
+
+# 来雪亭的十二道离线闸门里，能不靠浏览器、不靠 python-pptx 全部跑完的都在这里。
+# check-fit 要起只读 HTTP 服务并注入探针量版面，本仓 CI 不跑（没有 Chrome 时它量不出真读数）；
+# export-pptx 依赖 python-pptx，同理不进 CI。
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: 离线闸门
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: 编译面
+        run: python3 -m py_compile scripts/*.py
+
+      - name: 文档断言对账（README 的数字与名字逐条对回磁盘）
+        run: python3 scripts/check_doc_claims.py
+
+      - name: 梁架闸（17 族 / 39 式）
+        run: python3 scripts/check-layouts.py
+
+      - name: 整册与主题同步
+        run: python3 scripts/check-deck-sync.py
+
+      - name: 预览板同步
+        run: python3 scripts/check-preview-sync.py
+
+      - name: 字体闸门（随包字体子集与声明）
+        run: python3 scripts/check-fonts.py
+
+      - name: 位图资产闸（登记表 vs 磁盘 vs 主题 CSS）
+        run: python3 scripts/check-bitmap-assets.py
+
+      - name: 瓦作出图闸
+        run: python3 scripts/check-theme-textures.py
+
+      - name: 主题配色体检（对比度 / 明度骨架 / 色相暧昧带）
+        run: python3 scripts/check-theme-colors.py assets/themes
+
+      - name: 成稿闸 · 正例必须过
+        run: python3 scripts/check-prose.py examples/prose/good-spec.json
+
+      # 反例必须被拦下：闸不会红就是摆设。跑成 0 才是失败。
+      - name: 成稿闸 · 反例必须红
+        run: |
+          if python3 scripts/check-prose.py examples/prose/bad-spec.json; then
+            echo "⛔ 反例 spec 被放行：成稿闸没有判红"
+            exit 1
+          fi
+          echo "✓ 反例如期判红"
+
+  docs:
+    name: 文档闸 · 链接与语言切换
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      # references/ 与 examples/ 是规格与样例，里面按设计有占位路径（如「文件不存在就删掉这一行」），
+      # 因此只查顶层对外文档的相对链接；中英两版的切换行必须在正文前四行内。
+      - name: 顶层文档链接与切换行
+        run: |
+          python3 - <<'PY'
+          import glob, os, re, sys
+          bad = []
+          files = [f for f in glob.glob('*.md')]
+          for f in files:
+              t = open(f, encoding='utf-8').read()
+              for m in re.finditer(r'\]\(([^)#]+?)(?:#[^)]*)?\)', t):
+                  p = m.group(1).strip()
+                  if p.startswith(('http', 'mailto:')):
+                      continue
+                  q = os.path.normpath(os.path.join(os.path.dirname(f), p))
+                  if not os.path.exists(q):
+                      bad.append(f'坏链 {f} -> {p}')
+          rules = [
+              ('README.md', ['[English](README.en.md)', '中文']),
+              ('README.en.md', ['[中文](README.md)']),
+              ('CHANGELOG.md', ['[English](CHANGELOG.en.md)', '中文']),
+              ('CHANGELOG.en.md', ['[中文](CHANGELOG.md)']),
+          ]
+          for f, toks in rules:
+              if not os.path.exists(f):
+                  continue
+              head = '\n'.join(open(f, encoding='utf-8').read().splitlines()[:4]).replace('`', '')
+              for tok in toks:
+                  if tok not in head:
+                      bad.append(f'语言切换行缺「{tok}」：{f}')
+          print(f'文档闸：{len(bad)} 处问题')
+          for x in bad:
+              print(' ✗', x)
+          sys.exit(1 if bad else 0)
+          PY
