@@ -99,19 +99,16 @@ jobs:
                   q = os.path.normpath(os.path.join(os.path.dirname(f), p))
                   if not os.path.exists(q):
                       bad.append(f'坏链 {f} -> {p}')
-          rules = [
-              ('README.md', ['[English](README.en.md)', '中文']),
-              ('README.en.md', ['[中文](README.md)']),
-              ('CHANGELOG.md', ['[English](CHANGELOG.en.md)', '中文']),
-              ('CHANGELOG.en.md', ['[中文](CHANGELOG.md)']),
-          ]
-          for f, toks in rules:
+          # 切换行判「另一语言的链接 + 该语言名」都出现在前四行；不钉死整串措辞
+          # （公开件写「[中文](README.md)」，正本写「[中文正本](README.md)」，意思一样）。
+          rules = [('README.md', 'README.en.md', 'English'), ('README.en.md', 'README.md', '中文'),
+                   ('CHANGELOG.md', 'CHANGELOG.en.md', 'English'), ('CHANGELOG.en.md', 'CHANGELOG.md', '中文')]
+          for f, other, lang in rules:
               if not os.path.exists(f):
                   continue
               head = '\n'.join(open(f, encoding='utf-8').read().splitlines()[:4]).replace('`', '')
-              for tok in toks:
-                  if tok not in head:
-                      bad.append(f'语言切换行缺「{tok}」：{f}')
+              if other not in head or lang not in head:
+                  bad.append(f'语言切换行缺「{lang}」或指向 {other} 的链接：{f}')
           print(f'文档闸：{len(bad)} 处问题')
           for x in bad:
               print(' ✗', x)
@@ -123,10 +120,15 @@ jobs:
       - name: 本机路径与内部名扫描
         run: |
           python3 - <<'PY'
-          import glob, sys
+          import glob, os, sys
           words = ['/Users/', '/home/', 'dia-skills', '坚果云', 'CloudStorage', '.aurora/']
           bad = []
-          files = [f for p in ('*.md', '*.py', '*.sh') for f in glob.glob('**/' + p, recursive=True)]
+          # 正本（含 INTERNAL.md）本来就有内部件与本机路径，跳过扫描；公开导出件无 INTERNAL.md，照常全量扫。
+          files = [] if os.path.exists('INTERNAL.md') else [
+              f for p in ('*.md', '*.py', '*.sh') for f in glob.glob('**/' + p, recursive=True)]
+          if not files:
+              print('本机路径扫描：跳过（正本含内部件）')
+              sys.exit(0)
           for f in sorted(files):
               t = open(f, encoding='utf-8', errors='ignore').read()
               bad += [f'{f}: {w}' for w in words if w in t]
