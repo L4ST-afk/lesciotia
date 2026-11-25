@@ -43,6 +43,10 @@ jobs:
       - name: 预览板同步
         run: python3 scripts/check-preview-sync.py
 
+      # 字体闸门按设计不接受软跳过：缺 fontTools 就判红。CI 里必须显式装上。
+      - name: 装闸门依赖（fontTools，字体闸门的字库解析用）
+        run: python3 -m pip install --quiet --disable-pip-version-check fonttools
+
       - name: 字体闸门（随包字体子集与声明）
         run: python3 scripts/check-fonts.py
 
