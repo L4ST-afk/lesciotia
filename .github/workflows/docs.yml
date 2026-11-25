@@ -117,3 +117,21 @@ jobs:
               print(' ✗', x)
           sys.exit(1 if bad else 0)
           PY
+
+      # 公开件里不得出现开发机的绝对路径、内部仓名与云盘账号目录。
+      # 第三方字体授权原文（assets/fonts/*/*.pdf）内的厂方路径属授权文档，不得删改，故只扫 md/py/sh。
+      - name: 本机路径与内部名扫描
+        run: |
+          python3 - <<'PY'
+          import glob, sys
+          words = ['/Users/', '/home/', 'dia-skills', '坚果云', 'CloudStorage', '.aurora/']
+          bad = []
+          files = [f for p in ('*.md', '*.py', '*.sh') for f in glob.glob('**/' + p, recursive=True)]
+          for f in sorted(files):
+              t = open(f, encoding='utf-8', errors='ignore').read()
+              bad += [f'{f}: {w}' for w in words if w in t]
+          print(f'本机路径扫描：{len(bad)} 处')
+          for x in bad:
+              print(' ✗', x)
+          sys.exit(1 if bad else 0)
+          PY
