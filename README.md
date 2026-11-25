@@ -463,7 +463,13 @@ Chrome/Chromium 的 `--headless --screenshot`（`scripts/render-png.sh` 就用�
 
 ## 许可与第三方资产
 
-**本 skill 自身的正文与规格以 MIT 发布**（`Copyright (c) 2026 L4ST-afk`），许可见 [`LICENSE`](LICENSE)。
+**本 skill 自身的代码、脚本、规格与正文以 MIT 发布**（`Copyright (c) 2026 L4ST-afk`），许可见 [`LICENSE`](LICENSE)。
+
+**范围限定（重要）**：MIT 只覆盖本仓自己的代码、脚本、规格与文档。`assets/fonts/**`、
+`assets/vendor/**` 里的第三方资产**不随 MIT 授权**，各自按原许可使用与再分发——SIL OFL 1.1
+的随 OFL 原文，字体厂商「免费商用」声明的按该声明（多数只授权使用、不授权再分发字体文件本身），
+逐项见 [`ATTRIBUTION.md`](ATTRIBUTION.md) 与 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+要把本 skill 嵌进商业产品，字体请按原授权自行确认，或直接换成你有权分发的字体。
 **随包捆绑的第三方资产**（含两族内化字体与 html-ppt 的 MIT 资产）逐个登记在
 [`ATTRIBUTION.md`](ATTRIBUTION.md)，许可原文分别落在 `LICENSE-html-ppt.txt`、
 `assets/fonts/OFL-素材集市智造黑1.02.txt`、`assets/fonts/cheesefoam/OFL.txt`。
